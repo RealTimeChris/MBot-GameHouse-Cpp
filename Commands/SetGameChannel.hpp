@@ -29,38 +29,38 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<SetGameChannel>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm == true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId() ,.guildId = args->eventData->getGuildId() }).get();
-			bool doWeHaveAdminPermission = doWeHaveAdminPermissions(*args, *args->eventData, discordGuild, channel, guildMember);
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId() }).get();
+			bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 			if (doWeHaveAdminPermission == false) {
 				return;
 			}
 
-			if (args->commandData.subCommandName == "add") {
+			if (args.commandData.subCommandName == "add") {
 
 				std::string channelID = channel.id;
 				for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
 					if (channelID ==  discordGuild.data.gameChannelIds[x]) {
 						std::string msgString = "------\n**That channel is already on the list of enabled channels!**\n------";
 						EmbedData messageEmbed;
-						messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+						messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 						messageEmbed.setColor(discordGuild.data.borderColor);
 						messageEmbed.setTimeStamp(getTimeAndDate());
 						messageEmbed.setDescription(msgString);
 						messageEmbed.setTitle("__**Already Listed:**__");
-						RespondToInputEventData dataPackage(*args->eventData);
+						RespondToInputEventData dataPackage(*args.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(messageEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -71,18 +71,18 @@ namespace DiscordCoreAPI {
 				discordGuild.data.gameChannelIds.push_back(channelID);
 				discordGuild.writeDataToDB();
 				EmbedData messageEmbed;
-				messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				messageEmbed.setColor(discordGuild.data.borderColor);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setDescription("------\n**You've succesfully added <#" + channelID + "> to your list of accepted gaming channels!**\n------");
 				messageEmbed.setTitle("__**Game Channel Added:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			if (args->commandData.subCommandName == "remove") {
+			if (args.commandData.subCommandName == "remove") {
 				std::string channelID;
 				channelID = channel.id;
 
@@ -100,12 +100,12 @@ namespace DiscordCoreAPI {
 				if (isItPresent == false) {
 					std::string msgString2 = "------\n**That channel is not present on the list of enabled gaming channels!**\n------";
 					EmbedData messageEmbed;
-					messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+					messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					messageEmbed.setColor(discordGuild.data.borderColor);
 					messageEmbed.setTimeStamp(getTimeAndDate());
 					messageEmbed.setDescription(msgString2);
 					messageEmbed.setTitle("__**Missing from List:**__");
-					RespondToInputEventData dataPackage(*args->eventData);
+					RespondToInputEventData dataPackage(*args.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -113,18 +113,18 @@ namespace DiscordCoreAPI {
 				}
 
 				EmbedData messageEmbed;
-				messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				messageEmbed.setColor(discordGuild.data.borderColor);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setDescription(msgString);
 				messageEmbed.setTitle("__**Game Channel Removed:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			if (args->commandData.subCommandName == "purge") {
+			if (args.commandData.subCommandName == "purge") {
 				std::string msgString;
 
 				if (discordGuild.data.gameChannelIds.size() > 0) {
@@ -146,18 +146,18 @@ namespace DiscordCoreAPI {
 				}
 
 				EmbedData messageEmbed;
-				messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				messageEmbed.setColor(discordGuild.data.borderColor);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setDescription(msgString);
 				messageEmbed.setTitle("__**Game Channels Removed:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			if (args->commandData.optionsArgs.at(0).find("view") != std::string::npos) {
+			if (args.commandData.optionsArgs.at(0).find("view") != std::string::npos) {
 				std::string msgString = "__You have the following channels enabled for gaming, on this server:__\n------\n";
 
 				for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
@@ -169,12 +169,12 @@ namespace DiscordCoreAPI {
 				msgString += "------\n";
 
 				EmbedData messageEmbed;
-				messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				messageEmbed.setColor(discordGuild.data.borderColor);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setDescription(msgString);
 				messageEmbed.setTitle("__**Game Channels Enabled:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);

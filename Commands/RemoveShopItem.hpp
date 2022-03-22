@@ -29,29 +29,29 @@ namespace DiscordCoreAPI {
 			return newPtr;
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm ==  true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId() ,.guildId = args->eventData->getGuildId(), }).get();
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId(), }).get();
 			DiscordGuildMember discordGuildMember(guildMember);
-			bool doWeHaveAdminPermission = doWeHaveAdminPermissions(*args, *args->eventData, discordGuild, channel, guildMember);
+			bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 			if (doWeHaveAdminPermission == false) {
 				return;
 			}
 
-			std::string itemName = args->commandData.optionsArgs.at(0);
+			std::string itemName = args.commandData.optionsArgs.at(0);
 
 			uint32_t itemIndex = 0;
 			bool itemFound = false;
@@ -66,12 +66,12 @@ namespace DiscordCoreAPI {
 			if (itemFound ==  false) {
 				std::string msgString = "------\n**Sorry, but that item was not found in the shop's inventory!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Item Issue:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -86,12 +86,12 @@ namespace DiscordCoreAPI {
 			discordGuild.writeDataToDB();
 
 			EmbedData msgEmbed;
-			msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			msgEmbed.setColor(discordGuild.data.borderColor);
 			msgEmbed.setDescription(msgString);
 			msgEmbed.setTimeStamp(getTimeAndDate());
 			msgEmbed.setTitle("__**Shop Item Removed:**__");
-			RespondToInputEventData dataPackage(*args->eventData);
+			RespondToInputEventData dataPackage(*args.eventData);
 			dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 			dataPackage.addMessageEmbed(msgEmbed);
 			auto newEvent = InputEvents::respondToEvent(dataPackage);

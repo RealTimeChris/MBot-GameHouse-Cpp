@@ -28,28 +28,28 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<GamehouseOptions>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ .channelId = args->eventData->getChannelId() }).get();
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ .channelId = args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId(),.guildId = args->eventData->getGuildId() }).get();
-			bool doWeHaveAdminPerms = doWeHaveAdminPermissions(*args, *args->eventData, discordGuild, channel, guildMember);
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
+			bool doWeHaveAdminPerms = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 			if (doWeHaveAdminPerms == false) {
 				return;
 			}
 
 			EmbedData msgEmbed;
-			msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			msgEmbed.setTimeStamp(getTimeAndDate());
 			msgEmbed.setTitle("__**GameHouse Options:**__");
 			msgEmbed.setColor(discordGuild.data.borderColor);
@@ -88,7 +88,7 @@ namespace DiscordCoreAPI {
 			fields.push_back(gameChannelsField);
 
 			msgEmbed.fields = fields;
-			RespondToInputEventData dataPackage(*args->eventData);
+			RespondToInputEventData dataPackage(*args.eventData);
 			dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 			dataPackage.addMessageEmbed(msgEmbed);
 			InputEvents::respondToEvent(dataPackage);

@@ -29,30 +29,30 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<AddShopRole>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
+		virtual void execute(BaseFunctionArguments& args) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ .channelId = args->eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ .channelId = args.eventData->getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*args->eventData, channel);
+				bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData));
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData));
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId(),.guildId = args->eventData->getGuildId()  }).get();
+				GuildMember guildMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId()  }).get();
 
-				bool doWeHaveAdmin = doWeHaveAdminPermissions(*args, *args->eventData, discordGuild, channel, guildMember);
+				bool doWeHaveAdmin = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdmin == false) {
 					return;
 				}
 				
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData,  discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData,  discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -60,29 +60,29 @@ namespace DiscordCoreAPI {
 
 				std::regex hexColorRegExp(".{1,24}");
 				std::regex costRegExp("\\d{1,8}");
-				if (args->commandData.optionsArgs.size() < 2 || !regex_search(args->commandData.optionsArgs.at(1), hexColorRegExp)) {
+				if (args.commandData.optionsArgs.size() < 2 || !regex_search(args.commandData.optionsArgs.at(1), hexColorRegExp)) {
 					std::string msgString = "------\n**Please enter a valid hex color value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *args->eventData };
+					RespondToInputEventData dataPackage{ *args.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto event = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				if (args->commandData.optionsArgs.size() < 3 || !regex_search(args->commandData.optionsArgs.at(2), costRegExp) ||  std::stoll(args->commandData.optionsArgs.at(2)) <= 0) {
+				if (args.commandData.optionsArgs.size() < 3 || !regex_search(args.commandData.optionsArgs.at(2), costRegExp) ||  std::stoll(args.commandData.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *args->eventData };
+					RespondToInputEventData dataPackage{ *args.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto event = InputEvents::respondToEvent(dataPackage);
@@ -90,22 +90,22 @@ namespace DiscordCoreAPI {
 				}
 
 				std::cmatch matchResults;
-				std::string roleName = args->commandData.optionsArgs.at(0).c_str();
-				regex_search(args->commandData.optionsArgs.at(1).c_str(), matchResults, hexColorRegExp);
+				std::string roleName = args.commandData.optionsArgs.at(0).c_str();
+				regex_search(args.commandData.optionsArgs.at(1).c_str(), matchResults, hexColorRegExp);
 				std::string roleColor = matchResults.str();
-				regex_search(args->commandData.optionsArgs.at(2).c_str(), matchResults, costRegExp);
+				regex_search(args.commandData.optionsArgs.at(2).c_str(), matchResults, costRegExp);
 				uint32_t roleCost = (uint32_t) std::stoll(matchResults.str());
 
 				for (auto& value : discordGuild.data.guildShop.roles) {
 					if (roleName == value.roleName) {
 						std::string msgString = "------\n**Sorry, but a role by that name already exists!**\n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-						RespondToInputEventData dataPackage{ *args->eventData };
+						RespondToInputEventData dataPackage{ *args.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto event = InputEvents::respondToEvent(dataPackage);
@@ -137,7 +137,7 @@ namespace DiscordCoreAPI {
 
 				CreateGuildRoleData createRoleData{};
 				createRoleData.hexColorValue = roleColor;
-				createRoleData.guildId = args->eventData->getGuildId();
+				createRoleData.guildId = args.eventData->getGuildId();
 				createRoleData.hoist = true;
 				createRoleData.mentionable = true;
 				createRoleData.name = roleName;
@@ -154,17 +154,17 @@ namespace DiscordCoreAPI {
 				discordGuild.data.guildShop.roles.push_back(currentRole);
 				discordGuild.writeDataToDB();
 				std::string msgString = "";
-				auto botUser = args->discordCoreClient->getBotUser();
+				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as follows:\n------\n__**Role:**__ <@&" + currentRole.roleId + "> __**Cost**__ : " + std::to_string(roleCost) + " "
 					+ discordUser.data.currencyName + "\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**New Role Added:**__");
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				InputEvents::respondToEvent(dataPackage);

@@ -29,20 +29,20 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Rob>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm == true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData, discordGuild);
+			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 			if (areWeAllowed == false) {
 				return;
@@ -52,26 +52,26 @@ namespace DiscordCoreAPI {
 			std::regex userIDRegExp("\\d{18}");
 
 
-			std::string userID = args->eventData->getAuthorId();
+			std::string userID = args.eventData->getAuthorId();
 
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId(),.guildId = args->eventData->getGuildId() }).get();
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
 			DiscordGuildMember discordGuildMember(guildMember);
 
 			 std::cmatch matchResults;
-			regex_search(args->commandData.optionsArgs.at(0).c_str(), matchResults, userIDRegExp);
+			regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults, userIDRegExp);
 			std::string targetUserID = matchResults.str(); 
-			GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID,.guildId = args->eventData->getGuildId() }).get();
+			GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID,.guildId = args.eventData->getGuildId() }).get();
 			DiscordGuildMember targetGuildMember(targetMember);
 
 			if (targetMember.user.userName == "") {
 				std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**User Issue:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -81,18 +81,18 @@ namespace DiscordCoreAPI {
 			if (userID == targetUserID) {
 				std::string msgString = "------\n**You can't rob yourself, dumbass!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Robbery Issue:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			auto botUser = args->discordCoreClient->getBotUser();
+			auto botUser = args.discordCoreClient->getBotUser();
 			DiscordUser discordUser(botUser.userName, botUser.id);
 			uint32_t msPerSecond = 1000;
 			uint32_t secondsPerMinute = 60;
@@ -151,12 +151,12 @@ namespace DiscordCoreAPI {
 					if (currencyRobAmount < 0) {
 						std::string msgStringNew = "------\n**Cannot rob for debt!**\n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgStringNew);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Target Issue:**__");
-						RespondToInputEventData dataPackage(*args->eventData);
+						RespondToInputEventData dataPackage(*args.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -181,8 +181,8 @@ namespace DiscordCoreAPI {
 					messageEmbed.setDescription(msgString);
 					messageEmbed.setTimeStamp(getTimeAndDate());
 					messageEmbed.setTitle("__**Succesful Robbery:**__");
-					messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
-					RespondToInputEventData dataPackage(*args->eventData);
+					messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					RespondToInputEventData dataPackage(*args.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addContent("<@!" + targetUserID + ">");
 					dataPackage.addMessageEmbed(messageEmbed);
@@ -221,8 +221,8 @@ namespace DiscordCoreAPI {
 					messageEmbed.setDescription(msgString);
 					messageEmbed.setTimeStamp(getTimeAndDate());
 					messageEmbed.setTitle("__**Failed Robbery:**__");
-					messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
-					RespondToInputEventData dataPackage(*args->eventData);
+					messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					RespondToInputEventData dataPackage(*args.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -251,8 +251,8 @@ namespace DiscordCoreAPI {
 				messageEmbed.setDescription(msgString);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setTitle("__**Failed Robbery:**__");
-				messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
-				RespondToInputEventData dataPackage(*args->eventData);
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);

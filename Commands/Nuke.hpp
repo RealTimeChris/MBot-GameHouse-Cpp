@@ -27,21 +27,21 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Nuke>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
+		virtual void execute(BaseFunctionArguments& args) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ .channelId = args->eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ .channelId = args.eventData->getChannelId() }).get();
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId(),.guildId = args->eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
 
-				bool areWeInADm = areWeInADM(*args->eventData, channel);
+				bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 
 				for (auto& [key, value] : guild.members) {
 					CreateGuildBanData dataPackage{};

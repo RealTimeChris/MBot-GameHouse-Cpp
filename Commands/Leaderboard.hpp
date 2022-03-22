@@ -29,27 +29,27 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Leaderboard>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm == true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData, discordGuild);
+			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 			if (areWeAllowed == false) {
 				return;
 			}
 
-			std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(*args->eventData);
-			if (args->eventData->eventType == InputEventType::Application_Command_Interaction) {
+			std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(*args.eventData);
+			if (args.eventData->eventType == InputEventType::Application_Command_Interaction) {
 				RespondToInputEventData dataPackage(*newEvent);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 				newEvent = InputEvents::respondToEvent(dataPackage);
@@ -57,7 +57,7 @@ namespace DiscordCoreAPI {
 
 			std::vector<DiscordGuildMember> membersArray;
 			for (auto [key, value] : guild.members) {
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value.user.id,.guildId = args->eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value.user.id,.guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember guildMemberNew(guildMember);
 				membersArray.push_back(guildMemberNew);
 			}
@@ -87,7 +87,7 @@ namespace DiscordCoreAPI {
 			uint32_t currentPage = 0;
 			std::vector<EmbedData> pageEmbeds;
 			std::vector<std::string> pageStrings;
-			auto botUser = args->discordCoreClient->getBotUser();
+			auto botUser = args.discordCoreClient->getBotUser();
 			DiscordUser discordUser(botUser.userName, botUser.id);
 			for (uint32_t x = 0; x < (uint32_t)membersArray.size(); x += 1) {
 				if (x% membersPerPage ==  0) {
@@ -101,7 +101,7 @@ namespace DiscordCoreAPI {
 
 					pageStrings[currentPage] += msgString;
 				if (x% membersPerPage ==  membersPerPage - 1 || x ==  (uint32_t)membersArray.size() - 1) {
-					pageEmbeds[currentPage].setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+					pageEmbeds[currentPage].setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					pageEmbeds[currentPage].setDescription(pageStrings[currentPage]);
 					pageEmbeds[currentPage].setTimeStamp(getTimeAndDate());
 					pageEmbeds[currentPage].setTitle("__**Leaderboard (Wallet) (Page " + std::to_string(currentPage + 1) + " of " + std::to_string(totalPageCount) + ")**__");
@@ -111,7 +111,7 @@ namespace DiscordCoreAPI {
 			}
 
 			uint32_t currentPageIndex = 0;
-			std::string userID = args->eventData->getAuthorId();
+			std::string userID = args.eventData->getAuthorId();
 			moveThroughMessagePages(userID, std::make_unique<InputEventData>(*newEvent), currentPageIndex, pageEmbeds, true, 120000);
 			discordGuild.writeDataToDB();
 			return;

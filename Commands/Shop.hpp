@@ -104,45 +104,45 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Shop>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm ==  true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId(),.guildId = args->eventData->getGuildId() }).get();
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData, discordGuild);
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
+			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 			if (areWeAllowed == false) {
 				return;
 			}
 
-			GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->discordCoreClient->getBotUser().id,.guildId = args->eventData->getGuildId() }).get();
+			GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.discordCoreClient->getBotUser().id,.guildId = args.eventData->getGuildId() }).get();
 			if (!(botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
 				std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this command!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Permissions Issue:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
 
-			std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = args->eventData->getGuildId() }).get();
-			std::unique_ptr<InputEventData> event02 = std::make_unique<InputEventData>(*args->eventData);
+			std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = args.eventData->getGuildId() }).get();
+			std::unique_ptr<InputEventData> event02 = std::make_unique<InputEventData>(*args.eventData);
 			
 			for (uint32_t x = 0; x < discordGuild.data.guildShop.roles.size(); x+=1) {
 				bool isRoleFound = false;
@@ -158,12 +158,12 @@ namespace DiscordCoreAPI {
 					discordGuild.writeDataToDB();
 					std::string msgString = "------\n**Removing guild role " + shopRole.roleName + " from guild cache!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Removed Guild Role:**__");
-					RespondToInputEventData dataPackage(*args->eventData);
+					RespondToInputEventData dataPackage(*args.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -172,19 +172,19 @@ namespace DiscordCoreAPI {
 			}
 
 			EmbedData msgEmbed;
-			msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			msgEmbed.setDescription("------\n__**Select which part of the shop you would like to browse!**__\n------");
 			msgEmbed.setColor(discordGuild.data.borderColor);
 			msgEmbed.setTimeStamp(getTimeAndDate());
 			msgEmbed.setTitle("__**Welcome to the Shop:**__");
 			EmbedData msgEmbedItems;
-			msgEmbedItems.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			msgEmbedItems.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			msgEmbedItems.setDescription("------\n__**Select one or more items which you would like to purchase, from the drop-down menu!**__\n------");
 			msgEmbedItems.setColor(discordGuild.data.borderColor);
 			msgEmbedItems.setTimeStamp(getTimeAndDate());
 			msgEmbedItems.setTitle("__**Welcome to the Shop:**__");
 			EmbedData msgEmbedRoles;
-			msgEmbedRoles.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			msgEmbedRoles.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			msgEmbedRoles.setDescription("------\n__**Select one or more roles which you would like to purchase, from the drop-down menu!**__\n------");
 			msgEmbedRoles.setColor(discordGuild.data.borderColor);
 			msgEmbedRoles.setTimeStamp(getTimeAndDate());
@@ -204,7 +204,7 @@ namespace DiscordCoreAPI {
 				start:
 				EmbedData currentEmbed;
 				ButtonCollector newButton(*event02);
-				auto buttonData = newButton.collectButtonData(false, 120000, 1, args->eventData->getAuthorId()).get();
+				auto buttonData = newButton.collectButtonData(false, 120000, 1, args.eventData->getAuthorId()).get();
 				if (buttonData.at(0).buttonId== "items") {
 					currentEmbed = msgEmbedItems;
 				}
@@ -229,7 +229,7 @@ namespace DiscordCoreAPI {
 				}
 
 				SelectMenuCollector selectMenu(*event02);
-				values = selectMenu.collectSelectMenuData(false, 120000, 1, args->eventData->getAuthorId()).get();
+				values = selectMenu.collectSelectMenuData(false, 120000, 1, args.eventData->getAuthorId()).get();
 				for (auto& value : values) {
 					for (auto& value2 : value.values) {
 						if (value2 == "go_back" || values.size() == 0) {
@@ -320,7 +320,7 @@ namespace DiscordCoreAPI {
 							InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 							break;
 						}
-						auto botUser = args->discordCoreClient->getBotUser();
+						auto botUser = args.discordCoreClient->getBotUser();
 						DiscordUser discordUser(botUser.userName, botUser.id);
 						InventoryRole newRole = discordGuild.data.guildShop.roles.at(objectShopIndex);
 						discordGuildMember.data.roles.push_back(newRole);
@@ -331,7 +331,7 @@ namespace DiscordCoreAPI {
 
 						std::string roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
 
-						Roles::addGuildMemberRoleAsync({ .guildId = args->eventData->getGuildId(), .userId = guildMember.user.id, .roleId = roleID });
+						Roles::addGuildMemberRoleAsync({ .guildId = args.eventData->getGuildId(), .userId = guildMember.user.id, .roleId = roleID });
 
 						std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 						EmbedData msgEmbed04;
@@ -386,7 +386,7 @@ namespace DiscordCoreAPI {
 						discordGuildMember.data.items.push_back(newItem);
 						discordGuildMember.data.currency.wallet -= itemCost;
 						discordGuildMember.writeDataToDB();
-						auto botUser = args->discordCoreClient->getBotUser();
+						auto botUser = args.discordCoreClient->getBotUser();
 						DiscordUser discordUser(botUser.userName, botUser.id);
 						std::string itemEmoji = discordGuild.data.guildShop.items.at(objectShopIndex).emoji;
 						std::string itemName = discordGuild.data.guildShop.items.at(objectShopIndex).itemName;

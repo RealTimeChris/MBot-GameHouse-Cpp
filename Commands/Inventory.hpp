@@ -29,20 +29,20 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Inventory>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ .channelId = args->eventData->getChannelId() }).get();
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ .channelId = args.eventData->getChannelId() }).get();
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm == true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData, discordGuild);
+			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 			if (areWeAllowed == false) {
 				return;
@@ -52,28 +52,28 @@ namespace DiscordCoreAPI {
 
 			 std::regex userIDRegExp(".{2,3}\\d{18}>");
 			 std::regex idRegExp("\\d{18}");
-			if (args->commandData.optionsArgs.size() == 0) {
-				userID = args->eventData->getAuthorId();
+			if (args.commandData.optionsArgs.size() == 0) {
+				userID = args.eventData->getAuthorId();
 			}
 			else {
-				std::string argZero = args->commandData.optionsArgs.at(0);
+				std::string argZero = args.commandData.optionsArgs.at(0);
 				 std::cmatch userIDMatch;
 				regex_search(argZero.c_str(), userIDMatch, idRegExp);
 				std::string userIDOne = userIDMatch.str();
 				userID = userIDOne;
 			}
 
-			GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID,.guildId = args->eventData->getGuildId() }).get();
+			GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID,.guildId = args.eventData->getGuildId() }).get();
 
 			if (currentGuildMember.user.userName == "") {
 				std::string msgString = "-------\n**Sorry, but that user could not be found!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**User Issue:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -85,12 +85,12 @@ namespace DiscordCoreAPI {
 			if (currentGuildMember.user.userName == "") {
 				std::string msgString = "------\n**Sorry, but the specified user data could not be found!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**User Issue:**__");
-				RespondToInputEventData dataPackage(*args->eventData);
+				RespondToInputEventData dataPackage(*args.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -99,8 +99,8 @@ namespace DiscordCoreAPI {
 
 			std::string userName = currentGuildMember.user.userName; 
 
-			std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = args->eventData->getGuildId() }).get();
-			std::unique_ptr<InputEventData> event02 = std::make_unique<InputEventData>(*args->eventData);
+			std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = args.eventData->getGuildId() }).get();
+			std::unique_ptr<InputEventData> event02 = std::make_unique<InputEventData>(*args.eventData);
 
 			for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 				bool isRoleFound = false;
@@ -116,12 +116,12 @@ namespace DiscordCoreAPI {
 					discordGuildMember.writeDataToDB();
 					std::string msgString = "------\n**Removing role " + userRole.roleName + " from user cache!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Role Issue:**__");
-					RespondToInputEventData dataPackage(*args->eventData);
+					RespondToInputEventData dataPackage(*args.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					event02 = InputEvents::respondToEvent(dataPackage);
 					InputEvents::deleteInputEventResponseAsync(std::move(event02), 20000);
@@ -170,7 +170,7 @@ namespace DiscordCoreAPI {
 				newEmbed.setTitle("__**" + userName + "'s Inventory (Items) Page " + std::to_string(x + 1) + " of " + std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
 				newEmbed.setDescription(itemsMsgString[x]);
 				newEmbed.setColor(discordGuild.data.borderColor);
-				newEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				itemsMessageEmbeds.push_back(newEmbed);
 			}
 			
@@ -180,7 +180,7 @@ namespace DiscordCoreAPI {
 				EmbedData newEmbed;
 				newEmbed.setTimeStamp(getTimeAndDate());
 				newEmbed.setTitle("__**" + userName + "'s Inventory (Roles) Page " + std::to_string(itemsMessageEmbeds.size() + x + 1) + " of " + std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
-				newEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				newEmbed.setDescription(rolesMsgStrings[x]);
 				newEmbed.setColor(discordGuild.data.borderColor);
 				rolesMsgEmbeds.push_back(newEmbed);
@@ -202,7 +202,7 @@ namespace DiscordCoreAPI {
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setTitle("__**Empty Inventory:**__");
 				messageEmbed.setColor(discordGuild.data.borderColor);
-				messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				RespondToInputEventData dataPackage(*event02);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);

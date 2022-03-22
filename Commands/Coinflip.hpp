@@ -29,39 +29,39 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Coinflip>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
+		virtual void execute(BaseFunctionArguments& args) {
 		try {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 			
 			if (areWeInADm == true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData, discordGuild);
+			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 			if (areWeAllowed == false) {
 				return;
 			}
 
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getRequesterId(),.guildId = args->eventData->getGuildId() }).get();
-			GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->discordCoreClient->getBotUser().id,.guildId = args->eventData->getGuildId() }).get();
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getRequesterId(),.guildId = args.eventData->getGuildId() }).get();
+			GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.discordCoreClient->getBotUser().id,.guildId = args.eventData->getGuildId() }).get();
 			std::unique_ptr<InputEventData> inputData = std::make_unique<InputEventData>();
 			if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
 				std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Permissions Issue:**__");
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -69,17 +69,17 @@ namespace DiscordCoreAPI {
 			}
 			
 			 std::regex betAmountRegExp("\\d{1,18}");
-			auto botUser = args->discordCoreClient->getBotUser();
+			auto botUser = args.discordCoreClient->getBotUser();
 			DiscordUser discordUser(botUser.userName, botUser.id);
-			if (args->commandData.optionsArgs.size() == 0 || !std::regex_search(args->commandData.optionsArgs.at(0), betAmountRegExp) ||  std::stoll(args->commandData.optionsArgs.at(0)) < 1) {
+			if (args.commandData.optionsArgs.size() == 0 || !std::regex_search(args.commandData.optionsArgs.at(0), betAmountRegExp) ||  std::stoll(args.commandData.optionsArgs.at(0)) < 1) {
 				std::string msgString = "------\n**Please enter a valid amount to bet! 1 " + discordUser.data.currencyName + " or more! (!coinflip = BETAMOUNT)**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Missing or Invalid Arguments:**__");
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -89,19 +89,19 @@ namespace DiscordCoreAPI {
 			DiscordGuildMember discordGuildMember(guildMember);
 
 			 std::cmatch matchResults;
-			std::regex_search(args->commandData.optionsArgs.at(0).c_str(), matchResults, betAmountRegExp);
+			std::regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults, betAmountRegExp);
 			int32_t betAmount = (int32_t) std::stoll(matchResults.str());
 			int32_t currencyAmount = discordGuildMember.data.currency.wallet;
 
 			if (betAmount > currencyAmount) {
 				std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to place that wager!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Insufficient Funds:**__");
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -112,27 +112,27 @@ namespace DiscordCoreAPI {
 			newBetString += "React with :exploding_head: to choose heads, or with :snake: to choose tails!";
 
 			EmbedData msgEmbed;
-			msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			msgEmbed.setColor("0000FF");
 			msgEmbed.setDescription(newBetString);
 			msgEmbed.setTimeStamp(getTimeAndDate());
 			msgEmbed.setTitle("__**Heads, or Tails!?**__");
-			std::unique_ptr<InputEventData> inputEvent = std::make_unique<InputEventData>(*args->eventData);
-			RespondToInputEventData dataPackage{ *args->eventData };
+			std::unique_ptr<InputEventData> inputEvent = std::make_unique<InputEventData>(*args.eventData);
+			RespondToInputEventData dataPackage{ *args.eventData };
 			dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 			dataPackage.addButton(false, "Heads", "Heads", ButtonStyle::Success, "🤯");
 			dataPackage.addButton(false, "Tails", "Tails", ButtonStyle::Success, "🐍");
 			dataPackage.addMessageEmbed(msgEmbed);
 			inputData = InputEvents::respondToEvent(dataPackage);
 			ButtonCollector button2(*inputData);
-			std::vector<ButtonResponseData> buttonInteractionData = button2.collectButtonData(false, 120000, 1, args->eventData->getAuthorId()).get();
+			std::vector<ButtonResponseData> buttonInteractionData = button2.collectButtonData(false, 120000, 1, args.eventData->getAuthorId()).get();
 			if (buttonInteractionData.at(0).buttonId == ""){
 				std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
 				EmbedData msgEmbed2;
 				msgEmbed2.setColor("FF0000");
 				msgEmbed2.setTimeStamp(getTimeAndDate());
 				msgEmbed2.setTitle("__**Heads, or Tails?:**__");
-				msgEmbed2.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed2.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed2.setDescription(timeOutString);
 				RespondToInputEventData dataPackage{ buttonInteractionData.at(0).interactionData };
 				dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
@@ -155,7 +155,7 @@ namespace DiscordCoreAPI {
 				msgEmbed3.setDescription(completionString);
 				msgEmbed3.setTimeStamp(getTimeAndDate());
 				msgEmbed3.setTitle("__**Heads, or Tails**__");
-				msgEmbed3.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed3.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				RespondToInputEventData dataPackage{ *inputData };
 				dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed3);
@@ -172,8 +172,8 @@ namespace DiscordCoreAPI {
 				if (betAmount > discordGuild.data.casinoStats.largestCoinFlipPayout.amount) {
 					discordGuild.data.casinoStats.largestCoinFlipPayout.amount = betAmount;
 					discordGuild.data.casinoStats.largestCoinFlipPayout.timeStamp = getTimeAndDate();
-					discordGuild.data.casinoStats.largestCoinFlipPayout.userId = args->eventData->getAuthorId();
-					discordGuild.data.casinoStats.largestCoinFlipPayout.userName = args->eventData->getUserName();
+					discordGuild.data.casinoStats.largestCoinFlipPayout.userId = args.eventData->getAuthorId();
+					discordGuild.data.casinoStats.largestCoinFlipPayout.userName = args.eventData->getUserName();
 					discordGuild.writeDataToDB();
 				}
 				newBalance = discordGuildMember.data.currency.wallet;
@@ -181,7 +181,7 @@ namespace DiscordCoreAPI {
 				msgEmbed4.setColor("00FF00");
 				msgEmbed4.setDescription(completionString);
 				msgEmbed4.setTimeStamp(getTimeAndDate());
-				msgEmbed4.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed4.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed4.setTitle("__**Heads, or Tails?**__");
 				RespondToInputEventData dataPackage{ buttonInteractionData.at(0).interactionData };
 				dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
@@ -199,7 +199,7 @@ namespace DiscordCoreAPI {
 				msgEmbed4.setColor("FF0000");
 				msgEmbed4.setDescription(completionString);
 				msgEmbed4.setTimeStamp(getTimeAndDate());
-				msgEmbed4.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed4.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed4.setTitle("__**Heads, or Tails?**__");
 				RespondToInputEventData dataPackage{ buttonInteractionData.at(0).interactionData };
 				dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);

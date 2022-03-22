@@ -29,68 +29,68 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Deposit>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
-			Channel channel = Channels::getCachedChannelAsync({ args->eventData->getChannelId() }).get();
+		virtual void execute(BaseFunctionArguments& args) {
+			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args->eventData, channel);
+			bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 			if (areWeInADm == true) {
 				return;
 			}
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args->eventData)).get();
+			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args->eventData->getGuildId() }).get();
+			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 			DiscordGuild discordGuild(guild);
 
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args->eventData, discordGuild);
+			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 			if (!areWeAllowed) {
 				return;
 			}
 
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args->eventData->getAuthorId(),.guildId = args->eventData->getGuildId() }).get();
+			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
 			DiscordGuildMember discordGuildMember(guildMember);
 
 			 std::regex depositAmountRegExp("\\d{1,18}");
 			 std::cmatch matchResults;
 			uint32_t depositAmount = 0;
-			if (args->commandData.optionsArgs.size() == 0 || args->commandData.optionsArgs[0] == "all") {
+			if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "all") {
 				depositAmount = discordGuildMember.data.currency.wallet;
 			}
-			else if (args->commandData.optionsArgs.size() == 0 ||args->commandData.optionsArgs[0] == "" || !regex_search(args->commandData.optionsArgs[0].c_str(),matchResults, depositAmountRegExp) ||  std::stoll(matchResults.str()) <= 0) {
+			else if (args.commandData.optionsArgs.size() == 0 ||args.commandData.optionsArgs[0] == "" || !regex_search(args.commandData.optionsArgs[0].c_str(),matchResults, depositAmountRegExp) ||  std::stoll(matchResults.str()) <= 0) {
 				std::string msgString = "------\n**Please enter a valid deposit amount!(!deposit = AMOUNT)**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			else if (regex_search(args->commandData.optionsArgs[0], depositAmountRegExp)) {
+			else if (regex_search(args.commandData.optionsArgs[0], depositAmountRegExp)) {
 				depositAmount = (uint32_t) std::stoll(matchResults.str());
 			}
 
 			if (depositAmount > discordGuildMember.data.currency.wallet) {
 				std::string msgString = "------\n**Sorry, but you do not have sufficient funds to deposit that much!**\n------";
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			auto botUser = args->discordCoreClient->getBotUser();
+			auto botUser = args.discordCoreClient->getBotUser();
 			DiscordUser discordUser(botUser.userName, botUser.id);
 			uint32_t msPerSecond = 1000;
 			uint32_t  SecondsPerMinute = 60;
@@ -130,12 +130,12 @@ namespace DiscordCoreAPI {
 			}
 
 			EmbedData messageEmbed;
-			messageEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
+			messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 			messageEmbed.setColor(discordGuild.data.borderColor);
 			messageEmbed.setTitle("__**Bank Deposit:**__");
 			messageEmbed.setTimeStamp(getTimeAndDate());
 			messageEmbed.setDescription(msgString);
-			RespondToInputEventData dataPackage{ *args->eventData };
+			RespondToInputEventData dataPackage{ *args.eventData };
 			dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 			dataPackage.addMessageEmbed(messageEmbed);
 			auto newEvent = InputEvents::respondToEvent(dataPackage);

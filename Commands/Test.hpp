@@ -25,9 +25,9 @@ namespace DiscordCoreAPI {
 			return  std::make_unique<Test>();
 		}
 
-		virtual void execute( std::unique_ptr<BaseFunctionArguments> args) {
+		virtual void execute(BaseFunctionArguments& args) {
 			try {
-				RespondToInputEventData dataPackage{ *args->eventData };
+				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.addContent("TESTING");
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
