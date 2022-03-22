@@ -214,6 +214,7 @@ namespace DiscordCoreAPI {
 				if (buttonData.at(0).buttonId == "roles" || buttonData.at(0).buttonId == "items") {
 					RespondToInputEventData dataPackage(buttonData.at(0).interactionData);
 					dataPackage.addMessageEmbed(currentEmbed);
+					dataPackage.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 					if (buttonData.at(0).buttonId == "items") {
 						std::vector<SelectOptionData> selectOptionDataItems = getSelectOptionsVector(discordGuild, ItemsOrRoles::items);
 						dataPackage.addSelectMenu(false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.", (int32_t)selectOptionDataItems.size(), 1);

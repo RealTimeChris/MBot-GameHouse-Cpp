@@ -84,6 +84,7 @@ void executeAsyncCrossResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
 		msgEmbed.addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -155,6 +156,7 @@ void executeAsyncCrossResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
 		msgEmbed.addField("__**Game Status: Player Wins**__", winFooterString, false);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 
 		return;
@@ -175,6 +177,7 @@ void executeAsyncCrossResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.addField("__**Game Status: Tie**__", tieFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -208,6 +211,7 @@ void executeAsyncCrossResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.addField("__**Game Status: Player Bust**__", bustFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -232,6 +236,7 @@ void executeAsyncCheckResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.setTitle("__**Blackjack Fail:**__");
 		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
 		msgEmbed.addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		buttonInteraction->addMessageEmbed(msgEmbed);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -294,6 +299,7 @@ void executeAsyncCheckResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.addField("__**Game Status: Player Bust**__", bustFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -344,6 +350,7 @@ void executeAsyncCheckResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 			msgEmbed.addField("__**Game Status: Tie**__", tieFooterString, false);
 			msgEmbed.setDescription(finalEmbed.description);
 			buttonInteraction->addMessageEmbed(msgEmbed);
+			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 			return;
 		}
@@ -391,6 +398,7 @@ void executeAsyncCheckResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 			msgEmbed.addField("__**Game Status: Player Wins**__", winFooterString, false);
 			msgEmbed.setDescription(finalEmbed.description);
 			buttonInteraction->addMessageEmbed(msgEmbed);
+			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 			return;
 		}
@@ -418,6 +426,7 @@ void executeAsyncCheckResponse(DiscordCoreAPI::BaseFunctionArguments args, Disco
 		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
 		msgEmbed.addField("__**Game Status: In Play**__", inPlayFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		buttonInteraction->addComponentRow(component);
 		buttonInteraction->addMessageEmbed(msgEmbed);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
@@ -481,6 +490,7 @@ void executeAsyncDoubleResponse(DiscordCoreAPI::BaseFunctionArguments args, Disc
 			buttonInteraction->addComponentRow(value);
 		}
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		eventData002 = DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		DiscordCoreAPI::ButtonCollector button(*newEvent);
 		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, newEvent->getRequesterId()).get();
@@ -503,6 +513,7 @@ void executeAsyncDoubleResponse(DiscordCoreAPI::BaseFunctionArguments args, Disc
 			dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			dataPackage.addMessageEmbed(msgEmbed2);
 			buttonInteraction->addMessageEmbed(msgEmbed2);
+			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
 		}
 		return;
@@ -583,6 +594,7 @@ void executeAsyncDoubleResponse(DiscordCoreAPI::BaseFunctionArguments args, Disc
 		msgEmbed.addField("__**Game Status: Player Wins**__", winFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -847,7 +859,7 @@ namespace DiscordCoreAPI {
 				finalMessageEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type, true);
 				finalMessageEmbed.addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 				finalMessageEmbed.addField("__**Game Status: In Play**__", footerMsgString, false);
-				if (args.eventData->eventType == InputEventType::Application_Command_Interaction) {
+				if (args.eventData->eventType == InteractionType::Application_Command) {
 					RespondToInputEventData replyInteractionData(*args.eventData);
 					replyInteractionData.setResponseType(InputEventResponseType::Interaction_Response);
 					replyInteractionData.addMessageEmbed(finalMessageEmbed);

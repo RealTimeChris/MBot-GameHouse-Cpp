@@ -39,10 +39,6 @@ namespace DiscordCoreAPI {
 				DiscordGuild discordGuild(guild);
 				bool isItFirst{ true };
 				std::unique_ptr<InputEventData> newEvent01{ std::make_unique<InputEventData>(*args.eventData) };
-				RespondToInputEventData responseData02{ *newEvent01 };
-				responseData02.addContent("TEST");
-				responseData02.setResponseType(InputEventResponseType::Interaction_Response);
-				newEvent01 = InputEvents::respondToEvent(responseData02);
 				RespondToInputEventData responseData{ *newEvent01 };
 				while (1) {
 					std::vector<std::vector<SelectOptionData>> selectOptions;
@@ -110,7 +106,7 @@ namespace DiscordCoreAPI {
 					}
 					responseData.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
 					if (isItFirst) {
-						responseData.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
+						responseData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						isItFirst = false;
 						newEvent01 = InputEvents::respondToEvent(responseData);
 					}
@@ -147,7 +143,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData responseData03(buttonData.at(0).interactionData);
 							responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 							responseData03.addMessageEmbed(msgEmbed00);
-							newEvent = InputEvents::respondToEvent(responseData02);
+							newEvent = InputEvents::respondToEvent(responseData03);
 							InputEvents::deleteInputEventResponseAsync(std::move(newEvent01)).get();
 							break;
 						}

@@ -49,7 +49,7 @@ namespace DiscordCoreAPI {
 			}
 
 			std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(*args.eventData);
-			if (args.eventData->eventType == InputEventType::Application_Command_Interaction) {
+			if (args.eventData->eventType == InteractionType::Application_Command) {
 				RespondToInputEventData dataPackage(*newEvent);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 				newEvent = InputEvents::respondToEvent(dataPackage);

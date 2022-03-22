@@ -284,10 +284,11 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		messageEmbeds[0].setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		messageEmbeds[0].setTitle("__**Duel Results: " + std::to_string(0 + 1) + " of " + std::to_string(finalStrings.size()) + "**__");
 		messageEmbeds[0].setDescription(finalStrings[0]);
-		DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent);
+		dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		dataPackageNew.addMessageEmbed(messageEmbeds[0]);
 		*newEvent = *DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
 	}
+	dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 	dataPackageNew.addMessageEmbed(messageEmbeds[0]);
 	auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
 
@@ -295,7 +296,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 	moveThroughMessagePages(*fromUserIDNew, std::make_unique<DiscordCoreAPI::InputEventData>(*newEvent), currentPageIndex, messageEmbeds, false, 120000);
 }
 
-void executeAsyncExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::DiscordGuild discordGuild, DiscordCoreAPI::InputEventData originalEvent) {
+void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::DiscordGuild discordGuild, DiscordCoreAPI::InputEventData originalEvent) {
 	std::string rejectedString;
 	rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer! (Timed Out!)";
 	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ originalEvent.getRequesterId() }).get();
@@ -436,11 +437,8 @@ namespace DiscordCoreAPI {
 			messageEmbed.setTitle("__**IT'S TIME TO DUEL!**__");
 			messageEmbed.setColor(discordGuild.data.borderColor);
 			std::unique_ptr<InputEventData> newEvent02 = std::make_unique<InputEventData>(*args.eventData);
-			RespondToInputEventData dataPackage(*args.eventData);
-			dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-			auto newEvent01 = InputEvents::respondToEvent(dataPackage);
-			RespondToInputEventData dataPackage2(*newEvent01);
-			dataPackage2.setResponseType(InputEventResponseType::Edit_Interaction_Response);
+			RespondToInputEventData dataPackage2(*args.eventData);
+			dataPackage2.setResponseType(InputEventResponseType::Interaction_Response);
 			dataPackage2.addMessageEmbed(messageEmbed);
 			dataPackage2.addContent("<@!" + toUserID + ">");
 			dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
@@ -450,7 +448,7 @@ namespace DiscordCoreAPI {
 			std::vector<ButtonResponseData> buttonInteractionData = button.collectButtonData(false, 120000, 1, toUserID).get();
 			RespondToInputEventData dataPackageNew(buttonInteractionData.at(0).interactionData);
 			if (buttonInteractionData.at(0).buttonId == "empty") {
-				executeAsyncExit(fromUserID, toUserID, discordGuild, *newEvent02);
+				executeExit(fromUserID, toUserID, discordGuild, *newEvent02);
 			}
 			else if (buttonInteractionData.at(0).buttonId == "check") {
 				executeCheck(args, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02.get(), &betAmount, dataPackageNew, &msgEmbedString, &fromUserID, &toUserID);
@@ -464,21 +462,10 @@ namespace DiscordCoreAPI {
 				messageEmbed5.setTimeStamp(getTimeAndDate());
 				messageEmbed5.setTitle("__**DUEL REJECTED!**__");
 				messageEmbed5.setDescription(rejectedString);
-				if (newEvent02->responseType == InputEventResponseType::Interaction_Response
-					|| newEvent02->responseType == InputEventResponseType::Edit_Interaction_Response || newEvent02->responseType == InputEventResponseType::Ephemeral_Interaction_Response) {
-					DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent02);
-					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-					dataPackageNew.addMessageEmbed(messageEmbed5);
-					dataPackageNew.addContent("<@!" + fromUserID + ">");
-					InputEvents::respondToEvent(dataPackageNew);
-				}
-				else if (newEvent02->responseType == InputEventResponseType::Follow_Up_Message || newEvent02->responseType == InputEventResponseType::Edit_Follow_Up_Message) {
-					DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent02);
-					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Follow_Up_Message);
-					dataPackageNew.addMessageEmbed(messageEmbed5);
-					dataPackageNew.addContent("<@!" + fromUserID + ">");
-					InputEvents::respondToEvent(dataPackageNew);
-				}
+				dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
+				dataPackageNew.addMessageEmbed(messageEmbed5);
+				dataPackageNew.addContent("<@!" + fromUserID + ">");
+				InputEvents::respondToEvent(dataPackageNew);
 			}
 			return;
 		}

@@ -37,7 +37,7 @@ namespace DiscordCoreAPI {
 
 			RespondToInputEventData dataPackage(*args.eventData);
 			dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-			if (args.eventData->eventType == InputEventType::Application_Command_Interaction){
+			if (args.eventData->eventType == InteractionType::Application_Command){
 				newEvent = InputEvents::respondToEvent(dataPackage);
 			}
 			
