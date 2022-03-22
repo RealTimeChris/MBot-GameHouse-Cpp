@@ -291,8 +291,6 @@ namespace DiscordCoreAPI {
 				else {
 					betType = args.commandData.optionsArgs[1];
 				}
-				std::cout << "OPTION 00: " << args.commandData.optionsArgs[0] << std::endl;
-				std::cout << "OPTION 01: " << args.commandData.optionsArgs[1] << std::endl;
 				if (args.commandData.optionsArgs.size() > 2) {
 					betOptions = args.commandData.optionsArgs[2];
 				}
@@ -370,7 +368,7 @@ namespace DiscordCoreAPI {
 				case stringToInt("split"):
 				{
 					payoutAmount = betAmount * 17;
-					if (args.commandData.optionsArgs.size() < 4 || args.commandData.optionsArgs[2] == "" || !regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+					if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || !regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 						std::string msgString = "------\n**Please enter a valid starting value for your split!(1 - 35)** \n------";
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -410,7 +408,7 @@ namespace DiscordCoreAPI {
 				case stringToInt("street"):
 				{
 					payoutAmount = betAmount * 11;
-					if (args.commandData.optionsArgs.size() < 4 || args.commandData.optionsArgs[2] == "" || !regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+					if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || !regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 						std::string msgString = "------\n**Please enter a valid starting value for your street!(1 - 34)** \n------";
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -463,7 +461,7 @@ namespace DiscordCoreAPI {
 				case stringToInt("sixline"):
 				{
 					payoutAmount = betAmount * 5;
-					if (args.commandData.optionsArgs.size() < 4 || args.commandData.optionsArgs[2] == "" || !regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+					if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || !regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 						std::string msgString = "------\n**Please enter a valid starting value for your sixline!**\n------";
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
