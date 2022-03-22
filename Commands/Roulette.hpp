@@ -8,11 +8,6 @@
 #include "Index.hpp"
 #include "HelperFunctions.hpp"
 
-constexpr uint32_t stringToInt(std::string str, int32_t h = 0)
-{
-	return !str[h] ? 5381 : (stringToInt(str, h + 1) * 33) ^ str[h];
-}
-
 std::string getNumberString(std::string inputString, std::vector<std::string> redNumbers, std::vector<std::string> blackNumbers) {
 	std::string returnString;
 	for (uint32_t x = 0; x < redNumbers.size(); x += 1) {
@@ -115,6 +110,12 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 }
 
 namespace DiscordCoreAPI {
+
+	constexpr uint32_t stringToInt(std::string str, int32_t h = 0)
+	{
+		return !str[h] ? 5381 : (stringToInt(str, h + 1) * 33) ^ str[h];
+	}
+
 	class RouletteGame :public BaseFunction {
 	public:
 		RouletteGame() {
@@ -212,8 +213,8 @@ namespace DiscordCoreAPI {
 				}
 				whatAreWeDoing = "bet";
 			}
-			if (args->commandData.optionsArgs.size() > 1) {
-				if ( std::stoll(args->commandData.optionsArgs.at(0)) <= 0) {
+			if (args->commandData.optionsArgs.size() > 0) {
+				if (std::stoll(args->commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please, enter a valid betting amount! (!roulette = bet, BETAMOUNT, BETTYPE, BETOPTIONS)** \n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
@@ -290,8 +291,9 @@ namespace DiscordCoreAPI {
 				else {
 					betType = args->commandData.optionsArgs[1];
 				}
-
-				if (args->commandData.optionsArgs.size() > 3) {
+				std::cout << "OPTION 00: " << args->commandData.optionsArgs[0] << std::endl;
+				std::cout << "OPTION 01: " << args->commandData.optionsArgs[1] << std::endl;
+				if (args->commandData.optionsArgs.size() > 2) {
 					betOptions = args->commandData.optionsArgs[2];
 				}
 				uint32_t payoutAmount = 0;
@@ -324,7 +326,7 @@ namespace DiscordCoreAPI {
 				case stringToInt("straight"):
 				{
 					payoutAmount = betAmount * 35;
-					if (args->commandData.optionsArgs.size() < 4 || args->commandData.optionsArgs[2] == "" || !regex_search(args->commandData.optionsArgs[2], digitRegExp)) {
+					if (args->commandData.optionsArgs.size() < 3 || args->commandData.optionsArgs[2] == "" || !regex_search(args->commandData.optionsArgs[2], digitRegExp)) {
 						std::string msgString = "------\n**Please enter a valid value from the roulette wheel!(1 - 36)**\n------";
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args->eventData->getUserName(), args->eventData->getAvatarUrl());
