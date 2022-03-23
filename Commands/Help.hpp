@@ -144,7 +144,6 @@ namespace DiscordCoreAPI {
 							responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 							responseData03.addMessageEmbed(msgEmbed00);
 							newEvent = InputEvents::respondToEvent(responseData03);
-							InputEvents::deleteInputEventResponseAsync(std::move(newEvent01)).get();
 							break;
 						}
 						counter02 = 0;
@@ -157,69 +156,51 @@ namespace DiscordCoreAPI {
 						newEvent = InputEvents::respondToEvent(editInteractionResponseData00.at(counter02));
 					}
 					else {
-						InputEvents::deleteInputEventResponseAsync(std::move(newEvent)).get();
 						break;
 					}
 					SelectMenuCollector selectMenu(*newEvent01);
 					auto selectMenuReturnData = selectMenu.collectSelectMenuData(false, 120000, 1, args.eventData->getRequesterId()).get();
-					if (selectMenuReturnData.size() > 0) {
-						EmbedData newEmbed{};
-						for (auto& [key, value] : args.discordCoreClient->commandController.getFunctions()) {
-							for (auto& valueNew : key) {
-								if (valueNew == selectMenuReturnData.at(0).values.at(0)) {
-									newEmbed = args.discordCoreClient->commandController.getFunctions().at(key)->helpEmbed;
-								}
+					EmbedData newEmbed{};
+					for (auto& [key, value] : args.discordCoreClient->commandController.getFunctions()) {
+						for (auto& valueNew : key) {
+							if (valueNew == selectMenuReturnData.at(0).values.at(0)) {
+								newEmbed = args.discordCoreClient->commandController.getFunctions().at(key)->helpEmbed;
 							}
-						}
-						if (selectMenuReturnData.at(0).values.at(0) == "go back") {
-							RespondToInputEventData responseData02(selectMenuReturnData.at(0).interactionData);
-							responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
-							responseData02.addMessageEmbed(msgEmbed);
-							for (uint32_t x = 0; x < selectOptionsNew.size(); x += 1) {
-								std::string customId{ "select_page_" + std::to_string(x) };
-								responseData02.addButton(false, customId, std::to_string(x), ButtonStyle::Success, numberEmojiNames[x]);
-								numberEmojiId.push_back(customId);
-							}
-							responseData02.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
-							newEvent = InputEvents::respondToEvent(responseData02);
-							continue;
-						}
-
-						RespondToInputEventData responseData02(selectMenuReturnData.at(0).interactionData);
-						responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
-						responseData02.addMessageEmbed(newEmbed);
-						responseData02.addButton(false, "back", "Back", ButtonStyle::Success, "🔙");
-						responseData02.addButton(false, "exit", "Exit", ButtonStyle::Success, "❌");
-						newEvent = InputEvents::respondToEvent(responseData02);
-						auto buttonReturnData02 = ButtonCollector{ *newEvent01 }.collectButtonData(false, 120000, 1, args.eventData->getRequesterId()).get();
-						if (buttonReturnData02.size() > 0) {
-							{
-
-							}
-							if (buttonReturnData02.at(0).buttonId == "back") {
-								responseData = RespondToInputEventData{ buttonReturnData02.at(0).interactionData };
-								continue;
-							}
-							else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
-								RespondToInputEventData responseData02(buttonReturnData02.at(0).interactionData);
-								responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
-								responseData02.addMessageEmbed(newEmbed);
-								newEvent = InputEvents::respondToEvent(responseData02);
-								InputEvents::deleteInputEventResponseAsync(std::move(newEvent)).get();
-								break;
-							}
-						}
-						else {
-							InputEvents::deleteInputEventResponseAsync(std::move(newEvent)).get();
-							break;
 						}
 					}
-					else {
-						InputEvents::deleteInputEventResponseAsync(std::move(newEvent)).get();
+					if (selectMenuReturnData.at(0).values.at(0) == "go back") {
+						RespondToInputEventData responseData02(selectMenuReturnData.at(0).interactionData);
+						responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
+						responseData02.addMessageEmbed(msgEmbed);
+						for (uint32_t x = 0; x < selectOptionsNew.size(); x += 1) {
+							std::string customId{ "select_page_" + std::to_string(x) };
+							responseData02.addButton(false, customId, std::to_string(x), ButtonStyle::Success, numberEmojiNames[x]);
+							numberEmojiId.push_back(customId);
+						}
+						responseData02.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
+						newEvent = InputEvents::respondToEvent(responseData02);
+						continue;
+					}
+
+					RespondToInputEventData responseData02(selectMenuReturnData.at(0).interactionData);
+					responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
+					responseData02.addMessageEmbed(newEmbed);
+					responseData02.addButton(false, "back", "Back", ButtonStyle::Success, "🔙");
+					responseData02.addButton(false, "exit", "Exit", ButtonStyle::Success, "❌");
+					newEvent = InputEvents::respondToEvent(responseData02);
+					auto buttonReturnData02 = ButtonCollector{ *newEvent01 }.collectButtonData(false, 120000, 1, args.eventData->getRequesterId()).get();
+					if (buttonReturnData02.at(0).buttonId == "back") {
+						responseData = RespondToInputEventData{ buttonReturnData02.at(0).interactionData };
+						continue;
+					}
+					else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
+						RespondToInputEventData responseData02(buttonReturnData02.at(0).interactionData);
+						responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
+						responseData02.addMessageEmbed(newEmbed);
+						newEvent = InputEvents::respondToEvent(responseData02);
 						break;
 					}
 				}
-
 
 				return;
 			}
