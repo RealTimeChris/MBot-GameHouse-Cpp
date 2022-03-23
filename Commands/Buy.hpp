@@ -277,7 +277,7 @@ namespace DiscordCoreAPI {
 				return;
 			}
 			catch (...) {
-				  reportException("Buy::executeAsync()");
+				  reportException("Buy::execute()");
 			}
 
 			

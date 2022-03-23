@@ -118,7 +118,7 @@ namespace DiscordCoreAPI {
 				}
 			}
 			catch (...) {
-				reportException("SellDrugs::executeAsync()");
+				reportException("SellDrugs::execute()");
 			}
 		}
 		virtual ~SellDrugs() {};

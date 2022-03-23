@@ -224,7 +224,7 @@ namespace DiscordCoreAPI {
 				return;
 			}
 			catch (...) {
-				reportException("Help::executeAsync()");
+				reportException("Help::execute()");
 			}
 
 		}

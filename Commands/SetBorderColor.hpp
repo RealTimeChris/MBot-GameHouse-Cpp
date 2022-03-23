@@ -81,7 +81,7 @@ namespace DiscordCoreAPI {
                 }
             }
             catch (...) {
-                reportException("SetBorderColor::executeAsync Error: ");
+                reportException("SetBorderColor::execute()");
             }
 
         };

@@ -118,7 +118,7 @@ namespace DiscordCoreAPI {
 				std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
 			}
 			catch (...) {
-				reportException("Balance::executeAsync()");
+				reportException("Balance::execute()");
 			}			
 		}
 

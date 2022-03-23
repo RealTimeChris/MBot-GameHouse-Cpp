@@ -82,7 +82,7 @@ namespace DiscordCoreAPI {
 				return;
 			}
 			catch (...) {
-				reportException("DisplayGuildsData::executeAsync Error: ");
+				reportException("DisplayGuildsData::execute()");
 			}
 
 

@@ -209,7 +209,7 @@ namespace DiscordCoreAPI {
 			return;
 		}
 		catch (...) {
-			reportException("Coinflip::executeAsync()");
+			reportException("Coinflip::execute()");
 		}
 	}
 	virtual ~Coinflip() {};

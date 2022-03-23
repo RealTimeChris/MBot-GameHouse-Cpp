@@ -171,7 +171,7 @@ namespace DiscordCoreAPI {
 				return;
 			}
 			catch (...) {
-				reportException("AddShopRole::executeAsync()");
+				reportException("AddShopRole::execute()");
 			}
 		}
 		virtual ~AddShopRole() {};

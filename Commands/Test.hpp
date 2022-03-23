@@ -41,7 +41,7 @@ namespace DiscordCoreAPI {
 				return;
 			}
 			catch (...) {
-				reportException("Test::executeAsync Error: ");
+				reportException("Test::execute()");
 			}
 		}
 		virtual ~Test() {};

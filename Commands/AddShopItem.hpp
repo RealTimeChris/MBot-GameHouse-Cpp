@@ -176,7 +176,7 @@ namespace DiscordCoreAPI {
 				return;
 			}
 			catch (...) {
-				reportException("AddShopItem::executeAsync()");
+				reportException("AddShopItem::execute()");
 			}
 
 		}

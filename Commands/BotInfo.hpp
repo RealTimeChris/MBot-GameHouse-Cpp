@@ -58,7 +58,7 @@ namespace DiscordCoreAPI {
                 return;
             }
             catch (...) {
-                reportException("BotInfo::executeAsync Error: ");
+                reportException("BotInfo::execute()");
             }
         }
         virtual ~BotInfo() {};
