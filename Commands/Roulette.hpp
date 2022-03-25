@@ -680,9 +680,9 @@ namespace DiscordCoreAPI {
 					}
 				};
 
-				ThreadPoolTimer::executeFunctionAfterTimePeriod(function01, 10000).get();
-				ThreadPoolTimer::executeFunctionAfterTimePeriod(function01, 10000).get();
-				ThreadPoolTimer::executeFunctionAfterTimePeriod(function01, 10000).get();
+				ThreadPool::executeFunctionAfterTimePeriod(function01, 10000).get();
+				ThreadPool::executeFunctionAfterTimePeriod(function01, 10000).get();
+				ThreadPool::executeFunctionAfterTimePeriod(function01, 10000).get();
 			}
 			return;
 		}

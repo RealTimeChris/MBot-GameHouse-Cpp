@@ -255,9 +255,9 @@ namespace DiscordCoreAPI {
                 newEvent02 = *InputEvents::respondToEvent(dataPackage);
                 return;
             };
-            ThreadPoolTimer::executeFunctionAfterTimePeriod(theFunction00, 3000, newEvent01.get()).get();
-            ThreadPoolTimer::executeFunctionAfterTimePeriod(theFunction01, 3000, newEvent01.get()).get();
-            ThreadPoolTimer::executeFunctionAfterTimePeriod(theFunction, 3000, newEvent01.get()).get();
+            ThreadPool::executeFunctionAfterTimePeriod(theFunction00, 3000, newEvent01.get()).get();
+            ThreadPool::executeFunctionAfterTimePeriod(theFunction01, 3000, newEvent01.get()).get();
+            ThreadPool::executeFunctionAfterTimePeriod(theFunction, 3000, newEvent01.get()).get();
             return;
 		}
         virtual ~Slots() {};
