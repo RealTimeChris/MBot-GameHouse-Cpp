@@ -614,6 +614,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments args, DiscordCo
 		msgEmbed.addField("__**Game Status: Tie**__", tieFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -648,6 +649,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments args, DiscordCo
 		msgEmbed.addField("__**Game Status: Player Bust**__", bustFooterString, false);
 		msgEmbed.setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
