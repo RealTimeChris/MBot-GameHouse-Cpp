@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _SHOP_
-#define _SHOP_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -434,4 +430,3 @@ namespace DiscordCoreAPI {
 		virtual ~Shop() {};
 	};
 }
-#endif

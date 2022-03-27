@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _REMOVE_OBJECT_
-#define _REMOVE_OBJECT_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -173,5 +170,3 @@ namespace DiscordCoreAPI {
 		virtual ~RemoveObject() {};
 	};
 }
-
-#endif

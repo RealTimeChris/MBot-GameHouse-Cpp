@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _SET_GAME_CHANNEL_
-#define _SET_GAME_CHANNEL_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -186,4 +182,3 @@ namespace DiscordCoreAPI {
 		virtual ~SetGameChannel() {};
 	};
 }
-#endif

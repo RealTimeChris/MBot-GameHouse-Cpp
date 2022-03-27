@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _REMOVE_SHOP_ITEM_
-#define _REMOVE_SHOP_ITEM_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 	class RemoveShopItem : public BaseFunction {
@@ -100,5 +97,3 @@ namespace DiscordCoreAPI {
 		virtual ~RemoveShopItem() {};
 	};
 }
-
-#endif

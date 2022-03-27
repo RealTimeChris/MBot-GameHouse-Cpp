@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _BUY_
-#define _BUY_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -287,5 +284,3 @@ namespace DiscordCoreAPI {
 		};
 	};
 	
-
-#endif

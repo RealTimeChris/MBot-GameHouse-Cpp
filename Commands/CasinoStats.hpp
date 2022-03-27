@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _CASINO_STATS_
-#define _CASINO_STATS_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -116,4 +113,3 @@ namespace DiscordCoreAPI {
 
 	};
 }
-#endif

@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _REGISTER_SLASH_COMMANDS_
-#define _REGISTER_SLASH_COMMANDS_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -642,4 +638,3 @@ namespace DiscordCoreAPI {
 		virtual ~RegisterApplicationCommands() {};
 	};
 }
-#endif

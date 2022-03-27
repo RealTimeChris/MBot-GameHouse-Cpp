@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _HELPER_FUNCTIONS_
-#define _HELPER_FUNCTIONS_
-
-#include "Index.hpp"
+#include "../DatabaseEntities.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -123,4 +120,3 @@ namespace DiscordCoreAPI {
     }
 
 }
-#endif

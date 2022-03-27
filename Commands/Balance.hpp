@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _BALANCE_
-#define _BALANCE_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -127,4 +124,3 @@ namespace DiscordCoreAPI {
 	};
 
 }
-#endif

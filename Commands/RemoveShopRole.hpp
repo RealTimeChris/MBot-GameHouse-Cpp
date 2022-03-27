@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _REMOVE_SHOP_ROLE_
-#define _REMOVE_SHOP_ROLE_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -110,5 +106,3 @@ namespace DiscordCoreAPI {
 		virtual ~RemoveShopRole() {};
 	};
 }
-
-#endif

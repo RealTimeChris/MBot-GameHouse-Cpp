@@ -5,12 +5,7 @@
 
 #pragma once
 
-#ifndef _TRANSFER_
-#define _TRANSFER_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
-
 
 namespace DiscordCoreAPI {
 	class Transfer :public BaseFunction {
@@ -146,4 +141,3 @@ namespace DiscordCoreAPI {
 		virtual ~Transfer() {};
 	};
 }
-#endif

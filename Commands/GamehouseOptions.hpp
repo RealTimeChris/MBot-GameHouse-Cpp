@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _GAMEHOUSE_OPTIONS_
-#define _GAMEHOUSE_OPTIONS_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 	class GamehouseOptions : public BaseFunction {
@@ -98,5 +95,3 @@ namespace DiscordCoreAPI {
 		virtual ~GamehouseOptions() {};
 	};
 }
-
-#endif 

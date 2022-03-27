@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _BLACKJACK_
-#define _BLACKJACK_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 /**
 	Refreshes a blackjack stack of Cards.
@@ -917,4 +914,3 @@ namespace DiscordCoreAPI {
 			virtual ~Blackjack() {};
 		};
 	};
-#endif

@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _ADD_SHOP_ROLE_
-#define _ADD_SHOP_ROLE_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -177,4 +174,3 @@ namespace DiscordCoreAPI {
 		virtual ~AddShopRole() {};
 	};
 }
-#endif

@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _DEPOSIT_
-#define _DEPOSIT_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -144,5 +141,3 @@ namespace DiscordCoreAPI {
 		virtual ~Deposit() {};
 	};
 }
-
-#endif

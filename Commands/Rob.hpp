@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _ROB_
-#define _ROB_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -262,5 +258,3 @@ namespace DiscordCoreAPI {
 		virtual ~Rob() {};
 	};
 }
-
-#endif

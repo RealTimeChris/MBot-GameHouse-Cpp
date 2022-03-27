@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _DUEL_
-#define _DUEL_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::DiscordGuildMember* discordFromGuildMember, DiscordCoreAPI::DiscordGuildMember* discordToGuildMember,DiscordCoreAPI::DiscordGuild* discordGuild,  DiscordCoreAPI::InputEventData* newEvent, int32_t* betAmount, 
 	DiscordCoreAPI::RespondToInputEventData dataPackageNew, std::string* msgEmbedString,  std::string* fromUserIDNew, std::string* toUserIDNew) {
@@ -472,4 +469,3 @@ namespace DiscordCoreAPI {
 		virtual ~Duel() {};
 	};
 }
-#endif

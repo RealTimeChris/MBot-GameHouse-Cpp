@@ -15,9 +15,7 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/pool.hpp>
 
-#include "Index.hpp"
-
-using namespace bsoncxx::builder::stream;
+#include <Index.hpp>
 
 namespace DiscordCoreAPI {
 

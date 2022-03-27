@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _COIN_FLIP_
-#define _COIN_FLIP_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -216,4 +213,3 @@ namespace DiscordCoreAPI {
 
 	};
 };
-#endif

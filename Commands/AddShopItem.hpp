@@ -5,11 +5,6 @@
 
 #pragma once
 
-#ifndef _ADD_SHOP_ITEM_
-#define _ADD_SHOP_ITEM_
-
-#include "Index.hpp"
-#include "../DatabaseEntities.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -185,4 +180,3 @@ namespace DiscordCoreAPI {
 	};
 
 }
-#endif

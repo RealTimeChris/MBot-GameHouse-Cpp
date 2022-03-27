@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _SLOTS_
-#define _SLOTS
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -263,6 +259,3 @@ namespace DiscordCoreAPI {
         virtual ~Slots() {};
     };
 }
-
-#endif
-

@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _LEADERBOARD_
-#define _LEADERBOARD_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -120,4 +117,3 @@ namespace DiscordCoreAPI {
 		virtual ~Leaderboard() {};
 	};
 }
-#endif

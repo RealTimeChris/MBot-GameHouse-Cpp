@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _SELL_DRUGS_
-#define _SELL_DRUGS_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -124,4 +120,3 @@ namespace DiscordCoreAPI {
 		virtual ~SellDrugs() {};
 	};
 }
-#endif

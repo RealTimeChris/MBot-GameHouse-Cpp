@@ -5,10 +5,6 @@
 
 #pragma once
 
-#ifndef _SET_BALANCE_
-#define _SET_BALANCE_
-
-#include "Index.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -173,4 +169,3 @@ namespace DiscordCoreAPI {
 		virtual ~SetBalance() {};
 	};
 }
-#endif

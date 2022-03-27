@@ -5,10 +5,7 @@
 
 #pragma once
 
-#ifndef _INVENTORY_
-#define _INVENTORY_
-
-#include "Index.hpp"
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 
@@ -222,4 +219,3 @@ namespace DiscordCoreAPI {
 		virtual ~Inventory() {};
 	};
 }
-#endif

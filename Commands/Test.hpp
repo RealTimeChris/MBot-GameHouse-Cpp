@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include "Index.hpp"
-#include <fstream>
+#include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 

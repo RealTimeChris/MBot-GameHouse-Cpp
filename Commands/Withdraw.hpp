@@ -5,11 +5,6 @@
 
 #pragma once
 
-#ifndef _WITHDRAW_
-#define _WITHDRAW_
-
-#include "Index.hpp"
-#include "../DatabaseEntities.hpp"
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
@@ -116,5 +111,3 @@ namespace DiscordCoreAPI {
 		virtual ~Withdraw() {};
 	};
 }
-
-#endif
