@@ -15,7 +15,7 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/pool.hpp>
 
-#include <Index.hpp>
+#include <discordcoreapi/Index.hpp>
 
 namespace DiscordCoreAPI {
 
