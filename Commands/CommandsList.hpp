@@ -16,7 +16,6 @@
 #include "Deposit.hpp"
 #include "DisplayGuildsData.hpp"
 #include "Duel.hpp"
-#include "GamehouseOptions.hpp"
 #include "Help.hpp"
 #include "Inventory.hpp"
 #include "Leaderboard.hpp"

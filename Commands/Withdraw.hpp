@@ -26,87 +26,91 @@ namespace DiscordCoreAPI {
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
-			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+			try {
+				Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
 
-			bool areWeInADm = areWeInADM(*args.eventData, channel);
+				bool areWeInADm = areWeInADM(*args.eventData, channel);
 
-			if (areWeInADm ==  true) {
-				return;
-			}
+				if (areWeInADm == true) {
+					return;
+				}
 
-			Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
-			DiscordGuild discordGuild(guild);
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
+				DiscordGuild discordGuild(guild);
 
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-			if (!areWeAllowed) {
-				return;
-			}
+				if (!areWeAllowed) {
+					return;
+				}
 
-			uint32_t withdrawAmount = 0;
+				uint32_t withdrawAmount = 0;
 
-			GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId(), }).get();
-			DiscordGuildMember discordGuildMember(guildMember);
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId(), }).get();
+				DiscordGuildMember discordGuildMember(guildMember);
 
-			 std::regex amountRegExp("\\d{1,18}");
-			if (args.commandData.optionsArgs.size() == 0 || !regex_search(args.commandData.optionsArgs[0], amountRegExp)||  std::stoll(args.commandData.optionsArgs[0]) <= 0  ) {
-				std::string  msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
+				std::regex amountRegExp("\\d{1,18}");
+				if (args.commandData.optionsArgs.size() == 0 || !regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
+					std::string  msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
+					EmbedData msgEmbed;
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
+					RespondToInputEventData dataPackage{ *args.eventData };
+					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+					dataPackage.addMessageEmbed(msgEmbed);
+					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					return;
+				}
+				else {
+					std::cmatch matchResults;
+					regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, amountRegExp);
+					withdrawAmount = (uint32_t)std::stoll(matchResults.str());
+				}
+
+				if (withdrawAmount > discordGuildMember.data.currency.bank) {
+					std::string msgString = "-------\n**Sorry, but you do not have sufficient funds to withdraw that much!**\n------";
+					EmbedData msgEmbed;
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**Insufficient Funds:**__");
+					RespondToInputEventData dataPackage{ *args.eventData };
+					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+					dataPackage.addMessageEmbed(msgEmbed);
+					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					return;
+				}
+
+				discordGuildMember.data.currency.wallet += withdrawAmount;
+				discordGuildMember.data.currency.bank -= withdrawAmount;
+				discordGuildMember.writeDataToDB();
+				auto botUser = args.discordCoreClient->getBotUser();
+				DiscordUser discordUser(botUser.userName, botUser.id);
+				std::string msgString = "Congratulations! You've withdrawn " + std::to_string(withdrawAmount) + " " + discordUser.data.currencyName + " from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" +
+					"__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName
+					+ "\n------";
+
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
+				msgEmbed.setTitle("__**Bank Withdrawal:**__");
 				RespondToInputEventData dataPackage{ *args.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
 			}
-			else {
-				 std::cmatch matchResults;
-				regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, amountRegExp);
-				withdrawAmount = (uint32_t) std::stoll(matchResults.str());
+			catch (...) {
+				reportException("Withdraw::execute()");
 			}
-
-			if (withdrawAmount > discordGuildMember.data.currency.bank) {
-				std::string msgString = "-------\n**Sorry, but you do not have sufficient funds to withdraw that much!**\n------";
-				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-				msgEmbed.setColor(discordGuild.data.borderColor);
-				msgEmbed.setDescription(msgString);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Insufficient Funds:**__");
-				RespondToInputEventData dataPackage{ *args.eventData };
-				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-				dataPackage.addMessageEmbed(msgEmbed);
-				auto newEvent = InputEvents::respondToEvent(dataPackage);
-				return;
-			}
-
-			discordGuildMember.data.currency.wallet += withdrawAmount;
-			discordGuildMember.data.currency.bank -= withdrawAmount;
-			discordGuildMember.writeDataToDB();
-			auto botUser = args.discordCoreClient->getBotUser();
-			DiscordUser discordUser(botUser.userName, botUser.id);
-			std::string msgString = "Congratulations! You've withdrawn " + std::to_string(withdrawAmount) + " " + discordUser.data.currencyName + " from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" +
-				"__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName
-				+ "\n------";
-
-			EmbedData msgEmbed;
-			msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-			msgEmbed.setColor(discordGuild.data.borderColor);
-			msgEmbed.setDescription(msgString);
-			msgEmbed.setTimeStamp(getTimeAndDate());
-			msgEmbed.setTitle("__**Bank Withdrawal:**__");
-			RespondToInputEventData dataPackage{ *args.eventData };
-			dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-			dataPackage.addMessageEmbed(msgEmbed);
-			auto newEvent = InputEvents::respondToEvent(dataPackage);
-			return;
-
 		}
 		virtual ~Withdraw() {};
 	};

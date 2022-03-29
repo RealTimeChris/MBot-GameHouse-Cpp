@@ -328,143 +328,148 @@ namespace DiscordCoreAPI {
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
-			Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
-			bool areWeInADm = areWeInADM(*args.eventData, channel);
+			try {
+				Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+				bool areWeInADm = areWeInADM(*args.eventData, channel);
 
-			if (areWeInADm == true) {
+				if (areWeInADm == true) {
+					return;
+				}
+
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
+
+				Guild guild = Guilds::getCachedGuildAsync({ args.eventData->getGuildId() }).get();
+				DiscordGuild discordGuild(guild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
+
+				if (areWeAllowed == false) {
+					return;
+				}
+
+				std::regex numberRegExp("\\d{1,18}");
+				std::regex idRegExp("\\d{18}");
+
+				if (args.commandData.optionsArgs.size() < 2 || !std::regex_search(args.commandData.optionsArgs.at(1), numberRegExp) || std::stoll(args.commandData.optionsArgs.at(1)) < 0) {
+					std::string msgString = "------\n**Please enter a valid bet amount! (!duel = BETAMOUNT, @USERMENTION)**\n------";
+					EmbedData msgEmbed;
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
+					RespondToInputEventData dataPackage{ *args.eventData };
+					dataPackage.addMessageEmbed(msgEmbed);
+					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
+					return;
+				}
+
+				std::cmatch matchResults;
+				std::regex_search(args.commandData.optionsArgs.at(1).c_str(), matchResults, numberRegExp);
+				int32_t betAmount = (int32_t)std::stoll(matchResults.str());
+				std::cmatch matchResults02;
+				std::regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults02, idRegExp);
+				std::string toUserID = matchResults02.str();
+				std::string fromUserID = args.eventData->getAuthorId();
+
+				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = fromUserID,.guildId = args.eventData->getGuildId() }).get();
+				DiscordGuildMember discordFromGuildMember(fromGuildMember);
+
+				GuildMember toGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = toUserID,.guildId = args.eventData->getGuildId() }).get();
+				DiscordGuildMember discordToGuildMember(toGuildMember);
+
+				if (toGuildMember.user.userName == "") {
+					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
+					EmbedData msgEmbed;
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**User Issue:**__");
+					DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
+					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
+					dataPackage.addMessageEmbed(msgEmbed);
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
+					return;
+				}
+
+				int32_t fromUserCurrency = discordFromGuildMember.data.currency.wallet;
+				int32_t toUserCurrency = discordToGuildMember.data.currency.wallet;
+
+				if (betAmount > fromUserCurrency) {
+					std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet for placing that wager!**\n------";
+					EmbedData msgEmbed;
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**Insufficient Funds:**__");
+					DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
+					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
+					dataPackage.addMessageEmbed(msgEmbed);
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
+					return;
+				}
+				if (betAmount > toUserCurrency) {
+					std::string msgString = "------\n**Sorry, but they have insufficient funds in their wallet for accepting that wager!**\n------";
+					EmbedData msgEmbed;
+					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**Insufficient Funds:**__");
+					DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
+					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
+					dataPackage.addMessageEmbed(msgEmbed);
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
+					return;
+				}
+				auto botUser = args.discordCoreClient->getBotUser();
+				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
+				std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + fromUserID + ">\nFor a wager of: " + std::to_string(betAmount) + " " +
+					discordUser.data.currencyName + "\nReact with :white_check_mark: to accept or :x: to reject!";
+				EmbedData messageEmbed;
+				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+				messageEmbed.setDescription(msgEmbedString);
+				messageEmbed.setTimeStamp(getTimeAndDate());
+				messageEmbed.setTitle("__**IT'S TIME TO DUEL!**__");
+				messageEmbed.setColor(discordGuild.data.borderColor);
+				std::unique_ptr<InputEventData> newEvent02 = std::make_unique<InputEventData>(*args.eventData);
+				RespondToInputEventData dataPackage2(*args.eventData);
+				dataPackage2.setResponseType(InputEventResponseType::Interaction_Response);
+				dataPackage2.addMessageEmbed(messageEmbed);
+				dataPackage2.addContent("<@!" + toUserID + ">");
+				dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
+				dataPackage2.addButton(false, "cross", "Reject", ButtonStyle::Success, "❌");
+				newEvent02 = InputEvents::respondToEvent(dataPackage2);
+				ButtonCollector button(*newEvent02);
+				std::vector<ButtonResponseData> buttonInteractionData = button.collectButtonData(false, 120000, 1, toUserID).get();
+				RespondToInputEventData dataPackageNew(buttonInteractionData.at(0).interactionData);
+				if (buttonInteractionData.at(0).buttonId == "empty") {
+					executeExit(fromUserID, toUserID, discordGuild, *newEvent02);
+				}
+				else if (buttonInteractionData.at(0).buttonId == "check") {
+					executeCheck(args, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02.get(), &betAmount, dataPackageNew, &msgEmbedString, &fromUserID, &toUserID);
+				}
+				else if (buttonInteractionData.at(0).buttonId == "cross") {
+					std::string rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer!";
+					EmbedData messageEmbed5;
+					messageEmbed5 = EmbedData();
+					messageEmbed5.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					messageEmbed5.setColor("FE0000");
+					messageEmbed5.setTimeStamp(getTimeAndDate());
+					messageEmbed5.setTitle("__**DUEL REJECTED!**__");
+					messageEmbed5.setDescription(rejectedString);
+					dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
+					dataPackageNew.addMessageEmbed(messageEmbed5);
+					dataPackageNew.addContent("<@!" + fromUserID + ">");
+					InputEvents::respondToEvent(dataPackageNew);
+				}
 				return;
 			}
-
-			InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
-
-			Guild guild = Guilds::getCachedGuildAsync({ args.eventData->getGuildId() }).get();
-			DiscordGuild discordGuild(guild);
-			bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
-
-			if (areWeAllowed == false) {
-				return;
+			catch (...) {
+				reportException("Duel::execute()");
 			}
-
-			std::regex numberRegExp("\\d{1,18}");
-			std::regex idRegExp("\\d{18}");
-
-			if (args.commandData.optionsArgs.size() < 2 || !std::regex_search(args.commandData.optionsArgs.at(1), numberRegExp) ||  std::stoll(args.commandData.optionsArgs.at(1)) < 0) {
-				std::string msgString = "------\n**Please enter a valid bet amount! (!duel = BETAMOUNT, @USERMENTION)**\n------";
-				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-				msgEmbed.setColor(discordGuild.data.borderColor);
-				msgEmbed.setDescription(msgString);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-				RespondToInputEventData dataPackage{ *args.eventData };
-				dataPackage.addMessageEmbed(msgEmbed);
-				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-				auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
-				return;
-			}
-
-			 std::cmatch matchResults;
-			std::regex_search(args.commandData.optionsArgs.at(1).c_str(), matchResults, numberRegExp);
-			int32_t betAmount = (int32_t) std::stoll(matchResults.str());
-			 std::cmatch matchResults02;
-			std::regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults02, idRegExp);
-			std::string toUserID = matchResults02.str();
-			std::string fromUserID = args.eventData->getAuthorId();
-
-			GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = fromUserID,.guildId = args.eventData->getGuildId() }).get();
-			DiscordGuildMember discordFromGuildMember(fromGuildMember);
-
-			GuildMember toGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = toUserID,.guildId = args.eventData->getGuildId() }).get();
-			DiscordGuildMember discordToGuildMember(toGuildMember);
-
-			if (toGuildMember.user.userName == "") {
-				std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
-				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-				msgEmbed.setColor(discordGuild.data.borderColor);
-				msgEmbed.setDescription(msgString);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**User Issue:**__");
-				DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
-				dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
-				dataPackage.addMessageEmbed(msgEmbed);
-				auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
-				return;
-			}
-
-			int32_t fromUserCurrency = discordFromGuildMember.data.currency.wallet;
-			int32_t toUserCurrency = discordToGuildMember.data.currency.wallet;
-
-			if (betAmount > fromUserCurrency) {
-				std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet for placing that wager!**\n------";
-				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-				msgEmbed.setColor(discordGuild.data.borderColor);
-				msgEmbed.setDescription(msgString);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Insufficient Funds:**__");
-				DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
-				dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
-				dataPackage.addMessageEmbed(msgEmbed);
-				auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
-				return;
-			}
-			if (betAmount > toUserCurrency) {
-				std::string msgString = "------\n**Sorry, but they have insufficient funds in their wallet for accepting that wager!**\n------";
-				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-				msgEmbed.setColor(discordGuild.data.borderColor);
-				msgEmbed.setDescription(msgString);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Insufficient Funds:**__");
-				DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
-				dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
-				dataPackage.addMessageEmbed(msgEmbed);
-				auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
-				return;
-			}
-			auto botUser = args.discordCoreClient->getBotUser();
-			DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-			std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + fromUserID + ">\nFor a wager of: " + std::to_string(betAmount) + " " +
-				discordUser.data.currencyName + "\nReact with :white_check_mark: to accept or :x: to reject!";
-			EmbedData messageEmbed;
-			messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-			messageEmbed.setDescription(msgEmbedString);
-			messageEmbed.setTimeStamp(getTimeAndDate());
-			messageEmbed.setTitle("__**IT'S TIME TO DUEL!**__");
-			messageEmbed.setColor(discordGuild.data.borderColor);
-			std::unique_ptr<InputEventData> newEvent02 = std::make_unique<InputEventData>(*args.eventData);
-			RespondToInputEventData dataPackage2(*args.eventData);
-			dataPackage2.setResponseType(InputEventResponseType::Interaction_Response);
-			dataPackage2.addMessageEmbed(messageEmbed);
-			dataPackage2.addContent("<@!" + toUserID + ">");
-			dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
-			dataPackage2.addButton(false, "cross", "Reject", ButtonStyle::Success, "❌");
-			newEvent02 = InputEvents::respondToEvent(dataPackage2);
-			ButtonCollector button(*newEvent02);
-			std::vector<ButtonResponseData> buttonInteractionData = button.collectButtonData(false, 120000, 1, toUserID).get();
-			RespondToInputEventData dataPackageNew(buttonInteractionData.at(0).interactionData);
-			if (buttonInteractionData.at(0).buttonId == "empty") {
-				executeExit(fromUserID, toUserID, discordGuild, *newEvent02);
-			}
-			else if (buttonInteractionData.at(0).buttonId == "check") {
-				executeCheck(args, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02.get(), &betAmount, dataPackageNew, &msgEmbedString, &fromUserID, &toUserID);
-			}
-			else if (buttonInteractionData.at(0).buttonId == "cross") {
-				std::string rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer!";
-				EmbedData messageEmbed5;
-				messageEmbed5 = EmbedData();
-				messageEmbed5.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
-				messageEmbed5.setColor("FE0000");
-				messageEmbed5.setTimeStamp(getTimeAndDate());
-				messageEmbed5.setTitle("__**DUEL REJECTED!**__");
-				messageEmbed5.setDescription(rejectedString);
-				dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-				dataPackageNew.addMessageEmbed(messageEmbed5);
-				dataPackageNew.addContent("<@!" + fromUserID + ">");
-				InputEvents::respondToEvent(dataPackageNew);
-			}
-			return;
 		}
 		virtual ~Duel() {};
 	};
