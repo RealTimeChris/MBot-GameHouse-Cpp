@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (! areWeAllowed) {
+				if (!areWeAllowed) {
 					return;
 				}
 
@@ -57,7 +57,7 @@ namespace DiscordCoreAPI {
 				if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "all") {
 					depositAmount = discordGuildMember.data.currency.wallet;
 				} else if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "" ||
-						   ! regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) || std::stoll(matchResults.str()) <= 0) {
+						   !regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) || std::stoll(matchResults.str()) <= 0) {
 					std::string msgString = "------\n**Please enter a valid deposit amount!(!deposit = AMOUNT)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

@@ -56,8 +56,8 @@ namespace DiscordCoreAPI {
 				if (args.commandData.optionsArgs.size() == 0) {
 					userID = args.eventData->getRequesterId();
 				} else if (args.commandData.optionsArgs.at(0) != "") {
-					if (! regex_search(args.commandData.optionsArgs.at(0), mentionRegExp, std::regex_constants::match_flag_type::format_first_only) &&
-						! regex_search(args.commandData.optionsArgs.at(0), idRegExp, std::regex_constants::match_flag_type::format_first_only)) {
+					if (!regex_search(args.commandData.optionsArgs.at(0), mentionRegExp, std::regex_constants::match_flag_type::format_first_only) &&
+						!regex_search(args.commandData.optionsArgs.at(0), idRegExp, std::regex_constants::match_flag_type::format_first_only)) {
 						std::string msgString = "------\n* *Please, enter a valid user mention, or enter none at all!(!balance = @USERMENTION)**\n------";
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

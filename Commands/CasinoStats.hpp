@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowedHere = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (! areWeAllowedHere) {
+				if (!areWeAllowedHere) {
 					return;
 				}
 

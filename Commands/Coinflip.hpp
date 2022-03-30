@@ -54,7 +54,7 @@ namespace DiscordCoreAPI {
 											{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
 											.get();
 				std::unique_ptr<InputEventData> inputData = std::make_unique<InputEventData>();
-				if (! botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
+				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -72,7 +72,7 @@ namespace DiscordCoreAPI {
 				std::regex betAmountRegExp("\\d{1,18}");
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				if (args.commandData.optionsArgs.size() == 0 || ! std::regex_search(args.commandData.optionsArgs.at(0), betAmountRegExp) ||
+				if (args.commandData.optionsArgs.size() == 0 || !std::regex_search(args.commandData.optionsArgs.at(0), betAmountRegExp) ||
 					std::stoll(args.commandData.optionsArgs.at(0)) < 1) {
 					std::string msgString =
 						"------\n**Please enter a valid amount to bet! 1 " + discordUser.data.currencyName + " or more! (!coinflip = BETAMOUNT)**\n------";

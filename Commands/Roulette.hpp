@@ -114,7 +114,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 namespace DiscordCoreAPI {
 
 	constexpr uint32_t stringToInt(std::string str, int32_t h = 0) {
-		return ! str[h] ? 5381 : (stringToInt(str, h + 1) * 33) ^ str[h];
+		return !str[h] ? 5381 : (stringToInt(str, h + 1) * 33) ^ str[h];
 	}
 
 	class RouletteGame : public BaseFunction {
@@ -331,7 +331,7 @@ namespace DiscordCoreAPI {
 						case stringToInt("straight"): {
 							payoutAmount = betAmount * 35;
 							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
-								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+								!regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid value from the roulette wheel!(1 - 36)**\n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -374,7 +374,7 @@ namespace DiscordCoreAPI {
 						case stringToInt("split"): {
 							payoutAmount = betAmount * 17;
 							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
-								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+								!regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your split!(1 - 35)** \n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -414,7 +414,7 @@ namespace DiscordCoreAPI {
 						case stringToInt("street"): {
 							payoutAmount = betAmount * 11;
 							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
-								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+								!regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your street!(1 - 34)** \n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -466,7 +466,7 @@ namespace DiscordCoreAPI {
 						case stringToInt("sixline"): {
 							payoutAmount = betAmount * 5;
 							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
-								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+								!regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your sixline!**\n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

@@ -60,7 +60,7 @@ namespace DiscordCoreAPI {
 				std::regex oppModRegExp("-{0,1}\\d{1,5}");
 				std::regex itemCostRegExp("\\d{1,6}");
 				std::regex emojiRegExp(".{1,32}");
-				if (args.commandData.optionsArgs.size() < 2 || ! regex_search(args.commandData.optionsArgs.at(1), selfModRegExp) ||
+				if (args.commandData.optionsArgs.size() < 2 || !regex_search(args.commandData.optionsArgs.at(1), selfModRegExp) ||
 					std::stoll(args.commandData.optionsArgs.at(1)) > 100 || std::stoll(args.commandData.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid self-mod value, between 0 and 100! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
@@ -91,7 +91,7 @@ namespace DiscordCoreAPI {
 					std::unique_ptr<InputEventData> eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				if (args.commandData.optionsArgs.size() < 4 || ! regex_search(args.commandData.optionsArgs.at(3), itemCostRegExp) ||
+				if (args.commandData.optionsArgs.size() < 4 || !regex_search(args.commandData.optionsArgs.at(3), itemCostRegExp) ||
 					std::stoll(args.commandData.optionsArgs.at(3)) < 1) {
 					std::string msgString = "------\n**Please enter a valid item cost! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed;
@@ -106,7 +106,7 @@ namespace DiscordCoreAPI {
 					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				if (args.commandData.optionsArgs.size() < 5 || ! regex_search(args.commandData.optionsArgs.at(4), emojiRegExp)) {
+				if (args.commandData.optionsArgs.size() < 5 || !regex_search(args.commandData.optionsArgs.at(4), emojiRegExp)) {
 					std::string msgString = "------\n**Please enter a valid emoji! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

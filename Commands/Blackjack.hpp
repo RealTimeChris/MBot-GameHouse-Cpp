@@ -706,7 +706,7 @@ namespace DiscordCoreAPI {
 						.get();
 				GuildMember botMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = args.eventData->getGuildId() }).get();
-				if (! botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
+				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -722,7 +722,7 @@ namespace DiscordCoreAPI {
 				}
 
 				std::regex betRegExp("\\d{1,18}");
-				if (args.commandData.optionsArgs.size() == 0 || ! std::regex_search(args.commandData.optionsArgs.at(0), betRegExp) ||
+				if (args.commandData.optionsArgs.size() == 0 || !std::regex_search(args.commandData.optionsArgs.at(0), betRegExp) ||
 					std::stoll(args.commandData.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid bet amount!(!blackjack = BETAMOUNT)**\n------";
 					EmbedData msgEmbed;

@@ -58,7 +58,7 @@ namespace DiscordCoreAPI {
 
 				std::regex hexColorRegExp(".{1,24}");
 				std::regex costRegExp("\\d{1,8}");
-				if (args.commandData.optionsArgs.size() < 2 || ! regex_search(args.commandData.optionsArgs.at(1), hexColorRegExp)) {
+				if (args.commandData.optionsArgs.size() < 2 || !regex_search(args.commandData.optionsArgs.at(1), hexColorRegExp)) {
 					std::string msgString = "------\n**Please enter a valid hex color value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -72,7 +72,7 @@ namespace DiscordCoreAPI {
 					auto event = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				if (args.commandData.optionsArgs.size() < 3 || ! regex_search(args.commandData.optionsArgs.at(2), costRegExp) ||
+				if (args.commandData.optionsArgs.size() < 3 || !regex_search(args.commandData.optionsArgs.at(2), costRegExp) ||
 					std::stoll(args.commandData.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;

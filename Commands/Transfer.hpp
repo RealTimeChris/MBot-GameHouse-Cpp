@@ -41,13 +41,13 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (! areWeAllowed) {
+				if (!areWeAllowed) {
 					return;
 				}
 
 				std::regex userMentionRegExp("\\d{18}");
 				std::regex amountRegExp("\\d{1,18}");
-				if (! regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
+				if (!regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid number for amount! (!transfer = AMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

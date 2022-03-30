@@ -121,7 +121,7 @@ namespace DiscordCoreAPI {
 				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
 											{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
 											.get();
-				if (! (botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
+				if (!(botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this command!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

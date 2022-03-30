@@ -42,14 +42,14 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (! areWeAllowed) {
+				if (!areWeAllowed) {
 					return;
 				}
 
 
 				int32_t betAmountOld;
 				std::regex digitRegExp("\\d{1,18}");
-				if (std::stoll(args.commandData.optionsArgs[0]) <= 0 || ! regex_search(args.commandData.optionsArgs.at(0), digitRegExp)) {
+				if (std::stoll(args.commandData.optionsArgs[0]) <= 0 || !regex_search(args.commandData.optionsArgs.at(0), digitRegExp)) {
 					std::string msgString = "------\n**Please, enter a valid bet amount as the first argument of the command! (!slots = BETAMOUNT)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
