@@ -643,7 +643,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments args, DiscordCo
 
 namespace DiscordCoreAPI {
 
-	class Blackjack: public BaseFunction {
+	class Blackjack : public BaseFunction {
 	  public:
 		Blackjack() {
 			this->commandName = "blackjack";

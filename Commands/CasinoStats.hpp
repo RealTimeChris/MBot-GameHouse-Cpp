@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class CasinoStatsFunction: public BaseFunction {
+	class CasinoStatsFunction : public BaseFunction {
 	  public:
 		CasinoStatsFunction() {
 			this->commandName = "casinostats";

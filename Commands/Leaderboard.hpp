@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class Leaderboard: public BaseFunction {
+	class Leaderboard : public BaseFunction {
 	  public:
 		Leaderboard() {
 			this->commandName = "leaderboard";

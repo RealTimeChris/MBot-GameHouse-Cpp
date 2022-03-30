@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class RemoveObject: public BaseFunction {
+	class RemoveObject : public BaseFunction {
 	  public:
 		RemoveObject() {
 			this->commandName = "removeobject";

@@ -8,7 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class Withdraw: public BaseFunction {
+	class Withdraw : public BaseFunction {
 	  public:
 		Withdraw() {
 			this->commandName = "withdraw";

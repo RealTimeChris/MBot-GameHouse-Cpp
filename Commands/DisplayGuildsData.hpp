@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class DisplayGuildsData: public BaseFunction {
+	class DisplayGuildsData : public BaseFunction {
 	  public:
 		DisplayGuildsData() {
 			this->commandName = "displayguildsdata";

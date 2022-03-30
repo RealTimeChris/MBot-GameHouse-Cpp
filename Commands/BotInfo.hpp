@@ -8,7 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class BotInfo: public BaseFunction {
+	class BotInfo : public BaseFunction {
 	  public:
 		BotInfo() {
 			this->commandName = "botinfo";

@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class Coinflip: public BaseFunction {
+	class Coinflip : public BaseFunction {
 	  public:
 		Coinflip() {
 			this->commandName = "coinflip";

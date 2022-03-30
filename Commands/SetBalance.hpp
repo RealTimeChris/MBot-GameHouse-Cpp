@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class SetBalance: public BaseFunction {
+	class SetBalance : public BaseFunction {
 	  public:
 		SetBalance() {
 			this->commandName = "setbalance";

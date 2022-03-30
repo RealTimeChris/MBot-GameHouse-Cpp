@@ -8,7 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class SetGameChannel: public BaseFunction {
+	class SetGameChannel : public BaseFunction {
 	  public:
 		SetGameChannel() {
 			this->commandName = "setgamechannel";

@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class Buy: public BaseFunction {
+	class Buy : public BaseFunction {
 	  public:
 		Buy() {
 			this->commandName = "buy";

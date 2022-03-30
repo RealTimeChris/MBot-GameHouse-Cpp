@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class SetBorderColor: public BaseFunction {
+	class SetBorderColor : public BaseFunction {
 	  public:
 		SetBorderColor() {
 			this->commandName = "setbordercolor";

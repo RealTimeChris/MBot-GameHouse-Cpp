@@ -77,7 +77,7 @@ namespace DiscordCoreAPI {
 		return returnVector;
 	}
 
-	class Shop: public BaseFunction {
+	class Shop : public BaseFunction {
 	  public:
 		Shop() {
 			this->commandName = "shop";

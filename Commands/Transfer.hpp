@@ -8,7 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class Transfer: public BaseFunction {
+	class Transfer : public BaseFunction {
 	  public:
 		Transfer() {
 			this->commandName = "transfer";

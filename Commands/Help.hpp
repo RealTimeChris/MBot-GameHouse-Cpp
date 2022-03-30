@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class Help: public BaseFunction {
+	class Help : public BaseFunction {
 	  public:
 		Help() {
 			this->commandName = "help";

@@ -110,7 +110,7 @@ namespace DiscordCoreAPI {
 		return ! str[h] ? 5381 : (stringToInt(str, h + 1) * 33) ^ str[h];
 	}
 
-	class RouletteGame: public BaseFunction {
+	class RouletteGame : public BaseFunction {
 	  public:
 		RouletteGame() {
 			this->commandName = "roulette";

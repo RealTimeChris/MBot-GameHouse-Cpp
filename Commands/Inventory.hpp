@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class Inventory: public BaseFunction {
+	class Inventory : public BaseFunction {
 	  public:
 		Inventory() {
 			this->commandName = "inventory";

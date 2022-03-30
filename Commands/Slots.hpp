@@ -8,7 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class Slots: public BaseFunction {
+	class Slots : public BaseFunction {
 	  public:
 		Slots() {
 			this->commandName = "slots";

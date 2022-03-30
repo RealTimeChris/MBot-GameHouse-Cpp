@@ -9,7 +9,7 @@
 
 namespace DiscordCoreAPI {
 
-	class AddShopRole: public BaseFunction {
+	class AddShopRole : public BaseFunction {
 	  public:
 		AddShopRole() {
 			this->commandName = "addshoprole";

@@ -304,7 +304,7 @@ void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::D
 }
 
 namespace DiscordCoreAPI {
-	class Duel: public BaseFunction {
+	class Duel : public BaseFunction {
 	  public:
 		Duel() {
 			this->commandName = "duel";
