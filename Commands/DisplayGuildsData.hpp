@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class DisplayGuildsData : public BaseFunction {
-	public:
+	class DisplayGuildsData: public BaseFunction {
+	  public:
 		DisplayGuildsData() {
 			this->commandName = "displayguildsdata";
 			this->helpDescription = "Displays some info about the servers that this bot is in.";
@@ -33,16 +33,16 @@ namespace DiscordCoreAPI {
 				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 				Guild guild = Guilds::getCachedGuildAsync({ args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
-				if (!doWeHaveAdminPermission) {
+				if (! doWeHaveAdminPermission) {
 					return;
 				}
 
 				uint32_t currentCount = 0;
 				std::vector<Guild> theCache = Guilds::getAllGuildsAsync().get();
 				std::unique_ptr<InputEventData> inputEvent = std::make_unique<InputEventData>(*args.eventData);
-				for (auto& value : theCache) {
+				for (auto& value: theCache) {
 					std::string msgString = "__Guild Name:__ " + value.name + "\n";
 					msgString += "__Guild ID:__ " + value.id + "\n";
 					msgString += "__Member Count:__ " + std::to_string(value.memberCount) + "\n";
@@ -69,8 +69,7 @@ namespace DiscordCoreAPI {
 						dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 						dataPackage02.addMessageEmbed(messageEmbed);
 						inputEvent = InputEvents::respondToEvent(dataPackage02);
-					}
-					else {
+					} else {
 						RespondToInputEventData dataPackage(*args.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Follow_Up_Message);
 						dataPackage.addMessageEmbed(messageEmbed);
@@ -79,13 +78,10 @@ namespace DiscordCoreAPI {
 					currentCount += 1;
 				};
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("DisplayGuildsData::execute()");
 			}
-
-
 		};
-		virtual ~DisplayGuildsData() {};
+		virtual ~DisplayGuildsData(){};
 	};
 }

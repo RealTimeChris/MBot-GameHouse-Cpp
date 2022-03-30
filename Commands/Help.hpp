@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class Help : public  BaseFunction {
-	public:
+	class Help: public BaseFunction {
+	  public:
 		Help() {
 			this->commandName = "help";
 			this->helpDescription = "A help command for this bot!";
@@ -26,7 +26,7 @@ namespace DiscordCoreAPI {
 			return std::make_unique<Help>();
 		}
 
-		virtual  void execute(BaseFunctionArguments& args) {
+		virtual void execute(BaseFunctionArguments& args) {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = args.eventData->getChannelId() }).get();
 
@@ -44,13 +44,13 @@ namespace DiscordCoreAPI {
 					std::vector<std::vector<SelectOptionData>> selectOptions;
 					int32_t counter{ 0 };
 					int32_t currentHelpPage{ 0 };
-					for (auto& [key, value] : args.discordCoreClient->commandController.getFunctions()) {
+					for (auto& [key, value]: args.discordCoreClient->commandController.getFunctions()) {
 						if (counter % 24 == 0) {
 							selectOptions.push_back(std::vector<SelectOptionData>());
 							currentHelpPage += 1;
 						}
 						std::string newString;
-						newString.push_back((char)toupper(value->commandName[0]));
+						newString.push_back(( char )toupper(value->commandName[0]));
 						newString += value->commandName.substr(1, value->commandName.length() - 1);
 						SelectOptionData newData;
 						newData.label = newString;
@@ -58,8 +58,8 @@ namespace DiscordCoreAPI {
 						newData.value = convertToLowerCase(newString);
 						newData.emoji.name = "✅";
 						bool doWeContinue{ false };
-						for (auto& value02 : selectOptions) {
-							for (auto& value03 : value02) {
+						for (auto& value02: selectOptions) {
+							for (auto& value03: value02) {
 								if (value03.value == newData.value) {
 									doWeContinue = true;
 									break;
@@ -69,7 +69,7 @@ namespace DiscordCoreAPI {
 						if (doWeContinue) {
 							continue;
 						}
-						selectOptions.at((int64_t)currentHelpPage - (int64_t)1).push_back(newData);
+						selectOptions.at(( int64_t )currentHelpPage - ( int64_t )1).push_back(newData);
 						counter += 1;
 					}
 					SelectOptionData newData;
@@ -78,7 +78,7 @@ namespace DiscordCoreAPI {
 					newData.value = "go back";
 					newData.emoji.name = "❌";
 					std::vector<std::vector<SelectOptionData>> selectOptionsNew;
-					for (auto& value : selectOptions) {
+					for (auto& value: selectOptions) {
 						value.push_back(newData);
 						selectOptionsNew.push_back(value);
 					}
@@ -95,7 +95,12 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\nHello! How are you doing today?! I'm " + args.discordCoreClient->getBotUser().userName + " and I'm here to help you out!\n" +
 						"Please, select one of my commands from the drop-down menu below, to gain more information about them! (Or select 'Go Back' to go back to the previous menu)\n------";
 					std::unique_ptr<InputEventData> newEvent{ std::make_unique<InputEventData>() };
-					std::vector<std::string> numberEmojiNames{ "✅", "🍬", "🅱", "❌", };
+					std::vector<std::string> numberEmojiNames{
+						"✅",
+						"🍬",
+						"🅱",
+						"❌",
+					};
 					std::vector<std::string> numberEmojiId;
 
 					responseData.addMessageEmbed(msgEmbed);
@@ -109,8 +114,7 @@ namespace DiscordCoreAPI {
 						responseData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						isItFirst = false;
 						newEvent01 = InputEvents::respondToEvent(responseData);
-					}
-					else {
+					} else {
 						responseData.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						InputEvents::respondToEvent(responseData);
 					}
@@ -118,7 +122,7 @@ namespace DiscordCoreAPI {
 					auto buttonData = button.collectButtonData(false, 120000, 1, args.eventData->getRequesterId()).get();
 					int32_t counter03{ 0 };
 					std::vector<RespondToInputEventData> editInteractionResponseData00;
-					for (auto& value : selectOptionsNew) {
+					for (auto& value: selectOptionsNew) {
 						EmbedData msgEmbed00;
 						msgEmbed00.setAuthor(newEvent01->getUserName(), newEvent01->getAvatarUrl());
 						msgEmbed00.setColor(discordGuild.data.borderColor);
@@ -154,15 +158,14 @@ namespace DiscordCoreAPI {
 							}
 						}
 						newEvent = InputEvents::respondToEvent(editInteractionResponseData00.at(counter02));
-					}
-					else {
+					} else {
 						break;
 					}
 					SelectMenuCollector selectMenu(*newEvent01);
 					auto selectMenuReturnData = selectMenu.collectSelectMenuData(false, 120000, 1, args.eventData->getRequesterId()).get();
 					EmbedData newEmbed{};
-					for (auto& [key, value] : args.discordCoreClient->commandController.getFunctions()) {
-						for (auto& valueNew : key) {
+					for (auto& [key, value]: args.discordCoreClient->commandController.getFunctions()) {
+						for (auto& valueNew: key) {
 							if (valueNew == selectMenuReturnData.at(0).values.at(0)) {
 								newEmbed = args.discordCoreClient->commandController.getFunctions().at(key)->helpEmbed;
 							}
@@ -192,8 +195,7 @@ namespace DiscordCoreAPI {
 					if (buttonReturnData02.at(0).buttonId == "back") {
 						responseData = RespondToInputEventData{ buttonReturnData02.at(0).interactionData };
 						continue;
-					}
-					else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
+					} else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
 						RespondToInputEventData responseData02(buttonReturnData02.at(0).interactionData);
 						responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						responseData02.addMessageEmbed(newEmbed);
@@ -203,12 +205,10 @@ namespace DiscordCoreAPI {
 				}
 
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Help::execute()");
 			}
-
 		}
-		virtual ~Help() {};
+		virtual ~Help(){};
 	};
 }

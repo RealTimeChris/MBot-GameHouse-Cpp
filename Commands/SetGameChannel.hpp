@@ -8,21 +8,22 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class SetGameChannel :public BaseFunction {
-	public:
+	class SetGameChannel: public BaseFunction {
+	  public:
 		SetGameChannel() {
 			this->commandName = "setgamechannel";
 			this->helpDescription = "Enables channel-restriction for issuing commands on the bot, and sets the channels.";
 			EmbedData msgEmbed;
-			msgEmbed.setDescription("------\nSimply enter /setmusichannel add in order to add the current channel.\nAlternatively enter /setgamechannel remove to remove the current channel.\nAlso, enter /setgamechannel view or purge to view or purge the currently enabled channels.\n------");
+			msgEmbed.setDescription("------\nSimply enter /setmusichannel add in order to add the current channel.\nAlternatively enter /setgamechannel remove to remove the current channel.\nAlso, enter /setgamechannel "
+									"view or purge to view or purge the currently enabled channels.\n------");
 			msgEmbed.setTitle("__**Set Game Channel Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
 			msgEmbed.setColor("FeFeFe");
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<SetGameChannel>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<SetGameChannel>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -38,7 +39,7 @@ namespace DiscordCoreAPI {
 				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdminPermission == false) {
@@ -46,7 +47,6 @@ namespace DiscordCoreAPI {
 				}
 
 				if (args.commandData.subCommandName == "add") {
-
 					std::string channelID = channel.id;
 					for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
 						if (channelID == discordGuild.data.gameChannelIds[x]) {
@@ -137,8 +137,7 @@ namespace DiscordCoreAPI {
 
 						discordGuild.data.gameChannelIds = std::vector<std::string>();
 						discordGuild.writeDataToDB();
-					}
-					else {
+					} else {
 						msgString += "------\n**Sorry, but there are no channels to remove!**\n------";
 					}
 
@@ -179,11 +178,10 @@ namespace DiscordCoreAPI {
 				}
 
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("SetGameChannel::execute()");
 			}
 		}
-		virtual ~SetGameChannel() {};
+		virtual ~SetGameChannel(){};
 	};
 }

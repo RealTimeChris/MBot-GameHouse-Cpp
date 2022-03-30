@@ -8,8 +8,8 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class Transfer :public BaseFunction {
-	public:
+	class Transfer: public BaseFunction {
+	  public:
 		Transfer() {
 			this->commandName = "transfer";
 			this->helpDescription = "Transfers currency from yourself to another server member.";
@@ -22,13 +22,13 @@ namespace DiscordCoreAPI {
 		}
 
 		std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Transfer>();
+			return std::make_unique<Transfer>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
-				bool  areWeInADm = areWeInADM(*args.eventData, channel);
+				bool areWeInADm = areWeInADM(*args.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
@@ -41,13 +41,13 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (!areWeAllowed) {
+				if (! areWeAllowed) {
 					return;
 				}
 
 				std::regex userMentionRegExp("\\d{18}");
 				std::regex amountRegExp("\\d{1,18}");
-				if (!regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
+				if (! regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid number for amount! (!transfer = AMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -66,8 +66,12 @@ namespace DiscordCoreAPI {
 				regex_search(args.commandData.optionsArgs[1].c_str(), matchResults, userMentionRegExp);
 				std::string toUserID = matchResults.str();
 				std::string fromUserID = args.eventData->getAuthorId();
-				uint32_t amount = (uint32_t)std::stoll(args.commandData.optionsArgs[0]);
-				GuildMember toUserMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = toUserID ,.guildId = args.eventData->getGuildId(), }).get();
+				uint32_t amount = ( uint32_t )std::stoll(args.commandData.optionsArgs[0]);
+				GuildMember toUserMember = GuildMembers::getCachedGuildMemberAsync({
+																					   .guildMemberId = toUserID,
+																					   .guildId = args.eventData->getGuildId(),
+																				   })
+											   .get();
 
 				if (toUserID == fromUserID) {
 					std::string msgString = "------\n**Sorry, but you cannot transfer to yourself!**\n------";
@@ -99,7 +103,11 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = fromUserID , .guildId = args.eventData->getGuildId(), }).get();
+				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({
+																						  .guildMemberId = fromUserID,
+																						  .guildId = args.eventData->getGuildId(),
+																					  })
+												  .get();
 				DiscordGuildMember discordFromGuildMember(fromGuildMember);
 
 				if (amount > discordFromGuildMember.data.currency.wallet) {
@@ -138,11 +146,10 @@ namespace DiscordCoreAPI {
 				dataPackage.addContent("<@!" + toUserID + ">");
 				InputEvents::respondToEvent(dataPackage);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Transfer::execute()");
 			}
 		}
-		virtual ~Transfer() {};
+		virtual ~Transfer(){};
 	};
 }

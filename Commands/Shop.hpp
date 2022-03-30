@@ -9,21 +9,17 @@
 
 namespace DiscordCoreAPI {
 
-	enum class ItemsOrRoles {
-		roles = 0,
-		items = 1
-	};
+	enum class ItemsOrRoles { roles = 0, items = 1 };
 
 	std::vector<SelectOptionData> getSelectOptionsVector(DiscordGuild discordGuild, ItemsOrRoles itemsOrRoles) {
 		discordGuild.getDataFromDB();
 		uint32_t maxIdx = 0;
 		InventoryItem tempItem;
-		uint32_t len = (uint32_t)discordGuild.data.guildShop.items.size();
+		uint32_t len = ( uint32_t )discordGuild.data.guildShop.items.size();
 		for (uint32_t x = 0; x < len; x += 1) {
 			maxIdx = x;
 			for (uint32_t y = x + 1; y < len; y += 1) {
-				if (discordGuild.data.guildShop.items.at(y).itemCost
-			> discordGuild.data.guildShop.items.at(maxIdx).itemCost) {
+				if (discordGuild.data.guildShop.items.at(y).itemCost > discordGuild.data.guildShop.items.at(maxIdx).itemCost) {
 					maxIdx = y;
 				}
 			}
@@ -34,12 +30,11 @@ namespace DiscordCoreAPI {
 
 		maxIdx = 0;
 		InventoryRole tempRole;
-		len = (uint32_t)discordGuild.data.guildShop.roles.size();
+		len = ( uint32_t )discordGuild.data.guildShop.roles.size();
 		for (uint32_t x = 0; x < len; x += 1) {
 			maxIdx = x;
 			for (uint32_t y = x + 1; y < len; y += 1) {
-				if (discordGuild.data.guildShop.roles.at(y).roleCost
-			> discordGuild.data.guildShop.roles.at(maxIdx).roleCost) {
+				if (discordGuild.data.guildShop.roles.at(y).roleCost > discordGuild.data.guildShop.roles.at(maxIdx).roleCost) {
 					maxIdx = y;
 				}
 			}
@@ -51,7 +46,7 @@ namespace DiscordCoreAPI {
 
 		std::vector<SelectOptionData> returnVector;
 		if (itemsOrRoles == ItemsOrRoles::items) {
-			for (auto& value : discordGuild.data.guildShop.items) {
+			for (auto& value: discordGuild.data.guildShop.items) {
 				SelectOptionData itemOptionData;
 				itemOptionData.emoji.name = value.emoji;
 				itemOptionData.description = "Cost: " + std::to_string(value.itemCost) + " Self-Mod: " + std::to_string(value.selfMod) + " Opp-Mod: " + std::to_string(value.oppMod);
@@ -60,9 +55,8 @@ namespace DiscordCoreAPI {
 				itemOptionData._default = false;
 				returnVector.push_back(itemOptionData);
 			}
-		}
-		else {
-			for (auto& value : discordGuild.data.guildShop.roles) {
+		} else {
+			for (auto& value: discordGuild.data.guildShop.roles) {
 				SelectOptionData roleOptionData;
 				roleOptionData.description = "Cost: " + std::to_string(value.roleCost);
 				roleOptionData.label = value.roleName;
@@ -83,8 +77,8 @@ namespace DiscordCoreAPI {
 		return returnVector;
 	}
 
-	class Shop : public BaseFunction {
-	public:
+	class Shop: public BaseFunction {
+	  public:
 		Shop() {
 			this->commandName = "shop";
 			this->helpDescription = "View the server's item and role shop!";
@@ -96,8 +90,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Shop>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<Shop>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -115,15 +109,15 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
 				}
 
-				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.discordCoreClient->getBotUser().id,.guildId = args.eventData->getGuildId() }).get();
-				if (!(botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
+				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() }).get();
+				if (! (botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this command!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -144,7 +138,7 @@ namespace DiscordCoreAPI {
 				for (uint32_t x = 0; x < discordGuild.data.guildShop.roles.size(); x += 1) {
 					bool isRoleFound = false;
 					InventoryRole shopRole = discordGuild.data.guildShop.roles[x];
-					for (auto& value2 : rolesArray) {
+					for (auto& value2: rolesArray) {
 						if (value2.id == shopRole.roleId) {
 							isRoleFound = true;
 							break;
@@ -204,8 +198,7 @@ namespace DiscordCoreAPI {
 					auto buttonData = newButton.collectButtonData(false, 120000, 1, args.eventData->getAuthorId()).get();
 					if (buttonData.at(0).buttonId == "items") {
 						currentEmbed = msgEmbedItems;
-					}
-					else if (buttonData.at(0).buttonId == "roles") {
+					} else if (buttonData.at(0).buttonId == "roles") {
 						currentEmbed = msgEmbedRoles;
 					}
 					if (buttonData.at(0).buttonId == "roles" || buttonData.at(0).buttonId == "items") {
@@ -214,22 +207,20 @@ namespace DiscordCoreAPI {
 						dataPackage.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 						if (buttonData.at(0).buttonId == "items") {
 							std::vector<SelectOptionData> selectOptionDataItems = getSelectOptionsVector(discordGuild, ItemsOrRoles::items);
-							dataPackage.addSelectMenu(false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.", (int32_t)selectOptionDataItems.size(), 1);
-						}
-						else {
+							dataPackage.addSelectMenu(false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.", ( int32_t )selectOptionDataItems.size(), 1);
+						} else {
 							std::vector<SelectOptionData> selectOptionDataRoles = getSelectOptionsVector(discordGuild, ItemsOrRoles::roles);
-							dataPackage.addSelectMenu(false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.", (int32_t)selectOptionDataRoles.size(), 1);
+							dataPackage.addSelectMenu(false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.", ( int32_t )selectOptionDataRoles.size(), 1);
 						}
 						InputEvents::respondToEvent(dataPackage);
-					}
-					else if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
+					} else if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
 						break;
 					}
 
 					SelectMenuCollector selectMenu(*event02);
 					values = selectMenu.collectSelectMenuData(false, 120000, 1, args.eventData->getAuthorId()).get();
-					for (auto& value : values) {
-						for (auto& value2 : value.values) {
+					for (auto& value: values) {
+						for (auto& value2: value.values) {
 							if (value2 == "go_back" || values.size() == 0) {
 								RespondToInputEventData dataPackage02(value.interactionData);
 								dataPackage02.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
@@ -244,8 +235,8 @@ namespace DiscordCoreAPI {
 					}
 					break;
 				}
-				for (auto& value : values) {
-					for (auto& value02 : value.values) {
+				for (auto& value: values) {
+					for (auto& value02: value.values) {
 						DiscordGuildMember discordGuildMember(guildMember);
 						std::string objectName = value02;
 						std::string objectType;
@@ -331,7 +322,8 @@ namespace DiscordCoreAPI {
 
 							Roles::addGuildMemberRoleAsync({ .guildId = args.eventData->getGuildId(), .userId = guildMember.user.id, .roleId = roleID });
 
-							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
+							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName +
+								")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 							EmbedData msgEmbed04;
 							msgEmbed04.setTitle("__**New Role Purchased:**__");
 							msgEmbed04.setTimeStamp(getTimeAndDate());
@@ -344,12 +336,11 @@ namespace DiscordCoreAPI {
 							std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
 
 							uint32_t maxIdx = 0;
-							uint32_t len = (uint32_t)discordGuildMember.data.roles.size();
+							uint32_t len = ( uint32_t )discordGuildMember.data.roles.size();
 							for (uint32_t x = 0; x < len; x += 1) {
 								maxIdx = x;
 								for (uint32_t y = x + 1; y < len; y += 1) {
-									if (discordGuildMember.data.roles.at(y).roleCost
-								> discordGuildMember.data.roles.at(maxIdx).roleCost) {
+									if (discordGuildMember.data.roles.at(y).roleCost > discordGuildMember.data.roles.at(maxIdx).roleCost) {
 										maxIdx = y;
 									}
 								}
@@ -359,9 +350,8 @@ namespace DiscordCoreAPI {
 							}
 							discordGuildMember.writeDataToDB();
 							continue;
-						}
-						else if (objectType == "item") {
-							uint32_t  itemCost = discordGuild.data.guildShop.items.at(objectShopIndex).itemCost;
+						} else if (objectType == "item") {
+							uint32_t itemCost = discordGuild.data.guildShop.items.at(objectShopIndex).itemCost;
 							uint32_t userBalance = discordGuildMember.data.currency.wallet;
 
 							if (itemCost > userBalance) {
@@ -389,18 +379,18 @@ namespace DiscordCoreAPI {
 							std::string itemEmoji = discordGuild.data.guildShop.items.at(objectShopIndex).emoji;
 							std::string itemName = discordGuild.data.guildShop.items.at(objectShopIndex).itemName;
 							uint32_t newBalance = discordGuildMember.data.currency.wallet;
-							std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
+							std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName +
+								"\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 							EmbedData msgEmbed05;
 							msgEmbed05.setTitle("__**New Item Purchased:**__");
 
 							uint32_t maxIdx = 0;
 							InventoryItem tempItem;
-							uint32_t len = (uint32_t)discordGuildMember.data.items.size();
+							uint32_t len = ( uint32_t )discordGuildMember.data.items.size();
 							for (uint32_t x = 0; x < len; x += 1) {
 								maxIdx = x;
 								for (uint32_t y = x + 1; y < len; y += 1) {
-									if (discordGuildMember.data.items.at(y).itemCost
-								> discordGuildMember.data.items.at(maxIdx).itemCost) {
+									if (discordGuildMember.data.items.at(y).itemCost > discordGuildMember.data.items.at(maxIdx).itemCost) {
 										maxIdx = y;
 									}
 								}
@@ -419,7 +409,6 @@ namespace DiscordCoreAPI {
 							std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
 						}
 					}
-
 				}
 
 				InputEvents::deleteInputEventResponseAsync(std::move(event02));
@@ -427,11 +416,10 @@ namespace DiscordCoreAPI {
 				discordGuild.writeDataToDB();
 
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Shop::execute()");
 			}
 		}
-		virtual ~Shop() {};
+		virtual ~Shop(){};
 	};
 }

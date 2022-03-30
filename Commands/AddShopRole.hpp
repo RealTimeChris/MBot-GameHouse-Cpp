@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class AddShopRole :public BaseFunction {
-	public:
+	class AddShopRole: public BaseFunction {
+	  public:
 		AddShopRole() {
 			this->commandName = "addshoprole";
 			this->helpDescription = "Add a role to the server's shop";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<AddShopRole>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<AddShopRole>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -41,15 +41,15 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId()  }).get();
+				GuildMember guildMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 
 				bool doWeHaveAdmin = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdmin == false) {
 					return;
 				}
-				
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData,  discordGuild);
+
+				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -57,7 +57,7 @@ namespace DiscordCoreAPI {
 
 				std::regex hexColorRegExp(".{1,24}");
 				std::regex costRegExp("\\d{1,8}");
-				if (args.commandData.optionsArgs.size() < 2 || !regex_search(args.commandData.optionsArgs.at(1), hexColorRegExp)) {
+				if (args.commandData.optionsArgs.size() < 2 || ! regex_search(args.commandData.optionsArgs.at(1), hexColorRegExp)) {
 					std::string msgString = "------\n**Please enter a valid hex color value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -71,7 +71,7 @@ namespace DiscordCoreAPI {
 					auto event = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				if (args.commandData.optionsArgs.size() < 3 || !regex_search(args.commandData.optionsArgs.at(2), costRegExp) ||  std::stoll(args.commandData.optionsArgs.at(2)) <= 0) {
+				if (args.commandData.optionsArgs.size() < 3 || ! regex_search(args.commandData.optionsArgs.at(2), costRegExp) || std::stoll(args.commandData.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -91,9 +91,9 @@ namespace DiscordCoreAPI {
 				regex_search(args.commandData.optionsArgs.at(1).c_str(), matchResults, hexColorRegExp);
 				std::string roleColor = matchResults.str();
 				regex_search(args.commandData.optionsArgs.at(2).c_str(), matchResults, costRegExp);
-				uint32_t roleCost = (uint32_t) std::stoll(matchResults.str());
+				uint32_t roleCost = ( uint32_t )std::stoll(matchResults.str());
 
-				for (auto& value : discordGuild.data.guildShop.roles) {
+				for (auto& value: discordGuild.data.guildShop.roles) {
 					if (roleName == value.roleName) {
 						std::string msgString = "------\n**Sorry, but a role by that name already exists!**\n------";
 						EmbedData msgEmbed;
@@ -110,7 +110,7 @@ namespace DiscordCoreAPI {
 					}
 				}
 
-				Permissions  rolePermsString{ "" };
+				Permissions rolePermsString{ "" };
 				std::vector<Permission> permissions;
 				permissions.push_back(Permission::Create_Instant_Invite);
 				permissions.push_back(Permission::Add_Reactions);
@@ -153,8 +153,8 @@ namespace DiscordCoreAPI {
 				std::string msgString = "";
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as follows:\n------\n__**Role:**__ <@&" + currentRole.roleId + "> __**Cost**__ : " + std::to_string(roleCost) + " "
-					+ discordUser.data.currencyName + "\n------";
+				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as follows:\n------\n__**Role:**__ <@&" + currentRole.roleId +
+					"> __**Cost**__ : " + std::to_string(roleCost) + " " + discordUser.data.currencyName + "\n------";
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
@@ -166,11 +166,10 @@ namespace DiscordCoreAPI {
 				dataPackage.addMessageEmbed(msgEmbed);
 				InputEvents::respondToEvent(dataPackage);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("AddShopRole::execute()");
 			}
 		}
-		virtual ~AddShopRole() {};
+		virtual ~AddShopRole(){};
 	};
 }

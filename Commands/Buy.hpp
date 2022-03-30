@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class Buy : public BaseFunction {
-	public:
+	class Buy: public BaseFunction {
+	  public:
 		Buy() {
 			this->commandName = "buy";
 			this->helpDescription = "Buy an item or role from the server's shop.";
@@ -20,11 +20,10 @@ namespace DiscordCoreAPI {
 			msgEmbed.setTimeStamp(getTimeAndDate());
 			msgEmbed.setColor("FeFeFe");
 			this->helpEmbed = msgEmbed;
-
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Buy>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<Buy>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -53,9 +52,9 @@ namespace DiscordCoreAPI {
 				std::string objectName = args.commandData.optionsArgs.at(0);
 				uint32_t objectShopIndex = 0;
 				std::string objectType;
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id,.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember ,.guildId = args.eventData->getGuildId() }).get();
+				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = args.eventData->getGuildId() }).get();
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
@@ -129,7 +128,7 @@ namespace DiscordCoreAPI {
 					}
 				}
 
-				for (uint32_t x = 0; x < discordGuildMember.data.roles .size(); x += 1) {
+				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					if (objectName == discordGuildMember.data.roles.at(x).roleName) {
 						isFoundInInventory = true;
 						break;
@@ -182,7 +181,8 @@ namespace DiscordCoreAPI {
 					Roles::addGuildMemberRoleAsync({ .guildId = args.eventData->getGuildId(), .userId = currentUser.id, .roleId = roleID });
 					auto botUser = args.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
-					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
+					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName +
+						")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setTitle("__**New Role Purchased:**__");
 					msgEmbed.setTimeStamp(getTimeAndDate());
@@ -193,15 +193,14 @@ namespace DiscordCoreAPI {
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
-					
+
 					uint32_t maxIdx = 0;
 					InventoryRole tempItem;
-					uint32_t len = (uint32_t)discordGuildMember.data.roles.size();
+					uint32_t len = ( uint32_t )discordGuildMember.data.roles.size();
 					for (uint32_t x = 0; x < len; x += 1) {
 						maxIdx = x;
 						for (uint32_t y = x + 1; y < len; y += 1) {
-							if (discordGuildMember.data.roles.at(y).roleCost
-						> discordGuildMember.data.roles.at(maxIdx).roleCost) {
+							if (discordGuildMember.data.roles.at(y).roleCost > discordGuildMember.data.roles.at(maxIdx).roleCost) {
 								maxIdx = y;
 							}
 						}
@@ -211,9 +210,8 @@ namespace DiscordCoreAPI {
 					}
 					discordGuildMember.writeDataToDB();
 					return;
-				}
-				else if (objectType ==  "item") {
-					uint32_t  itemCost = discordGuild.data.guildShop.items.at(objectShopIndex).itemCost;
+				} else if (objectType == "item") {
+					uint32_t itemCost = discordGuild.data.guildShop.items.at(objectShopIndex).itemCost;
 					uint32_t userBalance = discordGuildMember.data.currency.wallet;
 
 					if (itemCost > userBalance) {
@@ -241,18 +239,18 @@ namespace DiscordCoreAPI {
 					uint32_t newBalance = discordGuildMember.data.currency.wallet;
 					auto botUser = args.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
-					std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
+					std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName +
+						"\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setTitle("__**New Item Purchased:**__");
 
 					uint32_t maxIdx = 0;
 					InventoryItem tempItem;
-					uint32_t len = (uint32_t)discordGuildMember.data.items.size();
+					uint32_t len = ( uint32_t )discordGuildMember.data.items.size();
 					for (uint32_t x = 0; x < len; x += 1) {
 						maxIdx = x;
 						for (uint32_t y = x + 1; y < len; y += 1) {
-							if (discordGuildMember.data.items.at(y).itemCost
-						> discordGuildMember.data.items.at(maxIdx).itemCost) {
+							if (discordGuildMember.data.items.at(y).itemCost > discordGuildMember.data.items.at(maxIdx).itemCost) {
 								maxIdx = y;
 							}
 						}
@@ -261,7 +259,7 @@ namespace DiscordCoreAPI {
 						discordGuildMember.data.items.at(maxIdx) = tempItem;
 					}
 					discordGuildMember.writeDataToDB();
-	 				msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 					msgEmbed.setColor(discordGuild.data.borderColor);
@@ -272,15 +270,11 @@ namespace DiscordCoreAPI {
 					return;
 				}
 				return;
+			} catch (...) {
+				reportException("Buy::execute()");
 			}
-			catch (...) {
-				  reportException("Buy::execute()");
-			}
+		}
 
-			
-			}
-
-			virtual ~Buy() {};
-		};
+		virtual ~Buy(){};
 	};
-	
+};

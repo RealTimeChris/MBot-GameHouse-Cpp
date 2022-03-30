@@ -8,8 +8,8 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class Withdraw : public BaseFunction {
-	public:
+	class Withdraw: public BaseFunction {
+	  public:
 		Withdraw() {
 			this->commandName = "withdraw";
 			this->helpDescription = "Withdraws currency from your bank account to your wallet.";
@@ -21,8 +21,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Withdraw>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<Withdraw>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -42,18 +42,22 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (!areWeAllowed) {
+				if (! areWeAllowed) {
 					return;
 				}
 
 				uint32_t withdrawAmount = 0;
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId(), }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
+																					  .guildMemberId = args.eventData->getAuthorId(),
+																					  .guildId = args.eventData->getGuildId(),
+																				  })
+											  .get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::regex amountRegExp("\\d{1,18}");
-				if (args.commandData.optionsArgs.size() == 0 || !regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
-					std::string  msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
+				if (args.commandData.optionsArgs.size() == 0 || ! regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
+					std::string msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
@@ -65,11 +69,10 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 					return;
-				}
-				else {
+				} else {
 					std::cmatch matchResults;
 					regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, amountRegExp);
-					withdrawAmount = (uint32_t)std::stoll(matchResults.str());
+					withdrawAmount = ( uint32_t )std::stoll(matchResults.str());
 				}
 
 				if (withdrawAmount > discordGuildMember.data.currency.bank) {
@@ -92,9 +95,9 @@ namespace DiscordCoreAPI {
 				discordGuildMember.writeDataToDB();
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				std::string msgString = "Congratulations! You've withdrawn " + std::to_string(withdrawAmount) + " " + discordUser.data.currencyName + " from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" +
-					"__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName
-					+ "\n------";
+				std::string msgString = "Congratulations! You've withdrawn " + std::to_string(withdrawAmount) + " " + discordUser.data.currencyName +
+					" from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" + "__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName +
+					"\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -107,11 +110,10 @@ namespace DiscordCoreAPI {
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Withdraw::execute()");
 			}
 		}
-		virtual ~Withdraw() {};
+		virtual ~Withdraw(){};
 	};
 }

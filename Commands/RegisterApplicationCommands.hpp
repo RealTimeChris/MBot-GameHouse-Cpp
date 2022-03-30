@@ -8,9 +8,9 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	
-	class RegisterApplicationCommands :public BaseFunction {
-	public:
+
+	class RegisterApplicationCommands: public BaseFunction {
+	  public:
 		RegisterApplicationCommands() {
 			this->commandName = "registerapplicationcommands";
 			this->helpDescription = "Registers some application commands.";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<RegisterApplicationCommands>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<RegisterApplicationCommands>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -634,11 +634,10 @@ namespace DiscordCoreAPI {
 				dataPackage02.addMessageEmbed(msgEmbed);
 				auto event = InputEvents::respondToEvent(dataPackage02);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("RegisterApplicationCommands::execute()");
 			}
 		}
-		virtual ~RegisterApplicationCommands() {};
+		virtual ~RegisterApplicationCommands(){};
 	};
 }

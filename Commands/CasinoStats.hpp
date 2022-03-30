@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class CasinoStatsFunction :public BaseFunction {
-	public:
+	class CasinoStatsFunction: public BaseFunction {
+	  public:
 		CasinoStatsFunction() {
 			this->commandName = "casinostats";
 			this->helpDescription = "View stats about this server's casino.";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<CasinoStatsFunction>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<CasinoStatsFunction>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -43,13 +43,13 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowedHere = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (!areWeAllowedHere) {
+				if (! areWeAllowedHere) {
 					return;
 				}
 
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				std::vector<EmbedFieldData> fields;
 				EmbedFieldData field1;
 				field1.name = "__**Largest Coinflip Payout:**__";
@@ -108,13 +108,11 @@ namespace DiscordCoreAPI {
 				dataPackage.addMessageEmbed(msgEmbed);
 				InputEvents::respondToEvent(dataPackage);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("CasinoStats::execute()");
 			}
 		};
 
-		virtual ~CasinoStatsFunction() {};
-
+		virtual ~CasinoStatsFunction(){};
 	};
 }

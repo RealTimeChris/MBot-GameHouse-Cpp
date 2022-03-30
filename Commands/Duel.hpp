@@ -7,15 +7,16 @@
 
 #include "HelperFunctions.hpp"
 
-void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::DiscordGuildMember* discordFromGuildMember, DiscordCoreAPI::DiscordGuildMember* discordToGuildMember,DiscordCoreAPI::DiscordGuild* discordGuild,  DiscordCoreAPI::InputEventData* newEvent, int32_t* betAmount, 
-	DiscordCoreAPI::RespondToInputEventData dataPackageNew, std::string* msgEmbedString,  std::string* fromUserIDNew, std::string* toUserIDNew) {
+void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::DiscordGuildMember* discordFromGuildMember, DiscordCoreAPI::DiscordGuildMember* discordToGuildMember,
+				  DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData* newEvent, int32_t* betAmount, DiscordCoreAPI::RespondToInputEventData dataPackageNew, std::string* msgEmbedString,
+				  std::string* fromUserIDNew, std::string* toUserIDNew) {
 	discordFromGuildMember->getDataFromDB();
 	int32_t fromUserCurrency = discordFromGuildMember->data.currency.wallet;
 	discordToGuildMember->getDataFromDB();
 	int32_t toUserCurrency = discordToGuildMember->data.currency.wallet;
 	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ .userId = newEvent->getRequesterId() }).get();
 	*fromUserIDNew;
-	
+
 	if (*betAmount > fromUserCurrency) {
 		std::string msgString;
 		msgString = *msgEmbedString + "\n\n__**Sorry, but you have insufficient funds in your wallet for placing that wager!**__";
@@ -55,9 +56,9 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent03), 20000);
 		return;
 	}
-	
+
 	std::mt19937_64 randomEngine{ static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
-	
+
 	int32_t fromUserRoll = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 100.0f);
 	int32_t toUserRoll = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 100.0f);
 	std::vector<DiscordCoreAPI::EmbedData> messageEmbeds;
@@ -72,8 +73,8 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 	int32_t toUserOppMod = 0;
 	int32_t finalFromUserRoll = 0;
 	int32_t finalToUserRoll = 0;
-	
-	for (auto value : discordFromGuildMember->data.items) {
+
+	for (auto value: discordFromGuildMember->data.items) {
 		if (value.selfMod > 0) {
 			std::string currentString = "+" + std::to_string(value.selfMod);
 			currentString += " of base roll from <@!" + *fromUserIDNew + ">'s " + value.emoji + value.itemName + "\n";
@@ -88,7 +89,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		}
 	}
 
-	for (auto value : discordToGuildMember->data.items) {
+	for (auto value: discordToGuildMember->data.items) {
 		if (value.selfMod > 0) {
 			std::string currentString = "+" + std::to_string(value.selfMod);
 			currentString += " of base roll from <@!" + *toUserIDNew + ">'s " + value.emoji + value.itemName + "\n";
@@ -102,13 +103,12 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 			fromUserOppMod += value.oppMod;
 		}
 	}
-	
-	finalFromUserRoll = (int32_t)DiscordCoreAPI::applyAsymptoticTransform((float)(fromUserRoll + fromUserSelfMod + fromUserOppMod), 2000, 100);
-	finalToUserRoll = (int32_t)DiscordCoreAPI::applyAsymptoticTransform((float)(toUserRoll + toUserSelfMod + toUserOppMod), 2000, 100);
+
+	finalFromUserRoll = ( int32_t )DiscordCoreAPI::applyAsymptoticTransform(( float )(fromUserRoll + fromUserSelfMod + fromUserOppMod), 2000, 100);
+	finalToUserRoll = ( int32_t )DiscordCoreAPI::applyAsymptoticTransform(( float )(toUserRoll + toUserSelfMod + toUserOppMod), 2000, 100);
 
 	std::string fromUserFooterString;
-	if (finalFromUserRoll != fromUserRoll || fromUserOppMod != 0
-		|| fromUserSelfMod != 0) {
+	if (finalFromUserRoll != fromUserRoll || fromUserOppMod != 0 || fromUserSelfMod != 0) {
 		fromUserFooterString = "__**For a final roll of:**__ " + std::to_string(finalFromUserRoll) + "\n";
 	}
 
@@ -141,18 +141,17 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		finalFooterString = "------\n__Your new wallet balances are:__\n";
 		auto botUser = args.discordCoreClient->getBotUser();
 		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-		finalFooterString += "<@!" + *fromUserIDNew + ">: " + std::to_string(discordFromGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n" + "<@!" + *toUserIDNew + ">: " +
-			std::to_string(discordToGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+		finalFooterString += "<@!" + *fromUserIDNew + ">: " + std::to_string(discordFromGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n" + "<@!" + *toUserIDNew +
+			">: " + std::to_string(discordToGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::vector<std::string> fromUserModStrings;
-		for (auto value : fromUserLossStrings) {
+		for (auto value: fromUserLossStrings) {
 			fromUserGainStrings.push_back(value);
 		}
 		fromUserModStrings = fromUserGainStrings;
 
-		for (auto value : fromUserModStrings) {
-			if ((finalStrings[currentPage].length() + value.length()
-				+ midFooter1.length() + fromUserFooterString.length()) >= 2048) {
+		for (auto value: fromUserModStrings) {
+			if ((finalStrings[currentPage].length() + value.length() + midFooter1.length() + fromUserFooterString.length()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
 				finalStrings[currentPage] = fromUserVicHeaderString;
@@ -166,14 +165,13 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		finalStrings[currentPage] += midFooter2;
 
 		std::vector<std::string> toUserModStrings;
-		for (auto value : toUserLossStrings) {
+		for (auto value: toUserLossStrings) {
 			toUserGainStrings.push_back(value);
 		}
 		toUserModStrings = toUserGainStrings;
 
-		for (auto value : toUserModStrings) {
-			if ((finalStrings[currentPage].size() + value.size()
-				+ midFooter1.size() + toUserFooterString.size()) >= 2048) {
+		for (auto value: toUserModStrings) {
+			if ((finalStrings[currentPage].size() + value.size() + midFooter1.size() + toUserFooterString.size()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
 				finalStrings[currentPage] = fromUserVicHeaderString;
@@ -185,7 +183,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		}
 		finalStrings[currentPage] += finalFooterString;
 
-		messageEmbeds.resize((int64_t)currentPage + (int64_t)1);
+		messageEmbeds.resize(( int64_t )currentPage + ( int64_t )1);
 		for (uint32_t x = 0; x < finalStrings.size(); x += 1) {
 			messageEmbeds[x] = DiscordCoreAPI::EmbedData();
 			messageEmbeds[x].setAuthor(currentUser.userName, currentUser.avatar);
@@ -194,8 +192,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 			messageEmbeds[x].setTitle("__**Duel Results: " + std::to_string(x + 1) + " of " + std::to_string(finalStrings.size()) + "**__");
 			messageEmbeds[x].setDescription(finalStrings[x]);
 		}
-	}
-	else if (finalToUserRoll > finalFromUserRoll) {
+	} else if (finalToUserRoll > finalFromUserRoll) {
 		discordToGuildMember->data.currency.wallet += *betAmount;
 		discordToGuildMember->writeDataToDB();
 		discordFromGuildMember->getDataFromDB();
@@ -214,22 +211,21 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		std::string midFooter2 = "__**<@!" + *fromUserIDNew + ">:**__ " + std::to_string(fromUserRoll) + "\n";
 
 		finalStrings[currentPage] += midFooter1;
-		
+
 		auto botUser = args.discordCoreClient->getBotUser();
 		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 
-		std::string finalFooterString = "-----\n__Your new wallet balances are: __\n<@!" + *toUserIDNew + ">: " + std::to_string(discordToGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n<@!" +
-			*fromUserIDNew + ">: " + std::to_string(discordFromGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
-			
+		std::string finalFooterString = "-----\n__Your new wallet balances are: __\n<@!" + *toUserIDNew + ">: " + std::to_string(discordToGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName +
+			"\n<@!" + *fromUserIDNew + ">: " + std::to_string(discordFromGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+
 		std::vector<std::string> toUserModStrings;
-		for (auto value : toUserLossStrings) {
+		for (auto value: toUserLossStrings) {
 			toUserGainStrings.push_back(value);
 		}
 		toUserModStrings = toUserGainStrings;
 
-		for (auto value : toUserModStrings) {
-			if ((finalStrings[currentPage].length() + value.length()
-				+ midFooter1.length() + toUserFooterString.length()) >= 2048) {
+		for (auto value: toUserModStrings) {
+			if ((finalStrings[currentPage].length() + value.length() + midFooter1.length() + toUserFooterString.length()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
 				finalStrings[currentPage] = toUserVicHeaderString;
@@ -243,14 +239,13 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		finalStrings[currentPage] += midFooter2;
 
 		std::vector<std::string> fromUserModStrings;
-		for (auto value : fromUserLossStrings) {
+		for (auto value: fromUserLossStrings) {
 			fromUserGainStrings.push_back(value);
 		}
 		fromUserModStrings = fromUserGainStrings;
 
-		for (auto value : fromUserModStrings) {
-			if ((finalStrings[currentPage].size() + value.size()
-				+ fromUserFooterString.size()) >= 2048) {
+		for (auto value: fromUserModStrings) {
+			if ((finalStrings[currentPage].size() + value.size() + fromUserFooterString.size()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
 				finalStrings[currentPage] = toUserVicHeaderString;
@@ -262,7 +257,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 		}
 		finalStrings[currentPage] += finalFooterString;
 
-		messageEmbeds.resize((int64_t)currentPage + (int64_t)1);
+		messageEmbeds.resize(( int64_t )currentPage + ( int64_t )1);
 		for (uint32_t x = 0; x < finalStrings.size(); x += 1) {
 			messageEmbeds[x] = DiscordCoreAPI::EmbedData();
 			messageEmbeds[x].setAuthor(currentUser.userName, currentUser.avatar);
@@ -271,8 +266,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::Di
 			messageEmbeds[x].setTitle("__**Duel Results: " + std::to_string(x + 1) + " of " + std::to_string(finalStrings.size()) + "**__");
 			messageEmbeds[x].setDescription(finalStrings[x]);
 		}
-	}
-	else if (finalToUserRoll == finalFromUserRoll) {
+	} else if (finalToUserRoll == finalFromUserRoll) {
 		finalStrings.resize(1);
 		messageEmbeds.push_back(DiscordCoreAPI::EmbedData());
 		finalStrings[0] = "__**Looks like it was a draw! Nicely done!**__";
@@ -310,8 +304,8 @@ void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::D
 }
 
 namespace DiscordCoreAPI {
-	class Duel : public BaseFunction {
-	public:
+	class Duel: public BaseFunction {
+	  public:
 		Duel() {
 			this->commandName = "duel";
 			this->helpDescription = "Challenge a fellow server member to a duel, for currency.";
@@ -323,8 +317,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Duel>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<Duel>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -349,7 +343,7 @@ namespace DiscordCoreAPI {
 				std::regex numberRegExp("\\d{1,18}");
 				std::regex idRegExp("\\d{18}");
 
-				if (args.commandData.optionsArgs.size() < 2 || !std::regex_search(args.commandData.optionsArgs.at(1), numberRegExp) || std::stoll(args.commandData.optionsArgs.at(1)) < 0) {
+				if (args.commandData.optionsArgs.size() < 2 || ! std::regex_search(args.commandData.optionsArgs.at(1), numberRegExp) || std::stoll(args.commandData.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid bet amount! (!duel = BETAMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -366,16 +360,16 @@ namespace DiscordCoreAPI {
 
 				std::cmatch matchResults;
 				std::regex_search(args.commandData.optionsArgs.at(1).c_str(), matchResults, numberRegExp);
-				int32_t betAmount = (int32_t)std::stoll(matchResults.str());
+				int32_t betAmount = ( int32_t )std::stoll(matchResults.str());
 				std::cmatch matchResults02;
 				std::regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults02, idRegExp);
 				std::string toUserID = matchResults02.str();
 				std::string fromUserID = args.eventData->getAuthorId();
 
-				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = fromUserID,.guildId = args.eventData->getGuildId() }).get();
+				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = fromUserID, .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember discordFromGuildMember(fromGuildMember);
 
-				GuildMember toGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = toUserID,.guildId = args.eventData->getGuildId() }).get();
+				GuildMember toGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = toUserID, .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember discordToGuildMember(toGuildMember);
 
 				if (toGuildMember.user.userName == "") {
@@ -426,8 +420,8 @@ namespace DiscordCoreAPI {
 				}
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-				std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + fromUserID + ">\nFor a wager of: " + std::to_string(betAmount) + " " +
-					discordUser.data.currencyName + "\nReact with :white_check_mark: to accept or :x: to reject!";
+				std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + fromUserID + ">\nFor a wager of: " + std::to_string(betAmount) + " " + discordUser.data.currencyName +
+					"\nReact with :white_check_mark: to accept or :x: to reject!";
 				EmbedData messageEmbed;
 				messageEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				messageEmbed.setDescription(msgEmbedString);
@@ -447,11 +441,9 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackageNew(buttonInteractionData.at(0).interactionData);
 				if (buttonInteractionData.at(0).buttonId == "empty") {
 					executeExit(fromUserID, toUserID, discordGuild, *newEvent02);
-				}
-				else if (buttonInteractionData.at(0).buttonId == "check") {
+				} else if (buttonInteractionData.at(0).buttonId == "check") {
 					executeCheck(args, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02.get(), &betAmount, dataPackageNew, &msgEmbedString, &fromUserID, &toUserID);
-				}
-				else if (buttonInteractionData.at(0).buttonId == "cross") {
+				} else if (buttonInteractionData.at(0).buttonId == "cross") {
 					std::string rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer!";
 					EmbedData messageEmbed5;
 					messageEmbed5 = EmbedData();
@@ -466,11 +458,10 @@ namespace DiscordCoreAPI {
 					InputEvents::respondToEvent(dataPackageNew);
 				}
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Duel::execute()");
 			}
 		}
-		virtual ~Duel() {};
+		virtual ~Duel(){};
 	};
 }

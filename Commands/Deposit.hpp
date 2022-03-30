@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class Deposit : public BaseFunction {
-	public:
+	class Deposit: public BaseFunction {
+	  public:
 		Deposit() {
 			this->commandName = "deposit";
 			this->helpDescription = "Deposit some currency to your bank account for safe keeping.";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Deposit>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<Deposit>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -43,11 +43,11 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (!areWeAllowed) {
+				if (! areWeAllowed) {
 					return;
 				}
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(),.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::regex depositAmountRegExp("\\d{1,18}");
@@ -55,8 +55,8 @@ namespace DiscordCoreAPI {
 				uint32_t depositAmount = 0;
 				if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "all") {
 					depositAmount = discordGuildMember.data.currency.wallet;
-				}
-				else if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "" || !regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) || std::stoll(matchResults.str()) <= 0) {
+				} else if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "" || ! regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) ||
+						   std::stoll(matchResults.str()) <= 0) {
 					std::string msgString = "------\n**Please enter a valid deposit amount!(!deposit = AMOUNT)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -69,9 +69,8 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 					return;
-				}
-				else if (regex_search(args.commandData.optionsArgs[0], depositAmountRegExp)) {
-					depositAmount = (uint32_t)std::stoll(matchResults.str());
+				} else if (regex_search(args.commandData.optionsArgs[0], depositAmountRegExp)) {
+					depositAmount = ( uint32_t )std::stoll(matchResults.str());
 				}
 
 				if (depositAmount > discordGuildMember.data.currency.wallet) {
@@ -91,7 +90,7 @@ namespace DiscordCoreAPI {
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				uint32_t msPerSecond = 1000;
-				uint32_t  SecondsPerMinute = 60;
+				uint32_t SecondsPerMinute = 60;
 				uint32_t msPerMinute = msPerSecond * SecondsPerMinute;
 				uint32_t MinutesPerHour = 60;
 				uint32_t msPerHour = msPerMinute * MinutesPerHour;
@@ -107,22 +106,21 @@ namespace DiscordCoreAPI {
 					discordGuildMember.data.currency.timeOfLastDeposit = currentTime;
 					discordGuildMember.writeDataToDB();
 
-					msgString = "Congratulations! You've deposited " + std::to_string(depositAmount) + " " + discordUser.data.currencyName + " from your wallet into your bank!\n------\n__**Your new balances are:**__\n__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " ";
+					msgString = "Congratulations! You've deposited " + std::to_string(depositAmount) + " " + discordUser.data.currencyName +
+						" from your wallet into your bank!\n------\n__**Your new balances are:**__\n__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " ";
 					msgString += discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
-				}
-				else {
+				} else {
 					uint32_t timeRemaining = msPerDepositCycle - timeSinceLastDeposit;
-					uint32_t hoursRemain = (uint32_t)trunc(timeRemaining / msPerHour);
-					uint32_t minutesRemain = (uint32_t)trunc((timeRemaining % msPerHour) / msPerMinute);
-					uint32_t secondsRemain = (uint32_t)trunc(((timeRemaining % msPerHour) % msPerMinute) / msPerSecond);
+					uint32_t hoursRemain = ( uint32_t )trunc(timeRemaining / msPerHour);
+					uint32_t minutesRemain = ( uint32_t )trunc((timeRemaining % msPerHour) / msPerMinute);
+					uint32_t secondsRemain = ( uint32_t )trunc(((timeRemaining % msPerHour) % msPerMinute) / msPerSecond);
 
 					if (hoursRemain > 0) {
-						msgString = "Sorry, but you need to wait " + std::to_string(hoursRemain) + " hours, " + std::to_string(minutesRemain) + " minutes, and " + std::to_string(secondsRemain) + " seconds before you can make another deposit!";
-					}
-					else if (minutesRemain > 0) {
+						msgString = "Sorry, but you need to wait " + std::to_string(hoursRemain) + " hours, " + std::to_string(minutesRemain) + " minutes, and " + std::to_string(secondsRemain) +
+							" seconds before you can make another deposit!";
+					} else if (minutesRemain > 0) {
 						msgString = "Sorry, but you need to wait " + std::to_string(minutesRemain) + " minutes, and " + std::to_string(secondsRemain) + " seconds before you can make another deposit!";
-					}
-					else {
+					} else {
 						msgString = "Sorry, but you need to wait " + std::to_string(secondsRemain) + " seconds before you can make another deposit!";
 					}
 				}
@@ -138,11 +136,10 @@ namespace DiscordCoreAPI {
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Deposit::execute()");
 			}
 		}
-		virtual ~Deposit() {};
+		virtual ~Deposit(){};
 	};
 }

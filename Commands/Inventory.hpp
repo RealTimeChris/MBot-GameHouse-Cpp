@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class Inventory :public BaseFunction {
-	public:
+	class Inventory: public BaseFunction {
+	  public:
 		Inventory() {
 			this->commandName = "inventory";
 			this->helpDescription = "Inspect your own or someone else's inventoryt";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Inventory>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<Inventory>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -52,8 +52,7 @@ namespace DiscordCoreAPI {
 				std::regex idRegExp("\\d{18}");
 				if (args.commandData.optionsArgs.size() == 0) {
 					userID = args.eventData->getAuthorId();
-				}
-				else {
+				} else {
 					std::string argZero = args.commandData.optionsArgs.at(0);
 					std::cmatch userIDMatch;
 					regex_search(argZero.c_str(), userIDMatch, idRegExp);
@@ -61,7 +60,7 @@ namespace DiscordCoreAPI {
 					userID = userIDOne;
 				}
 
-				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID,.guildId = args.eventData->getGuildId() }).get();
+				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = args.eventData->getGuildId() }).get();
 
 				if (currentGuildMember.user.userName == "") {
 					std::string msgString = "-------\n**Sorry, but that user could not be found!**\n------";
@@ -103,7 +102,7 @@ namespace DiscordCoreAPI {
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
 					InventoryRole userRole = discordGuildMember.data.roles[x];
-					for (auto& value2 : rolesArray) {
+					for (auto& value2: rolesArray) {
 						if (value2.id == userRole.roleId) {
 							isRoleFound = true;
 							break;
@@ -135,8 +134,9 @@ namespace DiscordCoreAPI {
 						itemsMsgString.push_back("");
 					}
 					std::string itemsMsgStringTemp = "";
-					itemsMsgStringTemp = "**| __Item:__** " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName + " **| __Value:__** " + std::to_string(discordGuildMember.data.items[x].itemCost) + " **| __Self-Mod:__** " +
-						std::to_string(discordGuildMember.data.items[x].selfMod) + " **| __Opp-Mod:__** " + std::to_string(discordGuildMember.data.items[x].oppMod) + "\n";
+					itemsMsgStringTemp = "**| __Item:__** " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName + " **| __Value:__** " +
+						std::to_string(discordGuildMember.data.items[x].itemCost) + " **| __Self-Mod:__** " + std::to_string(discordGuildMember.data.items[x].selfMod) + " **| __Opp-Mod:__** " +
+						std::to_string(discordGuildMember.data.items[x].oppMod) + "\n";
 					if (itemsMsgStringTemp.length() + itemsMsgString[currentPage].length() >= 2048) {
 						currentPage += 1;
 						itemsMsgString.push_back("");
@@ -177,7 +177,8 @@ namespace DiscordCoreAPI {
 				for (uint32_t x = 0; x < rolesMsgStrings.size(); x += 1) {
 					EmbedData newEmbed;
 					newEmbed.setTimeStamp(getTimeAndDate());
-					newEmbed.setTitle("__**" + userName + "'s Inventory (Roles) Page " + std::to_string(itemsMessageEmbeds.size() + x + 1) + " of " + std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
+					newEmbed.setTitle("__**" + userName + "'s Inventory (Roles) Page " + std::to_string(itemsMessageEmbeds.size() + x + 1) + " of " + std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) +
+									  ":**__");
 					newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					newEmbed.setDescription(rolesMsgStrings[x]);
 					newEmbed.setColor(discordGuild.data.borderColor);
@@ -185,10 +186,10 @@ namespace DiscordCoreAPI {
 				}
 
 				std::vector<EmbedData> finalMsgEmbedsArray;
-				for (auto& value : itemsMessageEmbeds) {
+				for (auto& value: itemsMessageEmbeds) {
 					finalMsgEmbedsArray.push_back(value);
 				}
-				for (auto& value : rolesMsgEmbeds) {
+				for (auto& value: rolesMsgEmbeds) {
 					finalMsgEmbedsArray.push_back(value);
 				}
 
@@ -216,11 +217,10 @@ namespace DiscordCoreAPI {
 
 				moveThroughMessagePages(userID, std::make_unique<InputEventData>(*event02), currentPageIndex, finalMsgEmbedsArray, true, 120000);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Inventory::execute()");
 			}
 		}
-		virtual ~Inventory() {};
+		virtual ~Inventory(){};
 	};
 }

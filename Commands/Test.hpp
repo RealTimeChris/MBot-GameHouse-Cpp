@@ -7,8 +7,8 @@
 
 namespace DiscordCoreAPI {
 
-	class Test : public BaseFunction {
-	public:
+	class Test: public BaseFunction {
+	  public:
 		Test() {
 			this->commandName = "test";
 			this->helpDescription = "Testing purposes!";
@@ -21,7 +21,7 @@ namespace DiscordCoreAPI {
 		}
 
 		std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<Test>();
+			return std::make_unique<Test>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -35,15 +35,13 @@ namespace DiscordCoreAPI {
 				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
 				auto newEvent02 = InputEvents::respondToEvent(dataPackage02);
 				InputEvents::deleteInputEventResponseAsync(std::move(newEvent02), 5000).get();
-				
-				
+
+
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("Test::execute()");
 			}
 		}
-		virtual ~Test() {};
+		virtual ~Test(){};
 	};
 }
-

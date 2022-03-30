@@ -8,8 +8,8 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class RemoveShopRole :public BaseFunction {
-	public:
+	class RemoveShopRole: public BaseFunction {
+	  public:
 		RemoveShopRole() {
 			this->commandName = "removeshoprole";
 			this->helpDescription = "Remove a role from the server's shop.";
@@ -22,7 +22,7 @@ namespace DiscordCoreAPI {
 		}
 
 		std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<RemoveShopRole>();
+			return std::make_unique<RemoveShopRole>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -39,7 +39,11 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId(), }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
+																					  .guildMemberId = args.eventData->getAuthorId(),
+																					  .guildId = args.eventData->getGuildId(),
+																				  })
+											  .get();
 
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
@@ -87,7 +91,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				Roles::removeGuildRoleAsync({ .guildId = args.eventData->getGuildId(),.roleId = roleID }).get();
+				Roles::removeGuildRoleAsync({ .guildId = args.eventData->getGuildId(), .roleId = roleID }).get();
 
 				msgString += "You've just deleted a role from the shop / server!\n------\n__**Role Name:**__ " + realRoleName + "\n------";
 
@@ -103,11 +107,10 @@ namespace DiscordCoreAPI {
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("RemoveShopRole::execute()");
 			}
 		}
-		virtual ~RemoveShopRole() {};
+		virtual ~RemoveShopRole(){};
 	};
 }

@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class RemoveObject :public BaseFunction {
-	public:
+	class RemoveObject: public BaseFunction {
+	  public:
 		RemoveObject() {
 			this->commandName = "removeobject";
 			this->helpDescription = "Remove an object from your own or someone else's inventory.";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<RemoveObject>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<RemoveObject>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -41,7 +41,11 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId(), }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
+																					  .guildMemberId = args.eventData->getAuthorId(),
+																					  .guildId = args.eventData->getGuildId(),
+																				  })
+											  .get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
@@ -56,8 +60,7 @@ namespace DiscordCoreAPI {
 				std::string objectName;
 				if (regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults, idRegExp)) {
 					roleID = matchResults.str();
-				}
-				else {
+				} else {
 					objectName = args.commandData.optionsArgs.at(0);
 				}
 
@@ -65,8 +68,7 @@ namespace DiscordCoreAPI {
 				std::regex userMentionRegExp("<@!\\d{18}>");
 				if (args.commandData.optionsArgs.size() == 1) {
 					userID = args.eventData->getAuthorId();
-				}
-				else {
+				} else {
 					std::string argOne = args.commandData.optionsArgs.at(1);
 					std::cmatch matchResultsNew;
 					regex_search(argOne.c_str(), matchResultsNew, idRegExp);
@@ -74,7 +76,11 @@ namespace DiscordCoreAPI {
 					userID = userIDOne;
 				}
 
-				GuildMember targetMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = userID ,.guildId = args.eventData->getGuildId(), }).get();
+				GuildMember targetMember = GuildMembers::getGuildMemberAsync({
+																				 .guildMemberId = userID,
+																				 .guildId = args.eventData->getGuildId(),
+																			 })
+											   .get();
 
 				if (targetMember.user.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
@@ -151,11 +157,15 @@ namespace DiscordCoreAPI {
 				std::string msgString;
 
 				if (objectType == "role") {
-					Roles::removeGuildMemberRoleAsync({ .guildId = args.eventData->getGuildId(), .userId = targetMember.user.id, .roleId = roleID, }).get();
+					Roles::removeGuildMemberRoleAsync({
+														  .guildId = args.eventData->getGuildId(),
+														  .userId = targetMember.user.id,
+														  .roleId = roleID,
+													  })
+						.get();
 					msgString = "------\n**You've removed the following role from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
 					messageEmbed.setTitle("__**Role Removed:**__");
-				}
-				else if (objectType == "item") {
+				} else if (objectType == "item") {
 					msgString = "------\n**You've removed the following item from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
 					messageEmbed.setTitle("__**Item Removed:**__");
 				}
@@ -167,11 +177,10 @@ namespace DiscordCoreAPI {
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("RemoveObject::execute()");
 			}
 		}
-		virtual ~RemoveObject() {};
+		virtual ~RemoveObject(){};
 	};
 }

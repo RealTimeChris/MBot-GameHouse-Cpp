@@ -9,8 +9,8 @@
 
 namespace DiscordCoreAPI {
 
-	class SellDrugs :public BaseFunction {
-	public:
+	class SellDrugs: public BaseFunction {
+	  public:
 		SellDrugs() {
 			this->commandName = "selldrugs";
 			this->helpDescription = "Gains you some currency!";
@@ -22,8 +22,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			return  std::make_unique<SellDrugs>();
+		std::unique_ptr<BaseFunction> create() {
+			return std::make_unique<SellDrugs>();
 		}
 
 		virtual void execute(BaseFunctionArguments& args) {
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
-				if (areWeAllowed ==  false) {
+				if (areWeAllowed == false) {
 					return;
 				}
 				auto botUser = args.discordCoreClient->getBotUser();
@@ -54,12 +54,12 @@ namespace DiscordCoreAPI {
 				uint32_t msPerMinute = 60 * msPerSecond;
 				uint32_t msPerHour = 60 * msPerMinute;
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getRequesterId(),.guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getRequesterId(), .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
 				User currentUser = Users::getUserAsync({ .userId = args.eventData->getRequesterId() }).get();
 				uint32_t lastTimeWorked = discordGuildMember.data.lastTimeWorked;
 
-				uint32_t timeDifference = (uint32_t)currentTime - lastTimeWorked;
+				uint32_t timeDifference = ( uint32_t )currentTime - lastTimeWorked;
 
 				if (timeDifference >= msPerWorkCycle) {
 					std::mt19937_64 randomEngine{ static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
@@ -69,7 +69,8 @@ namespace DiscordCoreAPI {
 					discordGuildMember.writeDataToDB();
 
 					std::string msgString = "";
-					msgString += "You've been busy dealing drugs... and you've earned " + std::to_string(amountEarned) + " " + discordUser.data.currencyName + "\nNice job and watch out for cops!\nYour new wallet balance is: ";
+					msgString +=
+						"You've been busy dealing drugs... and you've earned " + std::to_string(amountEarned) + " " + discordUser.data.currencyName + "\nNice job and watch out for cops!\nYour new wallet balance is: ";
 					msgString += std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
 					EmbedData messageEmbed;
 					messageEmbed.setAuthor(currentUser.userName, currentUser.avatar);
@@ -82,26 +83,24 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(messageEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
 
-					discordGuildMember.data.lastTimeWorked = (uint32_t)std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+					discordGuildMember.data.lastTimeWorked = ( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 					discordGuildMember.writeDataToDB();
-				}
-				else {
+				} else {
 					uint32_t timeLeft = msPerWorkCycle - timeDifference;
-					uint32_t hoursLeft = (uint32_t)trunc(timeLeft / msPerHour);
-					uint32_t minutesLeft = (uint32_t)trunc((timeLeft % msPerHour) / msPerMinute);
-					uint32_t secondsLeft = (uint32_t)trunc(((timeLeft % msPerHour) % msPerMinute) / msPerSecond);
+					uint32_t hoursLeft = ( uint32_t )trunc(timeLeft / msPerHour);
+					uint32_t minutesLeft = ( uint32_t )trunc((timeLeft % msPerHour) / msPerMinute);
+					uint32_t secondsLeft = ( uint32_t )trunc(((timeLeft % msPerHour) % msPerMinute) / msPerSecond);
 
 					std::string msgString = "";
 					if (hoursLeft > 0) {
-						msgString += "Sorry, but you need to wait " + std::to_string(hoursLeft) + " hours, " + std::to_string(minutesLeft) + " minutes, and " + std::to_string(secondsLeft) + " seconds before you can get paid again!";
-					}
-					else if (minutesLeft > 0) {
+						msgString += "Sorry, but you need to wait " + std::to_string(hoursLeft) + " hours, " + std::to_string(minutesLeft) + " minutes, and " + std::to_string(secondsLeft) +
+							" seconds before you can get paid again!";
+					} else if (minutesLeft > 0) {
 						msgString += "Sorry, but you need to wait " + std::to_string(minutesLeft) + " minutes, and " + std::to_string(secondsLeft) + " seconds before you can get paid again!";
-					}
-					else {
+					} else {
 						msgString += "Sorry, but you need to wait " + std::to_string(secondsLeft) + " seconds before you can get paid again!";
 					}
-					EmbedData  messageEmbed;
+					EmbedData messageEmbed;
 					messageEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 					messageEmbed.setDescription(msgString);
 					messageEmbed.setTitle("__**Drug Dealing:**__");
@@ -112,11 +111,10 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(messageEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
 				}
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("SellDrugs::execute()");
 			}
 		}
-		virtual ~SellDrugs() {};
+		virtual ~SellDrugs(){};
 	};
 }

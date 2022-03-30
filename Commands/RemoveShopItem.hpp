@@ -8,8 +8,8 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
-	class RemoveShopItem : public BaseFunction {
-	public:
+	class RemoveShopItem: public BaseFunction {
+	  public:
 		RemoveShopItem() {
 			this->commandName = "removeshopitem";
 			this->helpDescription = "Remove's an item from the server's shop.";
@@ -21,8 +21,8 @@ namespace DiscordCoreAPI {
 			this->helpEmbed = msgEmbed;
 		}
 
-		 std::unique_ptr<BaseFunction> create() {
-			 std::unique_ptr<BaseFunction> newPtr =  std::make_unique<RemoveShopItem>();
+		std::unique_ptr<BaseFunction> create() {
+			std::unique_ptr<BaseFunction> newPtr = std::make_unique<RemoveShopItem>();
 			return newPtr;
 		}
 
@@ -41,7 +41,11 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId() ,.guildId = args.eventData->getGuildId(), }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
+																					  .guildMemberId = args.eventData->getAuthorId(),
+																					  .guildId = args.eventData->getGuildId(),
+																				  })
+											  .get();
 				DiscordGuildMember discordGuildMember(guildMember);
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
@@ -78,7 +82,8 @@ namespace DiscordCoreAPI {
 
 				std::string msgString;
 
-				msgString = "Alrighty then! You've removed an item from the shop!\n------\n__The removed item: __ " + discordGuild.data.guildShop.items[itemIndex].emoji + discordGuild.data.guildShop.items[itemIndex].itemName + "\n------";
+				msgString = "Alrighty then! You've removed an item from the shop!\n------\n__The removed item: __ " + discordGuild.data.guildShop.items[itemIndex].emoji +
+					discordGuild.data.guildShop.items[itemIndex].itemName + "\n------";
 
 				discordGuild.data.guildShop.items.erase(discordGuild.data.guildShop.items.begin() + itemIndex);
 				discordGuild.writeDataToDB();
@@ -94,11 +99,10 @@ namespace DiscordCoreAPI {
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
 				return;
-			}
-			catch (...) {
+			} catch (...) {
 				reportException("RemoveShopItem::execute()");
 			}
 		}
-		virtual ~RemoveShopItem() {};
+		virtual ~RemoveShopItem(){};
 	};
 }
