@@ -114,8 +114,10 @@ namespace DiscordCoreAPI {
 				voidCard.value = 0;
 				return voidCard;
 			}
-			std::mt19937_64 randomEngine{ static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
-			uint32_t cardIndex = static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * static_cast<float>(this->cards.size()));
+			std::mt19937_64 randomEngine{ static_cast<uint64_t>(
+				std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
+			uint32_t cardIndex =
+				static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * static_cast<float>(this->cards.size()));
 			Card currentCard = this->cards.at(cardIndex);
 			this->cards.erase(this->cards.begin() + cardIndex);
 			return currentCard;
@@ -206,7 +208,14 @@ namespace DiscordCoreAPI {
 		Currency currency{};
 	};
 
-	enum class DatabaseWorkloadType { DISCORD_USER_WRITE = 0, DISCORD_USER_READ = 1, DISCORD_GUILD_WRITE = 2, DISCORD_GUILD_READ = 3, DISCORD_GUILD_MEMBER_WRITE = 4, DISCORD_GUILD_MEMBER_READ = 5 };
+	enum class DatabaseWorkloadType {
+		DISCORD_USER_WRITE = 0,
+		DISCORD_USER_READ = 1,
+		DISCORD_GUILD_WRITE = 2,
+		DISCORD_GUILD_READ = 3,
+		DISCORD_GUILD_MEMBER_WRITE = 4,
+		DISCORD_GUILD_MEMBER_READ = 5
+	};
 
 	struct DatabaseWorkload {
 		DiscordGuildMemberData guildMemberData{};
@@ -304,8 +313,10 @@ namespace DiscordCoreAPI {
 										   [discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
 											   for (const auto& value: discordGuildData.guildShop.items) {
 												   subArray.append([value](bsoncxx::builder::basic::sub_document subDocument2) {
-													   subDocument2.append(kvp("itemName", value.itemName), kvp("itemCost", bsoncxx::types::b_int32(value.itemCost)),
-																		   kvp("selfMod", bsoncxx::types::b_int32(value.selfMod)), kvp("oppMod", bsoncxx::types::b_int32(value.oppMod)), kvp("emoji", value.emoji));
+													   subDocument2.append(kvp("itemName", value.itemName),
+																		   kvp("itemCost", bsoncxx::types::b_int32(value.itemCost)),
+																		   kvp("selfMod", bsoncxx::types::b_int32(value.selfMod)),
+																		   kvp("oppMod", bsoncxx::types::b_int32(value.oppMod)), kvp("emoji", value.emoji));
 												   });
 											   }
 										   })),
@@ -410,25 +421,46 @@ namespace DiscordCoreAPI {
 					role.roleName = value["roleName"].get_utf8().value.to_string();
 					guildData.guildShop.roles.push_back(role);
 				}
-				guildData.casinoStats.largestBlackjackPayout.amount = docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestBlackjackPayout.timeStamp = docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestBlackjackPayout.userId = docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestBlackjackPayout.userName = docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["userName"].get_utf8().value.to_string();
+				guildData.casinoStats.largestBlackjackPayout.amount =
+					docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["amount"].get_int32().value;
+				guildData.casinoStats.largestBlackjackPayout.timeStamp = docValue.view()["casinoStats"]
+																			 .get_document()
+																			 .value["largestBlackjackPayout"]
+																			 .get_document()
+																			 .value["timeStamp"]
+																			 .get_utf8()
+																			 .value.to_string();
+				guildData.casinoStats.largestBlackjackPayout.userId =
+					docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestBlackjackPayout.userName =
+					docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalBlackjackPayout = docValue.view()["casinoStats"].get_document().value["totalBlackjackPayout"].get_int32().value;
-				guildData.casinoStats.largestCoinFlipPayout.amount = docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestCoinFlipPayout.timeStamp = docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestCoinFlipPayout.userId = docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestCoinFlipPayout.userName = docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["userName"].get_utf8().value.to_string();
+				guildData.casinoStats.largestCoinFlipPayout.amount =
+					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["amount"].get_int32().value;
+				guildData.casinoStats.largestCoinFlipPayout.timeStamp =
+					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestCoinFlipPayout.userId =
+					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestCoinFlipPayout.userName =
+					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalCoinFlipPayout = docValue.view()["casinoStats"].get_document().value["totalCoinFlipPayout"].get_int32().value;
-				guildData.casinoStats.largestRoulettePayout.amount = docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestRoulettePayout.timeStamp = docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestRoulettePayout.userId = docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestRoulettePayout.userName = docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["userName"].get_utf8().value.to_string();
+				guildData.casinoStats.largestRoulettePayout.amount =
+					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["amount"].get_int32().value;
+				guildData.casinoStats.largestRoulettePayout.timeStamp =
+					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestRoulettePayout.userId =
+					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestRoulettePayout.userName =
+					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalRoulettePayout = docValue.view()["casinoStats"].get_document().value["totalRoulettePayout"].get_int32().value;
-				guildData.casinoStats.largestSlotsPayout.amount = docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestSlotsPayout.timeStamp = docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestSlotsPayout.userId = docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestSlotsPayout.userName = docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["userName"].get_utf8().value.to_string();
+				guildData.casinoStats.largestSlotsPayout.amount =
+					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["amount"].get_int32().value;
+				guildData.casinoStats.largestSlotsPayout.timeStamp =
+					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestSlotsPayout.userId =
+					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestSlotsPayout.userName =
+					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalSlotsPayout = docValue.view()["casinoStats"].get_document().value["totalSlotsPayout"].get_int32().value;
 				guildData.casinoStats.totalPayout = docValue.view()["casinoStats"].get_document().value["totalPayout"].get_int32().value;
 				guildData.rouletteGame.currentlySpinning = docValue.view()["rouletteGame"].get_document().value["currentlySpinning"].get_bool().value;
@@ -465,23 +497,27 @@ namespace DiscordCoreAPI {
 				buildDoc.append(kvp("lastTimeRobbed", bsoncxx::types::b_int32(discordGuildMemberData.lastTimeRobbed)));
 				buildDoc.append(kvp("lastTimeWorked", bsoncxx::types::b_int32(discordGuildMemberData.lastTimeWorked)));
 				buildDoc.append(kvp("currency", [discordGuildMemberData](bsoncxx::builder::basic::sub_document subDocument) {
-					subDocument.append(kvp("bank", bsoncxx::types::b_int32(discordGuildMemberData.currency.bank)), kvp("wallet", bsoncxx::types::b_int32(discordGuildMemberData.currency.wallet)),
+					subDocument.append(kvp("bank", bsoncxx::types::b_int32(discordGuildMemberData.currency.bank)),
+									   kvp("wallet", bsoncxx::types::b_int32(discordGuildMemberData.currency.wallet)),
 									   kvp("timeOfLastDeposit", bsoncxx::types::b_int32(discordGuildMemberData.currency.timeOfLastDeposit)));
 				}));
 				buildDoc.append(kvp("items",
 									[discordGuildMemberData](bsoncxx::builder::basic::sub_array subArray) {
 										for (uint32_t x = 0; x < discordGuildMemberData.items.size(); x += 1) {
 											subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
-												subDocument.append(kvp("itemName", discordGuildMemberData.items.at(x).itemName), kvp("itemCost", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).itemCost)),
+												subDocument.append(kvp("itemName", discordGuildMemberData.items.at(x).itemName),
+																   kvp("itemCost", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).itemCost)),
 																   kvp("selfMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).selfMod)),
-																   kvp("oppMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).oppMod)), kvp("emoji", discordGuildMemberData.items.at(x).emoji));
+																   kvp("oppMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).oppMod)),
+																   kvp("emoji", discordGuildMemberData.items.at(x).emoji));
 											});
 										}
 									})),
 					buildDoc.append(kvp("roles", [discordGuildMemberData](bsoncxx::builder::basic::sub_array subArray) {
 						for (uint32_t x = 0; x < discordGuildMemberData.roles.size(); x += 1) {
 							subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
-								subDocument.append(kvp("roleName", discordGuildMemberData.roles.at(x).roleName), kvp("roleId", discordGuildMemberData.roles.at(x).roleId),
+								subDocument.append(kvp("roleName", discordGuildMemberData.roles.at(x).roleName),
+												   kvp("roleId", discordGuildMemberData.roles.at(x).roleId),
 												   kvp("roleCost", bsoncxx::types::b_int32(discordGuildMemberData.roles.at(x).roleCost)));
 							});
 						}
@@ -556,8 +592,9 @@ namespace DiscordCoreAPI {
 						bsoncxx::builder::basic::document document{};
 						document.append(bsoncxx::builder::basic::kvp("_id", workload.userData.userId));
 						auto resultNew = newCollection.find_one(document.view());
-						auto resultNewer = newCollection.find_one_and_replace(document.view(), std::move(doc.extract()),
-																			  mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
+						auto resultNewer = newCollection.find_one_and_replace(
+							document.view(), std::move(doc.extract()),
+							mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertUserDataToDBDoc(workload.userData);
 							newCollection.insert_one(std::move(doc02.extract()));
@@ -582,8 +619,9 @@ namespace DiscordCoreAPI {
 						auto doc = DatabaseManagerAgent::convertGuildDataToDBDoc(workload.guildData);
 						bsoncxx::builder::basic::document document{};
 						document.append(bsoncxx::builder::basic::kvp("_id", workload.guildData.guildId));
-						auto resultNewer = newCollection.find_one_and_replace(document.view(), std::move(doc.extract()),
-																			  mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
+						auto resultNewer = newCollection.find_one_and_replace(
+							document.view(), std::move(doc.extract()),
+							mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildDataToDBDoc(workload.guildData);
 							newCollection.insert_one(std::move(doc02.extract()));
@@ -608,8 +646,9 @@ namespace DiscordCoreAPI {
 						auto doc = DatabaseManagerAgent::convertGuildMemberDataToDBDoc(workload.guildMemberData);
 						bsoncxx::builder::basic::document document{};
 						document.append(bsoncxx::builder::basic::kvp("_id", workload.guildMemberData.globalId));
-						auto resultNewer = newCollection.find_one_and_replace(document.view(), std::move(doc.extract()),
-																			  mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
+						auto resultNewer = newCollection.find_one_and_replace(
+							document.view(), std::move(doc.extract()),
+							mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildMemberDataToDBDoc(workload.guildMemberData);
 							newCollection.insert_one(std::move(doc02.extract()));

@@ -72,14 +72,16 @@ namespace DiscordCoreAPI {
 		return false;
 	}
 
-	bool doWeHaveAdminPermissions(BaseFunctionArguments args, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember, bool displayResponse = true) {
+	bool doWeHaveAdminPermissions(BaseFunctionArguments args, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember,
+								  bool displayResponse = true) {
 		bool doWeHaveAdmin = guildMember.permissions.checkForPermission(guildMember, channel, Permission::Administrator);
 
 		if (doWeHaveAdmin) {
 			return true;
 		}
 
-		bool areWeACommander = checkForBotCommanderStatus(guildMember, DiscordUser(args.discordCoreClient->getBotUser().userName, args.discordCoreClient->getBotUser().id));
+		bool areWeACommander =
+			checkForBotCommanderStatus(guildMember, DiscordUser(args.discordCoreClient->getBotUser().userName, args.discordCoreClient->getBotUser().id));
 
 		if (areWeACommander) {
 			return true;
@@ -110,11 +112,13 @@ namespace DiscordCoreAPI {
 		if (newInputModValue <= 0) {
 			float newInputValue = newInputModValue * -1;
 
-			finalModValue = -1 * ( float )trunc((ceiling * pow(newInputValue, 3)) / ((pow(newInputValue, 3) + ( int64_t )horizontalStretch * ( int64_t )newInputValue)));
+			finalModValue =
+				-1 * ( float )trunc((ceiling * pow(newInputValue, 3)) / ((pow(newInputValue, 3) + ( int64_t )horizontalStretch * ( int64_t )newInputValue)));
 			return finalModValue;
 		}
 
-		finalModValue = ( float )trunc((ceiling * pow(newInputModValue, 3)) / ((pow(newInputModValue, 3) + ( int64_t )horizontalStretch * ( int64_t )newInputModValue)));
+		finalModValue =
+			( float )trunc((ceiling * pow(newInputModValue, 3)) / ((pow(newInputModValue, 3) + ( int64_t )horizontalStretch * ( int64_t )newInputModValue)));
 
 		return finalModValue;
 	}

@@ -33,7 +33,8 @@ namespace DiscordCoreAPI {
 				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 				Guild guild = Guilds::getCachedGuildAsync({ args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 				if (! doWeHaveAdminPermission) {
 					return;

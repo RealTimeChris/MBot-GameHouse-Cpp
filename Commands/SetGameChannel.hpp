@@ -14,7 +14,8 @@ namespace DiscordCoreAPI {
 			this->commandName = "setgamechannel";
 			this->helpDescription = "Enables channel-restriction for issuing commands on the bot, and sets the channels.";
 			EmbedData msgEmbed;
-			msgEmbed.setDescription("------\nSimply enter /setmusichannel add in order to add the current channel.\nAlternatively enter /setgamechannel remove to remove the current channel.\nAlso, enter /setgamechannel "
+			msgEmbed.setDescription("------\nSimply enter /setmusichannel add in order to add the current channel.\nAlternatively enter /setgamechannel remove "
+									"to remove the current channel.\nAlso, enter /setgamechannel "
 									"view or purge to view or purge the currently enabled channels.\n------");
 			msgEmbed.setTitle("__**Set Game Channel Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -39,7 +40,8 @@ namespace DiscordCoreAPI {
 				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdminPermission == false) {
@@ -90,7 +92,8 @@ namespace DiscordCoreAPI {
 							isItPresent = true;
 							discordGuild.data.gameChannelIds.erase(discordGuild.data.gameChannelIds.begin() + x);
 							discordGuild.writeDataToDB();
-							msgString += "------\n**You've succesfully removed the channel <#" + channelID + "> from the list of enabled gaming channels!**\n------";
+							msgString +=
+								"------\n**You've succesfully removed the channel <#" + channelID + "> from the list of enabled gaming channels!**\n------";
 						}
 					}
 

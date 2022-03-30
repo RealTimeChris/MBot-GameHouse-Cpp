@@ -100,8 +100,9 @@ namespace DiscordCoreAPI {
 				walletAmount = discordGuildMember.data.currency.wallet;
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				msgString = "<@!" + guildMember.user.id + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " + discordUser.data.currencyName + "\n__**Wallet Balance:**__ " +
-					std::to_string(walletAmount) + " " + discordUser.data.currencyName + "\n------";
+				msgString = "<@!" + guildMember.user.id + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " +
+					discordUser.data.currencyName + "\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName +
+					"\n------";
 
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

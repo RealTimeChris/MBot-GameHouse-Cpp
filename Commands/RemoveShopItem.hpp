@@ -82,8 +82,8 @@ namespace DiscordCoreAPI {
 
 				std::string msgString;
 
-				msgString = "Alrighty then! You've removed an item from the shop!\n------\n__The removed item: __ " + discordGuild.data.guildShop.items[itemIndex].emoji +
-					discordGuild.data.guildShop.items[itemIndex].itemName + "\n------";
+				msgString = "Alrighty then! You've removed an item from the shop!\n------\n__The removed item: __ " +
+					discordGuild.data.guildShop.items[itemIndex].emoji + discordGuild.data.guildShop.items[itemIndex].itemName + "\n------";
 
 				discordGuild.data.guildShop.items.erase(discordGuild.data.guildShop.items.begin() + itemIndex);
 				discordGuild.writeDataToDB();

@@ -92,8 +92,10 @@ namespace DiscordCoreAPI {
 					msgEmbed.setDescription(messageNew);
 					msgEmbed.setTitle("__**" + args.discordCoreClient->getBotUser().userName + " Help: Front Page**__");
 
-					std::string msgString = "------\nHello! How are you doing today?! I'm " + args.discordCoreClient->getBotUser().userName + " and I'm here to help you out!\n" +
-						"Please, select one of my commands from the drop-down menu below, to gain more information about them! (Or select 'Go Back' to go back to the previous menu)\n------";
+					std::string msgString = "------\nHello! How are you doing today?! I'm " + args.discordCoreClient->getBotUser().userName +
+						" and I'm here to help you out!\n" +
+						"Please, select one of my commands from the drop-down menu below, to gain more information about them! (Or select 'Go Back' to go back "
+						"to the previous menu)\n------";
 					std::unique_ptr<InputEventData> newEvent{ std::make_unique<InputEventData>() };
 					std::vector<std::string> numberEmojiNames{
 						"✅",
@@ -128,7 +130,8 @@ namespace DiscordCoreAPI {
 						msgEmbed00.setColor(discordGuild.data.borderColor);
 						msgEmbed00.setTimeStamp(getTimeAndDate());
 						msgEmbed00.setDescription(msgString);
-						msgEmbed00.setTitle("__**" + args.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) + " of " + std::to_string(selectOptions.size()) + "**__");
+						msgEmbed00.setTitle("__**" + args.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) + " of " +
+											std::to_string(selectOptions.size()) + "**__");
 						RespondToInputEventData responseData03(buttonData.at(0).interactionData);
 						responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						responseData03.addMessageEmbed(msgEmbed00);
@@ -143,7 +146,8 @@ namespace DiscordCoreAPI {
 							msgEmbed00.setColor(discordGuild.data.borderColor);
 							msgEmbed00.setTimeStamp(getTimeAndDate());
 							msgEmbed00.setDescription(messageNew);
-							msgEmbed00.setTitle("__**" + args.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) + " of " + std::to_string(selectOptions.size()) + "**__");
+							msgEmbed00.setTitle("__**" + args.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +
+												" of " + std::to_string(selectOptions.size()) + "**__");
 							RespondToInputEventData responseData03(buttonData.at(0).interactionData);
 							responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 							responseData03.addMessageEmbed(msgEmbed00);

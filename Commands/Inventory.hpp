@@ -60,7 +60,8 @@ namespace DiscordCoreAPI {
 					userID = userIDOne;
 				}
 
-				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = args.eventData->getGuildId() }).get();
+				GuildMember currentGuildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = args.eventData->getGuildId() }).get();
 
 				if (currentGuildMember.user.userName == "") {
 					std::string msgString = "-------\n**Sorry, but that user could not be found!**\n------";
@@ -134,8 +135,9 @@ namespace DiscordCoreAPI {
 						itemsMsgString.push_back("");
 					}
 					std::string itemsMsgStringTemp = "";
-					itemsMsgStringTemp = "**| __Item:__** " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName + " **| __Value:__** " +
-						std::to_string(discordGuildMember.data.items[x].itemCost) + " **| __Self-Mod:__** " + std::to_string(discordGuildMember.data.items[x].selfMod) + " **| __Opp-Mod:__** " +
+					itemsMsgStringTemp = "**| __Item:__** " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName +
+						" **| __Value:__** " + std::to_string(discordGuildMember.data.items[x].itemCost) + " **| __Self-Mod:__** " +
+						std::to_string(discordGuildMember.data.items[x].selfMod) + " **| __Opp-Mod:__** " +
 						std::to_string(discordGuildMember.data.items[x].oppMod) + "\n";
 					if (itemsMsgStringTemp.length() + itemsMsgString[currentPage].length() >= 2048) {
 						currentPage += 1;
@@ -152,7 +154,8 @@ namespace DiscordCoreAPI {
 						rolesMsgStrings.push_back("");
 					}
 					std::string rolesMsgStringTemp = "";
-					rolesMsgStringTemp = "**| __Role:__** <@&" + discordGuildMember.data.roles.at(x).roleId + "> **| __Value:__** " + std::to_string(discordGuildMember.data.roles.at(x).roleCost) + "\n";
+					rolesMsgStringTemp = "**| __Role:__** <@&" + discordGuildMember.data.roles.at(x).roleId + "> **| __Value:__** " +
+						std::to_string(discordGuildMember.data.roles.at(x).roleCost) + "\n";
 					if (rolesMsgStringTemp.length() + rolesMsgStrings[currentPage2].length() > 2048) {
 						currentPage2 += 1;
 						rolesMsgStrings.push_back("");
@@ -165,7 +168,8 @@ namespace DiscordCoreAPI {
 				for (uint32_t x = 0; x < itemsMsgString.size(); x += 1) {
 					EmbedData newEmbed;
 					newEmbed.setTimeStamp(getTimeAndDate());
-					newEmbed.setTitle("__**" + userName + "'s Inventory (Items) Page " + std::to_string(x + 1) + " of " + std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
+					newEmbed.setTitle("__**" + userName + "'s Inventory (Items) Page " + std::to_string(x + 1) + " of " +
+									  std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
 					newEmbed.setDescription(itemsMsgString[x]);
 					newEmbed.setColor(discordGuild.data.borderColor);
 					newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -177,8 +181,8 @@ namespace DiscordCoreAPI {
 				for (uint32_t x = 0; x < rolesMsgStrings.size(); x += 1) {
 					EmbedData newEmbed;
 					newEmbed.setTimeStamp(getTimeAndDate());
-					newEmbed.setTitle("__**" + userName + "'s Inventory (Roles) Page " + std::to_string(itemsMessageEmbeds.size() + x + 1) + " of " + std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) +
-									  ":**__");
+					newEmbed.setTitle("__**" + userName + "'s Inventory (Roles) Page " + std::to_string(itemsMessageEmbeds.size() + x + 1) + " of " +
+									  std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
 					newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					newEmbed.setDescription(rolesMsgStrings[x]);
 					newEmbed.setColor(discordGuild.data.borderColor);

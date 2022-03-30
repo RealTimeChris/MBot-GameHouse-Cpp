@@ -49,7 +49,8 @@ namespace DiscordCoreAPI {
 			for (auto& value: discordGuild.data.guildShop.items) {
 				SelectOptionData itemOptionData;
 				itemOptionData.emoji.name = value.emoji;
-				itemOptionData.description = "Cost: " + std::to_string(value.itemCost) + " Self-Mod: " + std::to_string(value.selfMod) + " Opp-Mod: " + std::to_string(value.oppMod);
+				itemOptionData.description =
+					"Cost: " + std::to_string(value.itemCost) + " Self-Mod: " + std::to_string(value.selfMod) + " Opp-Mod: " + std::to_string(value.oppMod);
 				itemOptionData.label = value.itemName;
 				itemOptionData.value = convertToLowerCase(value.itemName);
 				itemOptionData._default = false;
@@ -109,14 +110,17 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
 				}
 
-				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() }).get();
+				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
+											{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
+											.get();
 				if (! (botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this command!**\n------";
 					EmbedData msgEmbed;
@@ -207,10 +211,12 @@ namespace DiscordCoreAPI {
 						dataPackage.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 						if (buttonData.at(0).buttonId == "items") {
 							std::vector<SelectOptionData> selectOptionDataItems = getSelectOptionsVector(discordGuild, ItemsOrRoles::items);
-							dataPackage.addSelectMenu(false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.", ( int32_t )selectOptionDataItems.size(), 1);
+							dataPackage.addSelectMenu(false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.",
+													  ( int32_t )selectOptionDataItems.size(), 1);
 						} else {
 							std::vector<SelectOptionData> selectOptionDataRoles = getSelectOptionsVector(discordGuild, ItemsOrRoles::roles);
-							dataPackage.addSelectMenu(false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.", ( int32_t )selectOptionDataRoles.size(), 1);
+							dataPackage.addSelectMenu(false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.",
+													  ( int32_t )selectOptionDataRoles.size(), 1);
 						}
 						InputEvents::respondToEvent(dataPackage);
 					} else if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
@@ -322,7 +328,8 @@ namespace DiscordCoreAPI {
 
 							Roles::addGuildMemberRoleAsync({ .guildId = args.eventData->getGuildId(), .userId = guildMember.user.id, .roleId = roleID });
 
-							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName +
+							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType +
+								".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName +
 								")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 							EmbedData msgEmbed04;
 							msgEmbed04.setTitle("__**New Role Purchased:**__");
@@ -379,8 +386,9 @@ namespace DiscordCoreAPI {
 							std::string itemEmoji = discordGuild.data.guildShop.items.at(objectShopIndex).emoji;
 							std::string itemName = discordGuild.data.guildShop.items.at(objectShopIndex).itemName;
 							uint32_t newBalance = discordGuildMember.data.currency.wallet;
-							std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName +
-								"\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
+							std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType +
+								".\n------\n__**It is as follows:**__ " + itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " +
+								std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 							EmbedData msgEmbed05;
 							msgEmbed05.setTitle("__**New Item Purchased:**__");
 

@@ -56,7 +56,8 @@ namespace DiscordCoreAPI {
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::regex amountRegExp("\\d{1,18}");
-				if (args.commandData.optionsArgs.size() == 0 || ! regex_search(args.commandData.optionsArgs[0], amountRegExp) || std::stoll(args.commandData.optionsArgs[0]) <= 0) {
+				if (args.commandData.optionsArgs.size() == 0 || ! regex_search(args.commandData.optionsArgs[0], amountRegExp) ||
+					std::stoll(args.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -96,8 +97,9 @@ namespace DiscordCoreAPI {
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				std::string msgString = "Congratulations! You've withdrawn " + std::to_string(withdrawAmount) + " " + discordUser.data.currencyName +
-					" from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" + "__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName +
-					"\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+					" from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" + "__Bank:__ " +
+					std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName + "\n" + "__Wallet:__ " +
+					std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());

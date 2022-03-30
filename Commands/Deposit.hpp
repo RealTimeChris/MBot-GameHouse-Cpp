@@ -47,7 +47,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::regex depositAmountRegExp("\\d{1,18}");
@@ -55,8 +56,8 @@ namespace DiscordCoreAPI {
 				uint32_t depositAmount = 0;
 				if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "all") {
 					depositAmount = discordGuildMember.data.currency.wallet;
-				} else if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "" || ! regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) ||
-						   std::stoll(matchResults.str()) <= 0) {
+				} else if (args.commandData.optionsArgs.size() == 0 || args.commandData.optionsArgs[0] == "" ||
+						   ! regex_search(args.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) || std::stoll(matchResults.str()) <= 0) {
 					std::string msgString = "------\n**Please enter a valid deposit amount!(!deposit = AMOUNT)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -95,7 +96,8 @@ namespace DiscordCoreAPI {
 				uint32_t MinutesPerHour = 60;
 				uint32_t msPerHour = msPerMinute * MinutesPerHour;
 				uint32_t msPerDepositCycle = msPerHour * discordUser.data.hoursOfDepositCooldown;
-				uint32_t currentTime = static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
+				uint32_t currentTime = static_cast<uint32_t>(
+					std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count());
 
 				uint32_t timeSinceLastDeposit = currentTime - discordGuildMember.data.currency.timeOfLastDeposit;
 
@@ -107,8 +109,10 @@ namespace DiscordCoreAPI {
 					discordGuildMember.writeDataToDB();
 
 					msgString = "Congratulations! You've deposited " + std::to_string(depositAmount) + " " + discordUser.data.currencyName +
-						" from your wallet into your bank!\n------\n__**Your new balances are:**__\n__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " ";
-					msgString += discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+						" from your wallet into your bank!\n------\n__**Your new balances are:**__\n__Bank:__ " +
+						std::to_string(discordGuildMember.data.currency.bank) + " ";
+					msgString += discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " +
+						discordUser.data.currencyName + "\n------";
 				} else {
 					uint32_t timeRemaining = msPerDepositCycle - timeSinceLastDeposit;
 					uint32_t hoursRemain = ( uint32_t )trunc(timeRemaining / msPerHour);
@@ -116,10 +120,11 @@ namespace DiscordCoreAPI {
 					uint32_t secondsRemain = ( uint32_t )trunc(((timeRemaining % msPerHour) % msPerMinute) / msPerSecond);
 
 					if (hoursRemain > 0) {
-						msgString = "Sorry, but you need to wait " + std::to_string(hoursRemain) + " hours, " + std::to_string(minutesRemain) + " minutes, and " + std::to_string(secondsRemain) +
-							" seconds before you can make another deposit!";
+						msgString = "Sorry, but you need to wait " + std::to_string(hoursRemain) + " hours, " + std::to_string(minutesRemain) +
+							" minutes, and " + std::to_string(secondsRemain) + " seconds before you can make another deposit!";
 					} else if (minutesRemain > 0) {
-						msgString = "Sorry, but you need to wait " + std::to_string(minutesRemain) + " minutes, and " + std::to_string(secondsRemain) + " seconds before you can make another deposit!";
+						msgString = "Sorry, but you need to wait " + std::to_string(minutesRemain) + " minutes, and " + std::to_string(secondsRemain) +
+							" seconds before you can make another deposit!";
 					} else {
 						msgString = "Sorry, but you need to wait " + std::to_string(secondsRemain) + " seconds before you can make another deposit!";
 					}

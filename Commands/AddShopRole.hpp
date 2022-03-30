@@ -41,7 +41,8 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				GuildMember guildMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+				GuildMember guildMember =
+					GuildMembers::getGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
 
 				bool doWeHaveAdmin = doWeHaveAdminPermissions(args, *args.eventData, discordGuild, channel, guildMember);
 
@@ -71,7 +72,8 @@ namespace DiscordCoreAPI {
 					auto event = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				if (args.commandData.optionsArgs.size() < 3 || ! regex_search(args.commandData.optionsArgs.at(2), costRegExp) || std::stoll(args.commandData.optionsArgs.at(2)) <= 0) {
+				if (args.commandData.optionsArgs.size() < 3 || ! regex_search(args.commandData.optionsArgs.at(2), costRegExp) ||
+					std::stoll(args.commandData.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -153,8 +155,9 @@ namespace DiscordCoreAPI {
 				std::string msgString = "";
 				auto botUser = args.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as follows:\n------\n__**Role:**__ <@&" + currentRole.roleId +
-					"> __**Cost**__ : " + std::to_string(roleCost) + " " + discordUser.data.currencyName + "\n------";
+				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as "
+							"follows:\n------\n__**Role:**__ <@&" +
+					currentRole.roleId + "> __**Cost**__ : " + std::to_string(roleCost) + " " + discordUser.data.currencyName + "\n------";
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);

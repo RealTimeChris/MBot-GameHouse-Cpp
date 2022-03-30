@@ -31,7 +31,8 @@ std::string getNumberString(std::string inputString, std::vector<std::string> re
 	return returnString;
 }
 
-void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newEvent, DiscordCoreAPI::DiscordUser discordUser, std::vector<std::string> redNumbers, std::vector<std::string> blackNumbers) {
+void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newEvent, DiscordCoreAPI::DiscordUser discordUser,
+					  std::vector<std::string> redNumbers, std::vector<std::string> blackNumbers) {
 	std::string msgStringFinal;
 	std::string finalRollString = getNumberString(finalRoll, redNumbers, blackNumbers);
 	msgStringFinal += "------\n__**Final Roll:**__ " + finalRollString + "\n------\n";
@@ -40,7 +41,9 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 	for (uint32_t x = 0; x < discordGuild.data.rouletteGame.rouletteBets.size(); x += 1) {
 		bool isItAWinner = false;
 		DiscordCoreAPI::GuildMember guildMember =
-			DiscordCoreAPI::GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordGuild.data.rouletteGame.rouletteBets.at(x).userId, .guildId = newEvent.getGuildId() }).get();
+			DiscordCoreAPI::GuildMembers::getCachedGuildMemberAsync(
+				{ .guildMemberId = discordGuild.data.rouletteGame.rouletteBets.at(x).userId, .guildId = newEvent.getGuildId() })
+				.get();
 		DiscordCoreAPI::DiscordGuildMember discordGuildMember(guildMember);
 		msgStringFinal += "__**<@!" + guildMember.user.id + ">**__: ";
 		int32_t betAmount = discordGuild.data.rouletteGame.rouletteBets.at(x).betAmount;
@@ -60,10 +63,12 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 		}
 		if (( uint32_t )betAmount > discordGuildMember.data.currency.wallet) {
 			if (discordGuild.data.rouletteGame.rouletteBets[x].betOptions != "") {
-				msgStringFinal += "__**NSF:**__ Non-sufficient funds! __**Bet:**__ " + std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " + discordUser.data.currencyName + "__**On:**__ " +
+				msgStringFinal += "__**NSF:**__ Non-sufficient funds! __**Bet:**__ " +
+					std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " + discordUser.data.currencyName + "__**On:**__ " +
 					discordGuild.data.rouletteGame.rouletteBets[x].betType + ", " + discordGuild.data.rouletteGame.rouletteBets[x].betOptions + "\n";
 			} else {
-				msgStringFinal += "__**NSF:**__ Non-sufficient funds! __ **Bet:**__ " + std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " + discordUser.data.currencyName + "__**On:**__ " +
+				msgStringFinal += "__**NSF:**__ Non-sufficient funds! __ **Bet:**__ " +
+					std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " + discordUser.data.currencyName + "__**On:**__ " +
 					discordGuild.data.rouletteGame.rouletteBets[x].betType + "\n";
 			}
 		} else {
@@ -79,11 +84,13 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 			discordGuildMember.writeDataToDB();
 
 			if (discordGuild.data.rouletteGame.rouletteBets[x].betOptions != "") {
-				msgStringFinal += std::to_string(payoutAmount) + " " + discordUser.data.currencyName + " __**Bet:**__ " + std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " +
-					discordUser.data.currencyName + " __**On:**__ " + discordGuild.data.rouletteGame.rouletteBets[x].betType + ", " + discordGuild.data.rouletteGame.rouletteBets[x].betOptions + "\n";
+				msgStringFinal += std::to_string(payoutAmount) + " " + discordUser.data.currencyName + " __**Bet:**__ " +
+					std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " + discordUser.data.currencyName + " __**On:**__ " +
+					discordGuild.data.rouletteGame.rouletteBets[x].betType + ", " + discordGuild.data.rouletteGame.rouletteBets[x].betOptions + "\n";
 			} else {
-				msgStringFinal += std::to_string(payoutAmount) + " " + discordUser.data.currencyName + " __**Bet:**__ " + std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " +
-					discordUser.data.currencyName + " __**On:**__ " + discordGuild.data.rouletteGame.rouletteBets[x].betType + "\n";
+				msgStringFinal += std::to_string(payoutAmount) + " " + discordUser.data.currencyName + " __**Bet:**__ " +
+					std::to_string(discordGuild.data.rouletteGame.rouletteBets[x].betAmount) + " " + discordUser.data.currencyName + " __**On:**__ " +
+					discordGuild.data.rouletteGame.rouletteBets[x].betType + "\n";
 			}
 		}
 	}
@@ -116,7 +123,8 @@ namespace DiscordCoreAPI {
 			this->commandName = "roulette";
 			this->helpDescription = "Play a game of roulette.";
 			std::string newString;
-			newString = "\n__**Roulette Usage:**__ /roulette start to begin a game, and then /roulette bet BETAMOUNT, BETTYPE, BETOPTIONS to bet on it!\n__Where BETTYPE and BETOPTIONS are as follows:__\n```isbl\n";
+			newString = "\n__**Roulette Usage:**__ /roulette start to begin a game, and then /roulette bet BETAMOUNT, BETTYPE, BETOPTIONS to bet on "
+						"it!\n__Where BETTYPE and BETOPTIONS are as follows:__\n```isbl\n";
 			newString += "Bet Type/Payout:     Bet Options:\n------------------------------------------------------------";
 			newString += "\n0        / 35:1  |";
 			newString += "\n00       / 35:1  |";
@@ -226,16 +234,24 @@ namespace DiscordCoreAPI {
 					}
 				}
 				std::regex digitRegExp("\\d{1,18}");
-				std::vector<std::string> betTypes{ "0",			"00",		"straight", "row",		"split", "street", "basket", "sixline", "1stcolumn", "2ndcolumn",
-												   "3rdcolumn", "1stdozen", "2nddozen", "3rddozen", "odd",	 "even",   "red",	 "black",	"1to18",	 "19to36" };
-				std::vector<std::string> redNumbers{ ":red_square:32", ":red_square:19", ":red_square:21", ":red_square:25", ":red_square:34", ":red_square:27", ":red_square:36", ":red_square:30", ":red_square:23",
-													 ":red_square:5",  ":red_square:16", ":red_square:1",  ":red_square:14", ":red_square:9",  ":red_square:18", ":red_square:7",  ":red_square:12", ":red_square:3" };
-				std::vector<std::string> blackNumbers{ ":black_large_square:15", ":black_large_square:4",  ":black_large_square:2",	 ":black_large_square:17", ":black_large_square:6",	 ":black_large_square:13",
-													   ":black_large_square:11", ":black_large_square:8",  ":black_large_square:10", ":black_large_square:24", ":black_large_square:33", ":black_large_square:20",
-													   ":black_large_square:31", ":black_large_square:22", ":black_large_square:29", ":black_large_square:28", ":black_large_square:35", ":black_large_square:26" };
+				std::vector<std::string> betTypes{ "0",		  "00",		   "straight",	"row",		 "split",	 "street",	 "basket",
+												   "sixline", "1stcolumn", "2ndcolumn", "3rdcolumn", "1stdozen", "2nddozen", "3rddozen",
+												   "odd",	  "even",	   "red",		"black",	 "1to18",	 "19to36" };
+				std::vector<std::string> redNumbers{
+					":red_square:32", ":red_square:19", ":red_square:21", ":red_square:25", ":red_square:34", ":red_square:27",
+					":red_square:36", ":red_square:30", ":red_square:23", ":red_square:5",	":red_square:16", ":red_square:1",
+					":red_square:14", ":red_square:9",	":red_square:18", ":red_square:7",	":red_square:12", ":red_square:3"
+				};
+				std::vector<std::string> blackNumbers{ ":black_large_square:15", ":black_large_square:4",  ":black_large_square:2",	 ":black_large_square:17",
+													   ":black_large_square:6",	 ":black_large_square:13", ":black_large_square:11", ":black_large_square:8",
+													   ":black_large_square:10", ":black_large_square:24", ":black_large_square:33", ":black_large_square:20",
+													   ":black_large_square:31", ":black_large_square:22", ":black_large_square:29", ":black_large_square:28",
+													   ":black_large_square:35", ":black_large_square:26" };
 
 				if (whatAreWeDoing == "bet") {
-					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+					GuildMember guildMember =
+						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() })
+							.get();
 					DiscordGuildMember discordGuildMember(guildMember);
 
 					uint32_t currentBetAmount = 0;
@@ -270,7 +286,8 @@ namespace DiscordCoreAPI {
 					}
 
 					if (isValidType == false) {
-						std::string msgString = "------\n**Please enter a valid bet type!Enter '!help = roulette' for more info!(!roulette = BETAMOUNT, BETTYPE, BETOPTIONS)** \n------";
+						std::string msgString = "------\n**Please enter a valid bet type!Enter '!help = roulette' for more info!(!roulette = BETAMOUNT, "
+												"BETTYPE, BETOPTIONS)** \n------";
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
@@ -313,7 +330,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("straight"): {
 							payoutAmount = betAmount * 35;
-							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || ! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
+								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid value from the roulette wheel!(1 - 36)**\n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -355,7 +373,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("split"): {
 							payoutAmount = betAmount * 17;
-							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || ! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
+								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your split!(1 - 35)** \n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -394,7 +413,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("street"): {
 							payoutAmount = betAmount * 11;
-							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || ! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
+								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your street!(1 - 34)** \n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -445,7 +465,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("sixline"): {
 							payoutAmount = betAmount * 5;
-							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" || ! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
+							if (args.commandData.optionsArgs.size() < 3 || args.commandData.optionsArgs[2] == "" ||
+								! regex_search(args.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your sixline!**\n------";
 								EmbedData msgEmbed;
 								msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -496,26 +517,32 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("1stcolumn"): {
 							payoutAmount = betAmount * 2;
-							winningNumbers = { getNumberString("1", redNumbers, blackNumbers),	getNumberString("4", redNumbers, blackNumbers),	 getNumberString("7", redNumbers, blackNumbers),
-											   getNumberString("10", redNumbers, blackNumbers), getNumberString("13", redNumbers, blackNumbers), getNumberString("16", redNumbers, blackNumbers),
-											   getNumberString("19", redNumbers, blackNumbers), getNumberString("22", redNumbers, blackNumbers), getNumberString("25", redNumbers, blackNumbers),
-											   getNumberString("28", redNumbers, blackNumbers), getNumberString("31", redNumbers, blackNumbers), getNumberString("34", redNumbers, blackNumbers) };
+							winningNumbers = { getNumberString("1", redNumbers, blackNumbers),	getNumberString("4", redNumbers, blackNumbers),
+											   getNumberString("7", redNumbers, blackNumbers),	getNumberString("10", redNumbers, blackNumbers),
+											   getNumberString("13", redNumbers, blackNumbers), getNumberString("16", redNumbers, blackNumbers),
+											   getNumberString("19", redNumbers, blackNumbers), getNumberString("22", redNumbers, blackNumbers),
+											   getNumberString("25", redNumbers, blackNumbers), getNumberString("28", redNumbers, blackNumbers),
+											   getNumberString("31", redNumbers, blackNumbers), getNumberString("34", redNumbers, blackNumbers) };
 							break;
 						}
 						case stringToInt("2ndcolumn"): {
 							payoutAmount = betAmount * 2;
-							winningNumbers = { getNumberString("2", redNumbers, blackNumbers),	getNumberString("5", redNumbers, blackNumbers),	 getNumberString("8", redNumbers, blackNumbers),
-											   getNumberString("11", redNumbers, blackNumbers), getNumberString("14", redNumbers, blackNumbers), getNumberString("17", redNumbers, blackNumbers),
-											   getNumberString("20", redNumbers, blackNumbers), getNumberString("23", redNumbers, blackNumbers), getNumberString("26", redNumbers, blackNumbers),
-											   getNumberString("29", redNumbers, blackNumbers), getNumberString("32", redNumbers, blackNumbers), getNumberString("35", redNumbers, blackNumbers) };
+							winningNumbers = { getNumberString("2", redNumbers, blackNumbers),	getNumberString("5", redNumbers, blackNumbers),
+											   getNumberString("8", redNumbers, blackNumbers),	getNumberString("11", redNumbers, blackNumbers),
+											   getNumberString("14", redNumbers, blackNumbers), getNumberString("17", redNumbers, blackNumbers),
+											   getNumberString("20", redNumbers, blackNumbers), getNumberString("23", redNumbers, blackNumbers),
+											   getNumberString("26", redNumbers, blackNumbers), getNumberString("29", redNumbers, blackNumbers),
+											   getNumberString("32", redNumbers, blackNumbers), getNumberString("35", redNumbers, blackNumbers) };
 							break;
 						}
 						case stringToInt("3rdcolumn"): {
 							payoutAmount = betAmount * 2;
-							winningNumbers = { getNumberString("3", redNumbers, blackNumbers),	getNumberString("6", redNumbers, blackNumbers),	 getNumberString("9", redNumbers, blackNumbers),
-											   getNumberString("12", redNumbers, blackNumbers), getNumberString("15", redNumbers, blackNumbers), getNumberString("18", redNumbers, blackNumbers),
-											   getNumberString("21", redNumbers, blackNumbers), getNumberString("24", redNumbers, blackNumbers), getNumberString("27", redNumbers, blackNumbers),
-											   getNumberString("30", redNumbers, blackNumbers), getNumberString("33", redNumbers, blackNumbers), getNumberString("36", redNumbers, blackNumbers) };
+							winningNumbers = { getNumberString("3", redNumbers, blackNumbers),	getNumberString("6", redNumbers, blackNumbers),
+											   getNumberString("9", redNumbers, blackNumbers),	getNumberString("12", redNumbers, blackNumbers),
+											   getNumberString("15", redNumbers, blackNumbers), getNumberString("18", redNumbers, blackNumbers),
+											   getNumberString("21", redNumbers, blackNumbers), getNumberString("24", redNumbers, blackNumbers),
+											   getNumberString("27", redNumbers, blackNumbers), getNumberString("30", redNumbers, blackNumbers),
+											   getNumberString("33", redNumbers, blackNumbers), getNumberString("36", redNumbers, blackNumbers) };
 							break;
 						}
 						case stringToInt("1stdozen"): {
@@ -605,8 +632,9 @@ namespace DiscordCoreAPI {
 							winningNumbersNew += ", ";
 						}
 					}
-					msgEmbed.setDescription("------\n__**Bet Type:**__ " + betType + "\n__**Your winning numbers are:**__\n" + winningNumbersNew + "\n__**Your winning payout would be:**__\n" +
-											std::to_string(payoutAmount) + " " + discordUser.data.currencyName + "\n------");
+					msgEmbed.setDescription("------\n__**Bet Type:**__ " + betType + "\n__**Your winning numbers are:**__\n" + winningNumbersNew +
+											"\n__**Your winning payout would be:**__\n" + std::to_string(payoutAmount) + " " + discordUser.data.currencyName +
+											"\n------");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Roulette Bet Placed:**__");
 					DiscordCoreAPI::RespondToInputEventData dataPackage(*args.eventData);
@@ -640,7 +668,8 @@ namespace DiscordCoreAPI {
 						EmbedData msgEmbed;
 						msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
-						msgEmbed.setDescription("------\n__**" + std::to_string(currentIndex * 10) + " seconds remaining to place your roulette bets!**__\n------");
+						msgEmbed.setDescription("------\n__**" + std::to_string(currentIndex * 10) +
+												" seconds remaining to place your roulette bets!**__\n------");
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Roulette Ball Rolling:**__");
 						DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent);
@@ -651,7 +680,8 @@ namespace DiscordCoreAPI {
 						if (currentIndex == -1) {
 							DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent));
 							std::stringstream stream;
-							std::mt19937_64 randomEngine{ static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
+							std::mt19937_64 randomEngine{ static_cast<uint64_t>(
+								std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
 							stream << static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 38.0f);
 							std::string finalRoll = stream.str();
 
