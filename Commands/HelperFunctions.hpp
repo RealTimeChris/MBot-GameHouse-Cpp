@@ -38,7 +38,7 @@ namespace DiscordCoreAPI {
 		}
 		return isItFound;
 	}
-
+ 
 	bool areWeInADM(InputEventData eventData, Channel channel, bool displayResponse = true) {
 		auto currentChannelType = channel.type;
 		if (currentChannelType == ChannelType::Dm) {
