@@ -103,8 +103,8 @@ namespace DiscordCoreAPI {
 						pageEmbeds[currentPage].setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 						pageEmbeds[currentPage].setDescription(pageStrings[currentPage]);
 						pageEmbeds[currentPage].setTimeStamp(getTimeAndDate());
-						pageEmbeds[currentPage].setTitle("__**Leaderboard (Wallet) (Page " + std::to_string(currentPage + 1) + " of " +
-														 std::to_string(totalPageCount) + ")**__");
+						pageEmbeds[currentPage].setTitle(
+							"__**Leaderboard (Wallet) (Page " + std::to_string(currentPage + 1) + " of " + std::to_string(totalPageCount) + ")**__");
 						pageEmbeds[currentPage].setColor(discordGuild.data.borderColor);
 						currentPage += 1;
 					}

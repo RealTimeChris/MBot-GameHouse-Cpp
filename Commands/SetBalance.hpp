@@ -96,7 +96,7 @@ namespace DiscordCoreAPI {
 				if (args.commandData.optionsArgs.size() < 3) {
 					targetUserID = args.eventData->getRequesterId();
 				} else if (args.commandData.optionsArgs.size() == 3 && !regex_search(args.commandData.optionsArgs.at(2), userMentionRegExp) &&
-						   !regex_search(args.commandData.optionsArgs.at(2), userIDRegExp)) {
+					!regex_search(args.commandData.optionsArgs.at(2), userIDRegExp)) {
 					std::string msgString = "------\n**Please enter a valid target user mention, or leave it blank to select yourself as the target! "
 											"(!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";

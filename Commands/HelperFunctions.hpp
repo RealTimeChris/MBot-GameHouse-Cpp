@@ -38,7 +38,7 @@ namespace DiscordCoreAPI {
 		}
 		return isItFound;
 	}
- 
+
 	bool areWeInADM(InputEventData eventData, Channel channel, bool displayResponse = true) {
 		auto currentChannelType = channel.type;
 		if (currentChannelType == ChannelType::Dm) {
@@ -73,7 +73,7 @@ namespace DiscordCoreAPI {
 	}
 
 	bool doWeHaveAdminPermissions(BaseFunctionArguments args, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember,
-								  bool displayResponse = true) {
+		bool displayResponse = true) {
 		bool doWeHaveAdmin = guildMember.permissions.checkForPermission(guildMember, channel, Permission::Administrator);
 
 		if (doWeHaveAdmin) {

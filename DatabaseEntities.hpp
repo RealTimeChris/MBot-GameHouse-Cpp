@@ -6,7 +6,7 @@
 #pragma once
 
 #ifndef _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
-#	define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
+	#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #endif
 
 #include <bsoncxx/builder/stream/document.hpp>
@@ -310,16 +310,15 @@ namespace DiscordCoreAPI {
 				}));
 				buildDoc.append(kvp("guildShop", [discordGuildData](bsoncxx::builder::basic::sub_document subDocument) {
 					subDocument.append(kvp("items",
-										   [discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
-											   for (const auto& value: discordGuildData.guildShop.items) {
-												   subArray.append([value](bsoncxx::builder::basic::sub_document subDocument2) {
-													   subDocument2.append(kvp("itemName", value.itemName),
-																		   kvp("itemCost", bsoncxx::types::b_int32(value.itemCost)),
-																		   kvp("selfMod", bsoncxx::types::b_int32(value.selfMod)),
-																		   kvp("oppMod", bsoncxx::types::b_int32(value.oppMod)), kvp("emoji", value.emoji));
-												   });
-											   }
-										   })),
+						[discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
+							for (const auto& value: discordGuildData.guildShop.items) {
+								subArray.append([value](bsoncxx::builder::basic::sub_document subDocument2) {
+									subDocument2.append(kvp("itemName", value.itemName), kvp("itemCost", bsoncxx::types::b_int32(value.itemCost)),
+										kvp("selfMod", bsoncxx::types::b_int32(value.selfMod)), kvp("oppMod", bsoncxx::types::b_int32(value.oppMod)),
+										kvp("emoji", value.emoji));
+								});
+							}
+						})),
 						subDocument.append(kvp("roles", [discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
 							for (const auto& value: discordGuildData.guildShop.roles) {
 								subArray.append([value](bsoncxx::builder::basic::sub_document subDocument2) {
@@ -379,7 +378,7 @@ namespace DiscordCoreAPI {
 												   });
 											   }
 										   }),
-									   kvp("currentlySpinning", bsoncxx::types::b_bool(discordGuildData.rouletteGame.currentlySpinning)));
+						kvp("currentlySpinning", bsoncxx::types::b_bool(discordGuildData.rouletteGame.currentlySpinning)));
 				}));
 				return buildDoc;
 			} catch (...) {
@@ -498,27 +497,27 @@ namespace DiscordCoreAPI {
 				buildDoc.append(kvp("lastTimeWorked", bsoncxx::types::b_int32(discordGuildMemberData.lastTimeWorked)));
 				buildDoc.append(kvp("currency", [discordGuildMemberData](bsoncxx::builder::basic::sub_document subDocument) {
 					subDocument.append(kvp("bank", bsoncxx::types::b_int32(discordGuildMemberData.currency.bank)),
-									   kvp("wallet", bsoncxx::types::b_int32(discordGuildMemberData.currency.wallet)),
-									   kvp("timeOfLastDeposit", bsoncxx::types::b_int32(discordGuildMemberData.currency.timeOfLastDeposit)));
+						kvp("wallet", bsoncxx::types::b_int32(discordGuildMemberData.currency.wallet)),
+						kvp("timeOfLastDeposit", bsoncxx::types::b_int32(discordGuildMemberData.currency.timeOfLastDeposit)));
 				}));
 				buildDoc.append(kvp("items",
-									[discordGuildMemberData](bsoncxx::builder::basic::sub_array subArray) {
-										for (uint32_t x = 0; x < discordGuildMemberData.items.size(); x += 1) {
-											subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
-												subDocument.append(kvp("itemName", discordGuildMemberData.items.at(x).itemName),
-																   kvp("itemCost", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).itemCost)),
-																   kvp("selfMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).selfMod)),
-																   kvp("oppMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).oppMod)),
-																   kvp("emoji", discordGuildMemberData.items.at(x).emoji));
-											});
-										}
-									})),
+					[discordGuildMemberData](bsoncxx::builder::basic::sub_array subArray) {
+						for (uint32_t x = 0; x < discordGuildMemberData.items.size(); x += 1) {
+							subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
+								subDocument.append(kvp("itemName", discordGuildMemberData.items.at(x).itemName),
+									kvp("itemCost", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).itemCost)),
+									kvp("selfMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).selfMod)),
+									kvp("oppMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).oppMod)),
+									kvp("emoji", discordGuildMemberData.items.at(x).emoji));
+							});
+						}
+					})),
 					buildDoc.append(kvp("roles", [discordGuildMemberData](bsoncxx::builder::basic::sub_array subArray) {
 						for (uint32_t x = 0; x < discordGuildMemberData.roles.size(); x += 1) {
 							subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
 								subDocument.append(kvp("roleName", discordGuildMemberData.roles.at(x).roleName),
-												   kvp("roleId", discordGuildMemberData.roles.at(x).roleId),
-												   kvp("roleCost", bsoncxx::types::b_int32(discordGuildMemberData.roles.at(x).roleCost)));
+									kvp("roleId", discordGuildMemberData.roles.at(x).roleId),
+									kvp("roleCost", bsoncxx::types::b_int32(discordGuildMemberData.roles.at(x).roleCost)));
 							});
 						}
 					}));
@@ -592,8 +591,7 @@ namespace DiscordCoreAPI {
 						bsoncxx::builder::basic::document document{};
 						document.append(bsoncxx::builder::basic::kvp("_id", workload.userData.userId));
 						auto resultNew = newCollection.find_one(document.view());
-						auto resultNewer = newCollection.find_one_and_replace(
-							document.view(), std::move(doc.extract()),
+						auto resultNewer = newCollection.find_one_and_replace(document.view(), std::move(doc.extract()),
 							mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertUserDataToDBDoc(workload.userData);
@@ -619,8 +617,7 @@ namespace DiscordCoreAPI {
 						auto doc = DatabaseManagerAgent::convertGuildDataToDBDoc(workload.guildData);
 						bsoncxx::builder::basic::document document{};
 						document.append(bsoncxx::builder::basic::kvp("_id", workload.guildData.guildId));
-						auto resultNewer = newCollection.find_one_and_replace(
-							document.view(), std::move(doc.extract()),
+						auto resultNewer = newCollection.find_one_and_replace(document.view(), std::move(doc.extract()),
 							mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildDataToDBDoc(workload.guildData);
@@ -646,8 +643,7 @@ namespace DiscordCoreAPI {
 						auto doc = DatabaseManagerAgent::convertGuildMemberDataToDBDoc(workload.guildMemberData);
 						bsoncxx::builder::basic::document document{};
 						document.append(bsoncxx::builder::basic::kvp("_id", workload.guildMemberData.globalId));
-						auto resultNewer = newCollection.find_one_and_replace(
-							document.view(), std::move(doc.extract()),
+						auto resultNewer = newCollection.find_one_and_replace(document.view(), std::move(doc.extract()),
 							mongocxx::v_noabi::options::find_one_and_replace{}.return_document(mongocxx::v_noabi::options::return_document::k_after));
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildMemberDataToDBDoc(workload.guildMemberData);

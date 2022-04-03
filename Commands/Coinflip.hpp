@@ -51,7 +51,7 @@ namespace DiscordCoreAPI {
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getRequesterId(), .guildId = args.eventData->getGuildId() })
 						.get();
 				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
-											{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
+					{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
 											.get();
 				std::unique_ptr<InputEventData> inputData = std::make_unique<InputEventData>();
 				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
@@ -194,7 +194,7 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(msgEmbed4);
 					InputEvents::respondToEvent(dataPackage);
 				} else if (buttonInteractionData.at(0).buttonId == "Heads" && number <= 0.50 ||
-						   buttonInteractionData.at(0).buttonId == "Tails" && number >= 0.50) {
+					buttonInteractionData.at(0).buttonId == "Tails" && number >= 0.50) {
 					discordGuildMember.data.currency.wallet -= betAmount;
 					discordGuildMember.writeDataToDB();
 					discordGuild.data.casinoStats.totalCoinFlipPayout -= betAmount;

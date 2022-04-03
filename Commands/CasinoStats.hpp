@@ -109,7 +109,7 @@ namespace DiscordCoreAPI {
 				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription("__**Net Casino Payout:**__\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.totalPayout) + " " +
-										discordUser.data.currencyName);
+					discordUser.data.currencyName);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Server Casino Stats:**__");
 				msgEmbed.fields = fields;

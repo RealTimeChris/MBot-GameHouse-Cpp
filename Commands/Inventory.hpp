@@ -169,7 +169,7 @@ namespace DiscordCoreAPI {
 					EmbedData newEmbed;
 					newEmbed.setTimeStamp(getTimeAndDate());
 					newEmbed.setTitle("__**" + userName + "'s Inventory (Items) Page " + std::to_string(x + 1) + " of " +
-									  std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
+						std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
 					newEmbed.setDescription(itemsMsgString[x]);
 					newEmbed.setColor(discordGuild.data.borderColor);
 					newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
@@ -182,7 +182,7 @@ namespace DiscordCoreAPI {
 					EmbedData newEmbed;
 					newEmbed.setTimeStamp(getTimeAndDate());
 					newEmbed.setTitle("__**" + userName + "'s Inventory (Roles) Page " + std::to_string(itemsMessageEmbeds.size() + x + 1) + " of " +
-									  std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
+						std::to_string(itemsMsgString.size() + rolesMsgStrings.size()) + ":**__");
 					newEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					newEmbed.setDescription(rolesMsgStrings[x]);
 					newEmbed.setColor(discordGuild.data.borderColor);

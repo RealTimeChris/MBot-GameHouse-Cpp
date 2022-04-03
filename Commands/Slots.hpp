@@ -90,8 +90,9 @@ namespace DiscordCoreAPI {
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				int32_t payoutAmount{};
 				std::string gameResultType{};
-				std::vector<std::string> slotReel = { ":crossed_swords:", ":apple:", ":ring:",			 ":gun:",			":swan:", ":rocket:",
-													  ":coin:",			  ":star:",	 ":jack_o_lantern:", ":christmas_tree:" };
+				std::vector<std::string> slotReel = {
+					":crossed_swords:", ":apple:", ":ring:", ":gun:", ":swan:", ":rocket:", ":coin:", ":star:", ":jack_o_lantern:", ":christmas_tree:"
+				};
 
 				std::mt19937_64 randomEngine{ static_cast<uint64_t>(
 					std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
@@ -185,14 +186,14 @@ namespace DiscordCoreAPI {
 						gameResultTypeNew = "Triple Straight";
 						payoutAmountNew = betAmountOld * 15;
 					} else if ((slotReel[reelIndices1[9]] == slotReel[reelIndices2[8]] && slotReel[reelIndices2[8]] == slotReel[reelIndices3[7]]) ||
-							   (slotReel[reelIndices1[7]] == slotReel[reelIndices2[8]] && slotReel[reelIndices2[8]] == slotReel[reelIndices3[9]])) {
+						(slotReel[reelIndices1[7]] == slotReel[reelIndices2[8]] && slotReel[reelIndices2[8]] == slotReel[reelIndices3[9]])) {
 						gameResultTypeNew = "Triple Diagonal";
 						payoutAmountNew = betAmountOld * 7;
 					} else if (slotReel[reelIndices1[8]] == slotReel[reelIndices2[8]] || slotReel[reelIndices3[8]] == slotReel[reelIndices2[8]]) {
 						gameResultTypeNew = "Double Straight";
 						payoutAmountNew = betAmountOld * 1;
 					} else if ((slotReel[reelIndices1[9]] == slotReel[reelIndices2[8]]) || (slotReel[reelIndices1[7]] == slotReel[reelIndices2[8]]) ||
-							   (slotReel[reelIndices3[9]] == slotReel[reelIndices2[8]]) || (slotReel[reelIndices3[7]] == slotReel[reelIndices2[8]])) {
+						(slotReel[reelIndices3[9]] == slotReel[reelIndices2[8]]) || (slotReel[reelIndices3[7]] == slotReel[reelIndices2[8]])) {
 						gameResultTypeNew = "Double Diagonal";
 						payoutAmountNew = betAmountOld * 1;
 					} else {

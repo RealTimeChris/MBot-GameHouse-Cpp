@@ -1,4 +1,5 @@
 ﻿---
+AlignAfterOpenBracket: DontAlign
 AlignConsecutiveMacros: 'false'
 AlignConsecutiveAssignments: 'false'
 AlignConsecutiveDeclarations: 'false'
@@ -23,7 +24,7 @@ ContinuationIndentWidth: '4'
 Cpp11BracedListStyle: 'false'
 FixNamespaceComments: 'false'
 IndentCaseLabels: 'true'
-IndentPPDirectives: AfterHash
+IndentPPDirectives: BeforeHash
 IndentWidth: '4'
 IndentWrappedFunctionNames: 'false'
 KeepEmptyLinesAtTheStartOfBlocks: 'false'

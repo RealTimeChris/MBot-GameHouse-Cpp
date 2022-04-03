@@ -8,9 +8,9 @@
 #include "HelperFunctions.hpp"
 
 void executeCheck(DiscordCoreAPI::BaseFunctionArguments args, DiscordCoreAPI::DiscordGuildMember* discordFromGuildMember,
-				  DiscordCoreAPI::DiscordGuildMember* discordToGuildMember, DiscordCoreAPI::DiscordGuild* discordGuild,
-				  DiscordCoreAPI::InputEventData* newEvent, int32_t* betAmount, DiscordCoreAPI::RespondToInputEventData dataPackageNew,
-				  std::string* msgEmbedString, std::string* fromUserIDNew, std::string* toUserIDNew) {
+	DiscordCoreAPI::DiscordGuildMember* discordToGuildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData* newEvent,
+	int32_t* betAmount, DiscordCoreAPI::RespondToInputEventData dataPackageNew, std::string* msgEmbedString, std::string* fromUserIDNew,
+	std::string* toUserIDNew) {
 	discordFromGuildMember->getDataFromDB();
 	int32_t fromUserCurrency = discordFromGuildMember->data.currency.wallet;
 	discordToGuildMember->getDataFromDB();
@@ -451,7 +451,7 @@ namespace DiscordCoreAPI {
 					executeExit(fromUserID, toUserID, discordGuild, *newEvent02);
 				} else if (buttonInteractionData.at(0).buttonId == "check") {
 					executeCheck(args, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02.get(), &betAmount, dataPackageNew,
-								 &msgEmbedString, &fromUserID, &toUserID);
+						&msgEmbedString, &fromUserID, &toUserID);
 				} else if (buttonInteractionData.at(0).buttonId == "cross") {
 					std::string rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer!";
 					EmbedData messageEmbed5;

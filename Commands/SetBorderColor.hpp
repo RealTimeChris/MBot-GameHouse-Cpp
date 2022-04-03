@@ -72,7 +72,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription("Nicely done, you've updated the default border color for this bot!\n------\n__**Border Color Values:**__ " +
-											discordGuild.data.borderColor + "\n------");
+						discordGuild.data.borderColor + "\n------");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Updated Border Color:**__");
 					RespondToInputEventData dataPackage(*args.eventData);

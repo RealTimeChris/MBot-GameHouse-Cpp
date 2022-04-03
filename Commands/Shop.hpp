@@ -119,7 +119,7 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
-											{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
+					{ .guildMemberId = args.discordCoreClient->getBotUser().id, .guildId = args.eventData->getGuildId() })
 											.get();
 				if (!(botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this command!**\n------";
@@ -211,12 +211,12 @@ namespace DiscordCoreAPI {
 						dataPackage.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 						if (buttonData.at(0).buttonId == "items") {
 							std::vector<SelectOptionData> selectOptionDataItems = getSelectOptionsVector(discordGuild, ItemsOrRoles::items);
-							dataPackage.addSelectMenu(false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.",
-													  ( int32_t )selectOptionDataItems.size(), 1);
+							dataPackage.addSelectMenu(
+								false, "shop_menu_itmes", selectOptionDataItems, "Choose one or more items.", ( int32_t )selectOptionDataItems.size(), 1);
 						} else {
 							std::vector<SelectOptionData> selectOptionDataRoles = getSelectOptionsVector(discordGuild, ItemsOrRoles::roles);
-							dataPackage.addSelectMenu(false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.",
-													  ( int32_t )selectOptionDataRoles.size(), 1);
+							dataPackage.addSelectMenu(
+								false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.", ( int32_t )selectOptionDataRoles.size(), 1);
 						}
 						InputEvents::respondToEvent(dataPackage);
 					} else if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
