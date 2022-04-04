@@ -26,31 +26,31 @@ namespace DiscordCoreAPI {
 			return std::make_unique<CasinoStatsFunction>();
 		}
 
-		virtual void execute(BaseFunctionArguments& args) {
+		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*args.eventData, channel);
+				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
 
 				if (areWeInADm) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowedHere = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
+				bool areWeAllowedHere = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
 
 				if (!areWeAllowedHere) {
 					return;
 				}
 
-				auto botUser = args.discordCoreClient->getBotUser();
+				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() }).get();
 				std::vector<EmbedFieldData> fields;
 				EmbedFieldData field1;
 				field1.name = "__**Largest Coinflip Payout:**__";
@@ -106,14 +106,14 @@ namespace DiscordCoreAPI {
 				fields.push_back(field8);
 
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+				msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription("__**Net Casino Payout:**__\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.totalPayout) + " " +
 					discordUser.data.currencyName);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Server Casino Stats:**__");
 				msgEmbed.fields = fields;
-				RespondToInputEventData dataPackage(*args.eventData);
+				RespondToInputEventData dataPackage(*argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				InputEvents::respondToEvent(dataPackage);

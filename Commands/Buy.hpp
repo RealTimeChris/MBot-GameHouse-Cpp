@@ -26,36 +26,36 @@ namespace DiscordCoreAPI {
 			return std::make_unique<Buy>();
 		}
 
-		virtual void execute(BaseFunctionArguments& args) {
+		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*args.eventData, channel);
+				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ args.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
 				}
 
-				User currentUser = Users::getUserAsync({ args.eventData->getRequesterId() }).get();
+				User currentUser = Users::getUserAsync({ argsNew.eventData->getRequesterId() }).get();
 
-				std::string objectName = args.commandData.optionsArgs.at(0);
+				std::string objectName = argsNew.commandData.optionsArgs.at(0);
 				uint32_t objectShopIndex = 0;
 				std::string objectType;
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = args.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = args.eventData->getGuildId() }).get();
+				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData->getGuildId() }).get();
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
@@ -79,7 +79,7 @@ namespace DiscordCoreAPI {
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Removed Guild Member Role:**__");
-						RespondToInputEventData dataPackage{ *args.eventData };
+						RespondToInputEventData dataPackage{ *argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -113,7 +113,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Object:**__");
-					RespondToInputEventData dataPackage{ *args.eventData };
+					RespondToInputEventData dataPackage{ *argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -144,7 +144,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Duplicate Object:**__");
-					RespondToInputEventData dataPackage{ *args.eventData };
+					RespondToInputEventData dataPackage{ *argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -163,7 +163,7 @@ namespace DiscordCoreAPI {
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Insufficient Funds:**__");
-						RespondToInputEventData dataPackage{ *args.eventData };
+						RespondToInputEventData dataPackage{ *argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -179,8 +179,8 @@ namespace DiscordCoreAPI {
 
 					std::string roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
 
-					Roles::addGuildMemberRoleAsync({ .guildId = args.eventData->getGuildId(), .userId = currentUser.id, .roleId = roleID });
-					auto botUser = args.discordCoreClient->getBotUser();
+					Roles::addGuildMemberRoleAsync({ .guildId = argsNew.eventData->getGuildId(), .userId = currentUser.id, .roleId = roleID });
+					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
 					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" +
 						newRole.roleId + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
@@ -191,7 +191,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 					msgEmbed.setColor(discordGuild.data.borderColor);
-					RespondToInputEventData dataPackage{ *args.eventData };
+					RespondToInputEventData dataPackage{ *argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -224,7 +224,7 @@ namespace DiscordCoreAPI {
 						msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setTitle("__**Insufficient Funds:**__");
-						RespondToInputEventData dataPackage{ *args.eventData };
+						RespondToInputEventData dataPackage{ *argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -239,7 +239,7 @@ namespace DiscordCoreAPI {
 					std::string itemEmoji = discordGuild.data.guildShop.items.at(objectShopIndex).emoji;
 					std::string itemName = discordGuild.data.guildShop.items.at(objectShopIndex).itemName;
 					uint32_t newBalance = discordGuildMember.data.currency.wallet;
-					auto botUser = args.discordCoreClient->getBotUser();
+					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
 					std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " +
 						itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
@@ -266,7 +266,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 					msgEmbed.setColor(discordGuild.data.borderColor);
-					RespondToInputEventData dataPackage{ *args.eventData };
+					RespondToInputEventData dataPackage{ *argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);

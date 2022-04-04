@@ -1,13 +1,4 @@
 main.cpp
-x64/
-MBot-GameHouse-Cpp.aps
-MBot-GameHouse-Cpp.vcxproj
-MBot-GameHouse-Cpp_TemporaryKey.pfx
-MBot-GameHouse-Cpp.vcxproj.user
-readme.txt
-MBot-GameHouse-Cpp.vcxproj.filters
-packages.config
-Commands/Test.hpp
 Build/
-Output Files/
 .vs/
+Windows/

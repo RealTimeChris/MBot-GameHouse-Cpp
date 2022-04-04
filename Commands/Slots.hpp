@@ -25,22 +25,22 @@ namespace DiscordCoreAPI {
 			return std::make_unique<Slots>();
 		}
 
-		virtual void execute(BaseFunctionArguments& args) {
+		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ args.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*args.eventData, channel);
+				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
 
 				if (areWeInADm) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*args.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = args.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*args.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
 
 				if (!areWeAllowed) {
 					return;
@@ -49,44 +49,44 @@ namespace DiscordCoreAPI {
 
 				int32_t betAmountOld;
 				std::regex digitRegExp("\\d{1,18}");
-				if (std::stoll(args.commandData.optionsArgs[0]) <= 0 || !regex_search(args.commandData.optionsArgs.at(0), digitRegExp)) {
+				if (std::stoll(argsNew.commandData.optionsArgs[0]) <= 0 || !regex_search(argsNew.commandData.optionsArgs.at(0), digitRegExp)) {
 					std::string msgString = "------\n**Please, enter a valid bet amount as the first argument of the command! (!slots = BETAMOUNT)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage(*args.eventData);
+					RespondToInputEventData dataPackage(*argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				} else {
 					std::cmatch matchResults;
-					regex_search(args.commandData.optionsArgs.at(0).c_str(), matchResults, digitRegExp);
+					regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, digitRegExp);
 					betAmountOld = ( int32_t )std::stoll(matchResults.str());
 				}
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = args.eventData->getAuthorId(), .guildId = args.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				if (( uint32_t )betAmountOld > discordGuildMember.data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you don't have sufficient funds in your wallet for placing that bet!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Insufficient Funds:**__");
-					RespondToInputEventData dataPackage(*args.eventData);
+					RespondToInputEventData dataPackage(*argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				}
-				auto botUser = args.discordCoreClient->getBotUser();
+				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				int32_t payoutAmount{};
 				std::string gameResultType{};
@@ -122,19 +122,19 @@ namespace DiscordCoreAPI {
 					" " + discordUser.data.currencyName;
 
 				EmbedData msgEmbed0;
-				msgEmbed0.setAuthor(args.eventData->getUserName(), args.eventData->getAvatarUrl());
+				msgEmbed0.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
 				msgEmbed0.setColor("0000FE");
 				msgEmbed0.setDescription(msgString0);
 				msgEmbed0.setTimeStamp(getTimeAndDate());
 				msgEmbed0.setTitle("__**Slots Game:**__");
 
-				std::unique_ptr<InputEventData> newEvent01 = std::make_unique<InputEventData>(*args.eventData);
+				std::unique_ptr<InputEventData> newEvent01 = std::make_unique<InputEventData>(*argsNew.eventData);
 
 				RespondToInputEventData dataPackage(*newEvent01);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed0);
 				*newEvent01 = *InputEvents::respondToEvent(dataPackage);
-				BaseFunctionArguments argsNew00 = args;
+				BaseFunctionArguments argsNew00 = argsNew;
 				std::function theFunction00 = [&](InputEventData* newEvent01) -> void {
 					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[9]] +
@@ -153,13 +153,13 @@ namespace DiscordCoreAPI {
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				};
-				BaseFunctionArguments argsNew = args;
+				BaseFunctionArguments argsNewer = argsNew;
 				std::function theFunction01 = [&](InputEventData* newEvent01) -> void {
 					std::string msgString2 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][" + slotReel[reelIndices2[7]] + "][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][:question:]\n" + "[" + slotReel[reelIndices1[9]] + "][" +
 						slotReel[reelIndices2[9]] + "][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " +
 						discordUser.data.currencyName + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
-					BaseFunctionArguments argsNew01 = *const_cast<BaseFunctionArguments*>(&argsNew);
+					BaseFunctionArguments argsNew01 = *const_cast<BaseFunctionArguments*>(&argsNewer);
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew01.eventData->getUserName(), argsNew01.eventData->getAvatarUrl());
 					msgEmbed.setColor("0000FE");
@@ -173,7 +173,7 @@ namespace DiscordCoreAPI {
 					return;
 				};
 
-				BaseFunctionArguments argsNew02 = args;
+				BaseFunctionArguments argsNew02 = argsNew;
 				std::function<void(InputEventData*)> theFunction = [&](InputEventData* newEvent01) -> void {
 					BaseFunctionArguments argsNew03 = *const_cast<BaseFunctionArguments*>(&argsNew02);
 					std::string gameResultTypeNew;

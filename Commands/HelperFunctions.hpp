@@ -72,7 +72,7 @@ namespace DiscordCoreAPI {
 		return false;
 	}
 
-	bool doWeHaveAdminPermissions(BaseFunctionArguments args, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember,
+	bool doWeHaveAdminPermissions(BaseFunctionArguments argsNew, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember,
 		bool displayResponse = true) {
 		bool doWeHaveAdmin = guildMember.permissions.checkForPermission(guildMember, channel, Permission::Administrator);
 
@@ -81,7 +81,7 @@ namespace DiscordCoreAPI {
 		}
 
 		bool areWeACommander =
-			checkForBotCommanderStatus(guildMember, DiscordUser(args.discordCoreClient->getBotUser().userName, args.discordCoreClient->getBotUser().id));
+			checkForBotCommanderStatus(guildMember, DiscordUser(argsNew.discordCoreClient->getBotUser().userName, argsNew.discordCoreClient->getBotUser().id));
 
 		if (areWeACommander) {
 			return true;
