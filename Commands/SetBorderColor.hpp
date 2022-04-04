@@ -40,7 +40,8 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData->getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+						.get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, *argsNew.eventData, discordGuild, channel, guildMember);
 				if (!doWeHaveAdminPermission) {
 					return;

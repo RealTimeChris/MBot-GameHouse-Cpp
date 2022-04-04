@@ -76,7 +76,8 @@ namespace DiscordCoreAPI {
 					userID = matchResults.str();
 				}
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData->getGuildId() }).get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData->getGuildId() }).get();
 
 				if (guildMember.user.id == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";

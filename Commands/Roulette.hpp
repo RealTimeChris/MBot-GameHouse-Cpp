@@ -244,9 +244,9 @@ namespace DiscordCoreAPI {
 					":black_large_square:29", ":black_large_square:28", ":black_large_square:35", ":black_large_square:26" };
 
 				if (whatAreWeDoing == "bet") {
-					GuildMember guildMember =
-						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
-							.get();
+					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
+						{ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+												  .get();
 					DiscordGuildMember discordGuildMember(guildMember);
 
 					uint32_t currentBetAmount = 0;

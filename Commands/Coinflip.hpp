@@ -47,9 +47,9 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getRequesterId(), .guildId = argsNew.eventData->getGuildId() })
-						.get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
+					{ .guildMemberId = argsNew.eventData->getRequesterId(), .guildId = argsNew.eventData->getGuildId() })
+											  .get();
 				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
 					{ .guildMemberId = argsNew.discordCoreClient->getBotUser().id, .guildId = argsNew.eventData->getGuildId() })
 											.get();

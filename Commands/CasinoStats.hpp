@@ -50,7 +50,8 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+						.get();
 				std::vector<EmbedFieldData> fields;
 				EmbedFieldData field1;
 				field1.name = "__**Largest Coinflip Payout:**__";

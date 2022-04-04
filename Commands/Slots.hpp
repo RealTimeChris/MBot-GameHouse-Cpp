@@ -69,7 +69,8 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+						.get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				if (( uint32_t )betAmountOld > discordGuildMember.data.currency.wallet) {

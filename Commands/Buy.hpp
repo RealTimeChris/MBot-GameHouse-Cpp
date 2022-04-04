@@ -55,7 +55,8 @@ namespace DiscordCoreAPI {
 				GuildMember guildMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData->getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData->getGuildId() }).get();
+				std::vector<Role> rolesArray =
+					Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData->getGuildId() }).get();
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;

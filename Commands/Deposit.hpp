@@ -48,7 +48,8 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+						.get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::regex depositAmountRegExp("\\d{1,18}");

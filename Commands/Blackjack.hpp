@@ -453,8 +453,8 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 		} else {
 		}
 		if (buttonInteractionData->at(0).buttonId == "check") {
-			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand, userAceIndices,
-				dealerAceIndices, userID, dealerHand, finalEmbed, component);
+			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
+				userAceIndices, dealerAceIndices, userID, dealerHand, finalEmbed, component);
 		} else if (buttonInteractionData->at(0).buttonId == "cross") {
 			executeCrossResponse(
 				argsNew, discordGuildMember, betAmount, guildMember, discordGuild, &inputData, userHand, dealerAceIndices, userID, dealerHand, finalEmbed);
@@ -499,8 +499,8 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, newEvent->getRequesterId()).get();
 		DiscordCoreAPI::RespondToInputEventData inputData{ buttonIntData.at(0).interactionData };
 		if (buttonIntData.at(0).buttonId == "check") {
-			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand, userAceIndices,
-				dealerAceIndices, userID, dealerHand, finalEmbed, component);
+			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
+				userAceIndices, dealerAceIndices, userID, dealerHand, finalEmbed, component);
 		} else if (buttonIntData.at(0).buttonId == "cross") {
 			executeCrossResponse(
 				argsNew, discordGuildMember, betAmount, guildMember, discordGuild, &inputData, userHand, dealerAceIndices, userID, dealerHand, finalEmbed);
@@ -700,9 +700,9 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
-				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getRequesterId(), .guildId = argsNew.eventData->getGuildId() })
-						.get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
+					{ .guildMemberId = argsNew.eventData->getRequesterId(), .guildId = argsNew.eventData->getGuildId() })
+											  .get();
 				GuildMember botMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData->getGuildId() }).get();
 				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
@@ -907,14 +907,14 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
-					executeCheckResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001.get(), &buttonInteraction, &newCardCount,
-						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
+					executeCheckResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001.get(), &buttonInteraction,
+						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
-					executeCrossResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, &buttonInteraction, &userHand, &dealerAceIndices,
-						&userID, &dealerHand, finalMessageEmbed);
+					executeCrossResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, &buttonInteraction, &userHand,
+						&dealerAceIndices, &userID, &dealerHand, finalMessageEmbed);
 				} else if (buttonIntData.at(0).buttonId == "double") {
-					executeDoubleResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001.get(), &buttonInteraction, &newCardCount,
-						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
+					executeDoubleResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001.get(), &buttonInteraction,
+						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
 				};
 
 				return;
