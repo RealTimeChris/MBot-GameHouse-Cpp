@@ -9,7 +9,7 @@ generate_product_version(
    VersionFilesOutputVariable
    NAME "MBot-GameHouse-Cpp"
    ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
-   FILE_DESCRIPTION "A Discord bot written in C++, using asynchronous coroutines."
+   FILE_DESCRIPTION "MBot-GameHouse-Cpp.exe",
    COMPANY_NAME "RealTimeChris Inc."
    VERSION_MAJOR 1
    VERSION_MINOR 0
@@ -24,6 +24,7 @@ add_executable (MBot-GameHouse "main.cpp" "Commands/CommandsList.hpp" "${Version
 target_link_libraries(MBot-GameHouse PRIVATE DiscordCoreAPI::DiscordCoreAPI "C:/vcpkg/installed/x64-windows/lib/mongoc-1.0.lib" "C:/vcpkg/installed/x64-windows/lib/mongocxx.lib" "C:/vcpkg/installed/x64-windows/lib/bsoncxx.lib")
 
 set_target_properties(MBot-GameHouse PROPERTIES 
+	OUTPUT_NAME "MBot-GameHouse-Cpp"
 	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/$<PLATFORM_ID>/$<CONFIG>"
 	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/$<PLATFORM_ID>/$<CONFIG>"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/$<PLATFORM_ID>/$<CONFIG>"
