@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 
 project (MBot-GameHouse-Cpp LANGUAGES CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMake)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 include(generate_product_version)
 
 set(VCPKG_BASE_DIR "C:/vcpkg")
@@ -10,7 +10,7 @@ string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 set(VCPKG_INSTALLED_DIR "${VCPKG_BASE_DIR}/installed/x64-${OS_NAME}")
 
 generate_product_version(
-   VersionFilesOutputVariable
+   VERSION_FILES_OUTPUT_VARIABLE
    NAME "MBot-GameHouse-Cpp"
    ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
    FILE_DESCRIPTION "MBot-GameHouse-Cpp.exe"
@@ -27,7 +27,7 @@ add_executable (
 	MBot-GameHouse
 	"main.cpp"
 	"Commands/CommandsList.hpp"
-	"${VersionFilesOutputVariable}"
+	"${VERSION_FILES_OUTPUT_VARIABLE}"
 )
 
 target_compile_features(
