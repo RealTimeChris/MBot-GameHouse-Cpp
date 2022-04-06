@@ -36,7 +36,8 @@ add_executable (
 )
 
 target_compile_features(
-	MBot-GameHouse PUBLIC
+	MBot-GameHouse PRIVATE
+	"$<$<PLATFORM_ID:Windows>:cxx_std_23>"
 	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
 )
 
