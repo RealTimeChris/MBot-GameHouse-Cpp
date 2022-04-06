@@ -1,19 +1,23 @@
-cmake_minimum_required (VERSION 3.8)
-
-project (MBot-GameHouse-Cpp LANGUAGES CXX)
+cmake_minimum_required (VERSION 3.22)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
-include(generate_product_version)
 
-set(VCPKG_BASE_DIR "C:/vcpkg")
-string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
-set(VCPKG_INSTALLED_DIR "${VCPKG_BASE_DIR}/installed/x64-${OS_NAME}")
+include(FindVCPKGRootDir)
+
+find_vcpkg_root_dir()
+
+set(THE_TOOLCHAIN_PATH "$ENV{VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake")
+
+set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE FILEPATH "The toolchain file.")
+
+project(MBot-GameHouse-Cpp LANGUAGES CXX)
+
+include(generate_product_version)
 
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
    NAME "MBot-GameHouse-Cpp"
-   ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
-   FILE_DESCRIPTION "MBot-GameHouse-Cpp.exe"
+   ICON "${CMAKE_SOURCE_DIR}/Chris 01.ico"
    COMPANY_NAME "RealTimeChris Inc."
    VERSION_MAJOR 1
    VERSION_MINOR 0
@@ -34,6 +38,9 @@ target_compile_features(
 	MBot-GameHouse PUBLIC
 	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
 )
+
+string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
+set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
 
 target_link_libraries(
 	MBot-GameHouse PRIVATE
