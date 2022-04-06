@@ -17,7 +17,7 @@ include(generate_product_version)
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
    NAME "MBot-GameHouse-Cpp"
-   ICON "${CMAKE_SOURCE_DIR}/Chris 01.ico"
+   ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
    COMPANY_NAME "RealTimeChris Inc."
    VERSION_MAJOR 1
    VERSION_MINOR 0
@@ -45,9 +45,9 @@ set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
 target_link_libraries(
 	MBot-GameHouse PRIVATE
 	DiscordCoreAPI::DiscordCoreAPI
-	"${VCPKG_INSTALLED_DIR}/lib/mongoc-1.0.lib"
-	"${VCPKG_INSTALLED_DIR}/lib/mongocxx.lib"
-	"${VCPKG_INSTALLED_DIR}/lib/bsoncxx.lib"
+	"${VCPKG_INSTALLED_DIR}lib/mongoc-1.0.lib"
+	"${VCPKG_INSTALLED_DIR}lib/mongocxx.lib"
+	"${VCPKG_INSTALLED_DIR}lib/bsoncxx.lib"
 )
 
 set_target_properties(
