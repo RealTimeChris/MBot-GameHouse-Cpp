@@ -57,7 +57,7 @@ string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
 
 target_link_libraries(
-	MBot-GameHouse PRIVATE
+	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
 	"${VCPKG_INSTALLED_DIR}lib/mongoc-1.0.lib"
 	"${VCPKG_INSTALLED_DIR}lib/mongocxx.lib"
