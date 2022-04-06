@@ -40,6 +40,13 @@ target_compile_features(
 	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
 )
 
+string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
+
+target_include_directories(
+	MBot-GameHouse PUBLIC 
+	"$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/include"
+)
+
 target_compile_options(
 	MBot-GameHouse PUBLIC
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Release>:/O2>>"
@@ -53,7 +60,6 @@ target_compile_options(
 	"$<$<PLATFORM_ID:Linux>:-O3>"
 )
 
-string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
 
 target_link_libraries(

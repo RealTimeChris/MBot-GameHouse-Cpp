@@ -7,8 +7,8 @@
   "version": 3,
   "configurePresets": [
     {
-      "name": "windows-default",
-      "displayName": "Windows x64 Release",
+      "name": "windows-default-config",
+      "displayName": "Windows x64 Release - Config",
       "description": "Target Windows with the Visual Studio development environment.",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/Windows/Output Files/Release",
@@ -22,8 +22,8 @@
       "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Windows" ] } }
     },
     {
-      "name": "windows-dbg-default",
-      "displayName": "Windows x64 Debug",
+      "name": "windows-dbg-default-config",
+      "displayName": "Windows x64 Debug - Config",
       "description": "Target Windows with the Visual Studio development environment.",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/Windows/Output Files/Debug",
@@ -37,8 +37,8 @@
       "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Windows" ] } }
     },
     {
-      "name": "linux-default",
-      "displayName": "Linux x64 Release",
+      "name": "linux-default-config",
+      "displayName": "Linux x64 Release - Config",
       "description": "Target Linux with the g++-11 compiler.",
       "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/Linux/Output Files/Release",
@@ -55,8 +55,8 @@
       }
     },
     {
-      "name": "linux-dbg-default",
-      "displayName": "Linux x64 Debug",
+      "name": "linux-dbg-default-config",
+      "displayName": "Linux x64 Debug - Config",
       "description": "Target Linux with the g++-11 compiler.",
       "generator": "Unix Makefiles",
       "binaryDir": "${sourceDir}/Linux/Output Files/Debug",
@@ -75,37 +75,39 @@
   ],
   "buildPresets": [
     {
-      "name": "windows-default",
-      "displayName": "Windows x64 Release",
+      "name": "windows-default-build",
+      "displayName": "Windows x64 Release - Build",
       "description": "Target Windows with the Visual Studio development environment",
-      "configurePreset": "windows-default",
+      "configurePreset": "windows-default-config",
+      "cleanFirst": true,
       "configuration": "Release",
       "verbose": true,
       "inheritConfigureEnvironment": true
     },
     {
-      "name": "windows-dbg-default",
-      "displayName": "Windows x64 Debug",
+      "name": "windows-dbg-default-build",
+      "displayName": "Windows x64 Debug - Build",
       "description": "Target Windows with the Visual Studio development environment",
-      "configurePreset": "windows-dbg-default",
+      "configurePreset": "windows-dbg-default-config",
+      "cleanFirst": true,
       "configuration": "Debug",
       "verbose": true,
       "inheritConfigureEnvironment": true
     },
     {
-      "name": "linux-default",
-      "displayName": "Linux x64 Release",
+      "name": "linux-default-build",
+      "displayName": "Linux x64 Release - Build",
       "description": "Target Linux with the g++-11 compiler.",
-      "configurePreset": "linux-default",
+      "configurePreset": "linux-default-config",
       "configuration": "Release",
       "verbose": true,
       "inheritConfigureEnvironment": true
     },
     {
-      "name": "linux-dbg-default",
-      "displayName": "Linux x64 Debug",
+      "name": "linux-dbg-default-build",
+      "displayName": "Linux x64 Debug - Build",
       "description": "Target Linux with the g++-11 compiler.",
-      "configurePreset": "linux-dbg-default",
+      "configurePreset": "linux-dbg-default-config",
       "configuration": "Debug",
       "verbose": true,
       "inheritConfigureEnvironment": true
