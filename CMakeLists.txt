@@ -8,10 +8,10 @@ find_vcpkg_root_dir()
 
 set(THE_TOOLCHAIN_PATH "$ENV{VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake")
 
-set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE FILEPATH "The toolchain file.")
+set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE PATH "The toolchain file.")
 set(ENV{CMAKE_TOOLCHAIN_FILE} "${THE_TOOLCHAIN_PATH}")
 
-project(MBot-GameHouse-Cpp LANGUAGES CXX)
+project(MBot-GameHouse LANGUAGES CXX)
 
 include(generate_product_version)
 
@@ -40,6 +40,19 @@ target_compile_features(
 	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
 )
 
+target_compile_options(
+	MBot-GameHouse PUBLIC
+	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Release>:/O2>>"
+	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"
+	"$<$<PLATFORM_ID:Linux>:-std=c++2a>"
+	"$<$<PLATFORM_ID:Linux>:-lpthread>"
+	"$<$<PLATFORM_ID:Windows>:/bigobj>"
+	"$<$<PLATFORM_ID:Windows>:/W4>"
+	"$<$<PLATFORM_ID:Windows>:/WX>"
+	"$<$<PLATFORM_ID:Windows>:/MP>"
+	"$<$<PLATFORM_ID:Linux>:-O3>"
+)
+
 string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
 
@@ -59,3 +72,4 @@ set_target_properties(
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/$<PLATFORM_ID>/$<CONFIG>"
 	PDB_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/$<PLATFORM_ID>/$<CONFIG>"
 )
+
