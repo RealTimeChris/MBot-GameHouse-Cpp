@@ -9,6 +9,7 @@ find_vcpkg_root_dir()
 set(THE_TOOLCHAIN_PATH "$ENV{VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake")
 
 set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE FILEPATH "The toolchain file.")
+set(ENV{CMAKE_TOOLCHAIN_FILE} "${THE_TOOLCHAIN_PATH}")
 
 project(MBot-GameHouse-Cpp LANGUAGES CXX)
 
