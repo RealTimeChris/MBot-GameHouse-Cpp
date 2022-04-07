@@ -1,0 +1,23 @@
+function(findglib RELEASE_ROOT_DIR DEBUG_ROOT_DIR)
+	find_library(GLIB_RELEASE_LIBRARY NAME "${LIBRARY_PREFIX}glib-2.0${LIBRARY_SUFFIX}" PATHS "${RELEASE_ROOT_DIR}")
+	find_library(GLIB_DEBUG_LIBRARY NAME "${LIBRARY_PREFIX}glib-2.0${LIBRARY_SUFFIX}" PATHS "${DEBUG_ROOT_DIR}")
+	if (EXISTS "${GLIB_RELEASE_LIBRARY}" AND EXISTS "${GLIB_DEBUG_LIBRARY}")
+		add_library(GLIB::Glib UNKNOWN IMPORTED GLOBAL)
+        set_target_properties(GLIB::Glib PROPERTIES
+            IMPORTED_LINK_INTERFACE_LANGUAGES "C"
+            IMPORTED_LOCATION "${GLIB_RELEASE_LIBRARY}")
+        set_property(TARGET GLIB::Glib APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS RELEASE)
+            set_target_properties(GLIB::Glib PROPERTIES
+            IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "C"
+            IMPORTED_LOCATION_RELEASE "${GLIB_RELEASE_LIBRARY}")
+        set_property(TARGET GLIB::Glib APPEND PROPERTY
+            IMPORTED_CONFIGURATIONS DEBUG)
+            set_target_properties(GLIB::Glib PROPERTIES
+            IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "C"
+            IMPORTED_LOCATION_DEBUG "${GLIB_DEBUG_LIBRARY}")
+		message(STATUS "Found Glib!")
+	else()
+		message(FATAL_ERROR "Couldn't find Glib!")
+	endif()
+endfunction()

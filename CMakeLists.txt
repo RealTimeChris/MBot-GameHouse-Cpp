@@ -3,6 +3,13 @@ cmake_minimum_required (VERSION 3.22)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 
 include(FindVCPKGRootDir)
+include(FindCurl)
+include(FindFFMPEG)
+include(FindGlib)
+include(FindLibz)
+include(FindOpenSSL)
+include(FindOpus)
+include(FindSodium)
 
 find_vcpkg_root_dir()
 
@@ -28,6 +35,26 @@ generate_product_version(
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
+if(UNIX)
+	set(LIBRARY_SUFFIX ".a")
+	set(LIBRARY_PREFIX "lib")
+elseif(WIN32)
+	set(LIBRARY_SUFFIX ".lib")
+	set(LIBRARY_PREFIX "")
+endif()
+
+string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
+set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
+message("THE PATH ${VCPKG_INSTALLED_DIR}")
+
+findcurl("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+findffmpeg("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+findglib("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+findlibz("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+findopenssl("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+findopus("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+findsodium("${VCPKG_INSTALLED_DIR}/lib/" "${VCPKG_INSTALLED_DIR}/debug/lib/")
+
 add_executable (
 	MBot-GameHouse
 	"main.cpp"
@@ -40,8 +67,6 @@ target_compile_features(
 	"$<$<PLATFORM_ID:Windows>:cxx_std_23>"
 	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
 )
-
-string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 
 target_include_directories(
 	MBot-GameHouse PUBLIC 
@@ -60,8 +85,6 @@ target_compile_options(
 	"$<$<PLATFORM_ID:Windows>:/MP>"
 	"$<$<PLATFORM_ID:Linux>:-O3>"
 )
-
-set(VCPKG_INSTALLED_DIR "$ENV{VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}/")
 
 target_link_libraries(
 	MBot-GameHouse PUBLIC
