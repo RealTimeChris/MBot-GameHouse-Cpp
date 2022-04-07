@@ -1,10 +1,49 @@
 {
+  "buildPresets": [
+    {
+      "name": "windows-default-build",
+      "displayName": "Windows x64 Release - Build",
+      "description": "Target Windows with the Visual Studio development environment",
+      "configurePreset": "windows-default-config",
+      "cleanFirst": true,
+      "configuration": "Release",
+      "verbose": true,
+      "inheritConfigureEnvironment": true
+    },
+    {
+      "name": "windows-dbg-default-build",
+      "displayName": "Windows x64 Debug - Build",
+      "description": "Target Windows with the Visual Studio development environment",
+      "configurePreset": "windows-dbg-default-config",
+      "cleanFirst": true,
+      "configuration": "Debug",
+      "verbose": true,
+      "inheritConfigureEnvironment": true
+    },
+    {
+      "name": "linux-default-build",
+      "displayName": "Linux x64 Release - Build",
+      "description": "Target Linux with the g++-11 compiler.",
+      "configurePreset": "linux-default-config",
+      "configuration": "Release",
+      "verbose": true,
+      "inheritConfigureEnvironment": true
+    },
+    {
+      "name": "linux-dbg-default-build",
+      "displayName": "Linux x64 Debug - Build",
+      "description": "Target Linux with the g++-11 compiler.",
+      "configurePreset": "linux-dbg-default-config",
+      "configuration": "Debug",
+      "verbose": true,
+      "inheritConfigureEnvironment": true
+    }
+  ],
   "cmakeMinimumRequired": {
     "major": 3,
     "minor": 2,
     "patch": 2
   },
-  "version": 3,
   "configurePresets": [
     {
       "name": "windows-default-config",
@@ -73,44 +112,5 @@
       }
     }
   ],
-  "buildPresets": [
-    {
-      "name": "windows-default-build",
-      "displayName": "Windows x64 Release - Build",
-      "description": "Target Windows with the Visual Studio development environment",
-      "configurePreset": "windows-default-config",
-      "cleanFirst": true,
-      "configuration": "Release",
-      "verbose": true,
-      "inheritConfigureEnvironment": true
-    },
-    {
-      "name": "windows-dbg-default-build",
-      "displayName": "Windows x64 Debug - Build",
-      "description": "Target Windows with the Visual Studio development environment",
-      "configurePreset": "windows-dbg-default-config",
-      "cleanFirst": true,
-      "configuration": "Debug",
-      "verbose": true,
-      "inheritConfigureEnvironment": true
-    },
-    {
-      "name": "linux-default-build",
-      "displayName": "Linux x64 Release - Build",
-      "description": "Target Linux with the g++-11 compiler.",
-      "configurePreset": "linux-default-config",
-      "configuration": "Release",
-      "verbose": true,
-      "inheritConfigureEnvironment": true
-    },
-    {
-      "name": "linux-dbg-default-build",
-      "displayName": "Linux x64 Debug - Build",
-      "description": "Target Linux with the g++-11 compiler.",
-      "configurePreset": "linux-dbg-default-config",
-      "configuration": "Debug",
-      "verbose": true,
-      "inheritConfigureEnvironment": true
-    }
-  ]
+  "version": 3
 }
