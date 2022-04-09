@@ -1,5 +1,5 @@
 # Set this value...
-set(VCPKG_BASE_DIR "")
+set(VCPKG_BASE_DIR "C:/vcpkg")
 # Or this value
 set(CMAKE_CONFIG_FILE_PATH "")
 
@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 include(generate_product_version)
 
-cmake_minimum_required (VERSION 3.22)
+cmake_minimum_required(VERSION 3.21.2)
 
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
@@ -51,8 +51,7 @@ target_compile_features(
 target_compile_options(
 	MBot-GameHouse PUBLIC
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Release>:/O2>>"
-	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"
-	"$<$<PLATFORM_ID:Linux>:-std=c++2a>"
+	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"cm,a
 	"$<$<PLATFORM_ID:Linux>:-lpthread>"
 	"$<$<PLATFORM_ID:Windows>:/bigobj>"
 	"$<$<PLATFORM_ID:Windows>:/W4>"
