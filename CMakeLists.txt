@@ -1,5 +1,5 @@
 # Set this value...
-set(VCPKG_BASE_DIR "C:/vcpkg")
+set(VCPKG_BASE_DIR "")
 # Or this value
 set(CMAKE_CONFIG_FILE "C:/Program Files (x86)/discordcoreapi_proj/share/discordcoreapi")
 
@@ -80,3 +80,4 @@ set_target_properties(
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 	PDB_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 )
+
