@@ -3,7 +3,7 @@
     {
       "name": "windows-default-build",
       "displayName": "Windows x64 Release - Build",
-      "description": "Target Windows with the Visual Studio development environment",
+      "description": "Target Windows with the Visual Studio development environment.",
       "configurePreset": "windows-default-config",
       "configuration": "Release",
       "verbose": true,
@@ -12,7 +12,7 @@
     {
       "name": "windows-dbg-default-build",
       "displayName": "Windows x64 Debug - Build",
-      "description": "Target Windows with the Visual Studio development environment",
+      "description": "Target Windows with the Visual Studio development environment.",
       "configurePreset": "windows-dbg-default-config",
       "configuration": "Debug",
       "verbose": true,
