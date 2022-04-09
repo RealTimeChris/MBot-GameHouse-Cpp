@@ -1,7 +1,7 @@
 # Set this value...
-set(VCPKG_BASE_DIR "C:/vcpkg")
+set(VCPKG_BASE_DIR "")
 # Or this value
-set(CMAKE_CONFIG_FILE "")
+set(CMAKE_CONFIG_FILE_PATH "")
 
 if (EXISTS ${VCPKG_BASE_DIR})
 	set(THE_TOOLCHAIN_PATH "${VCPKG_BASE_DIR}/scripts/buildsystems/vcpkg.cmake")
@@ -10,8 +10,8 @@ if (EXISTS ${VCPKG_BASE_DIR})
 	set(ENV{CMAKE_TOOLCHAIN_FILE} "${THE_TOOLCHAIN_PATH}")
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 	set(VCPKG_INSTALLED_DIR_NEW "${VCPKG_BASE_DIR}/installed/x64-windows")
-elseif (EXISTS ${CMAKE_CONFIG_FILE})
-	set(DiscordCoreAPI_DIR ${CMAKE_CONFIG_FILE})
+elseif (EXISTS ${CMAKE_CONFIG_FILE_PATH})
+	set(DiscordCoreAPI_DIR ${CMAKE_CONFIG_FILE_PATH})
 else()
 	message(FATAL_ERROR "Please, set the VCPKG base directory, or the location of the DiscordCoreAPIConfig.cmake file!")
 endif()
@@ -43,13 +43,13 @@ add_executable (
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
 target_compile_features(
-	MBot-GameHouse PRIVATE
+	MBot-GameHouse PUBLIC
 	"$<$<PLATFORM_ID:Windows>:cxx_std_23>"
 	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
 )
 
 target_compile_options(
-	MBot-GameHouse PRIVATE
+	MBot-GameHouse PUBLIC
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Release>:/O2>>"
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"
 	"$<$<PLATFORM_ID:Linux>:-std=c++2a>"
@@ -62,7 +62,7 @@ target_compile_options(
 )
 
 target_link_libraries(
-	MBot-GameHouse PRIVATE
+	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
