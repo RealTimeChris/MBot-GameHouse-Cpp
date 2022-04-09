@@ -48,7 +48,7 @@
       "displayName": "Windows x64 Release - Config",
       "description": "Target Windows with the Visual Studio development environment.",
       "generator": "Visual Studio 17 2022",
-      "binaryDir": "${sourceDir}/Output Files/Release",
+      "binaryDir": "${sourceDir}/Output Files/Release/Build Files",
       "architecture": {
         "value": "x64",
         "strategy": "external"
@@ -63,7 +63,7 @@
       "displayName": "Windows x64 Debug - Config",
       "description": "Target Windows with the Visual Studio development environment.",
       "generator": "Visual Studio 17 2022",
-      "binaryDir": "${sourceDir}/Output Files/Debug",
+      "binaryDir": "${sourceDir}/Output Files/Debug/Build Files",
       "architecture": {
         "value": "x64",
         "strategy": "external"
@@ -78,7 +78,7 @@
       "displayName": "Linux x64 Release - Config",
       "description": "Target Linux with the g++-11 compiler.",
       "generator": "Unix Makefiles",
-      "binaryDir": "${sourceDir}/Output Files/Release",
+      "binaryDir": "${sourceDir}/Output Files/Release/Build Files",
       "architecture": {
         "value": "x64",
         "strategy": "external"
@@ -96,7 +96,7 @@
       "displayName": "Linux x64 Debug - Config",
       "description": "Target Linux with the g++-11 compiler.",
       "generator": "Unix Makefiles",
-      "binaryDir": "${sourceDir}/Output Files/Debug",
+      "binaryDir": "${sourceDir}/Output Files/Debug/Build Files",
       "architecture": {
         "value": "x64",
         "strategy": "external"
