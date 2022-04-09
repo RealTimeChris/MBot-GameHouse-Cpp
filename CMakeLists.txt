@@ -9,7 +9,7 @@ if (EXISTS ${VCPKG_BASE_DIR})
 	set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE PATH "The toolchain file.")
 	set(ENV{CMAKE_TOOLCHAIN_FILE} "${THE_TOOLCHAIN_PATH}")
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
-	set(VCPKG_INSTALLED_DIR "${VCPKG_BASE_DIR}/installed/x64-${OS_NAME}")
+	set(VCPKG_INSTALLED_DIR_NEW "${VCPKG_BASE_DIR}/installed/x64-windows")
 elseif (EXISTS ${CMAKE_CONFIG_FILE})
 	set(DiscordCoreAPI_DIR ${CMAKE_CONFIG_FILE})
 else()
@@ -24,9 +24,8 @@ cmake_minimum_required (VERSION 3.22)
 
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
-   NAME "MBot-GameHouse"
+   NAME "MBot-GameHouse-Cpp"
    ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
-   FILE_DESCRIPTION "A Discord bot written in C++, using asynchronous coroutines."
    ORIGINAL_FILENAME "MBot-GameHouse-Cpp.exe"
    VERSION_MAJOR 1
    VERSION_MINOR 0
@@ -35,13 +34,13 @@ generate_product_version(
 )
 project(MBot-GameHouse LANGUAGES CXX)
 
-find_package(DiscordCoreAPI CONFIG REQUIRED)
-
 add_executable (
 	MBot-GameHouse
 	"main.cpp"
 	"${VERSION_FILES_OUTPUT_VARIABLE}"
 )
+
+find_package(DiscordCoreAPI CONFIG REQUIRED)
 
 target_compile_features(
 	MBot-GameHouse PRIVATE
@@ -50,7 +49,7 @@ target_compile_features(
 )
 
 target_compile_options(
-	MBot-GameHouse PUBLIC
+	MBot-GameHouse PRIVATE
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Release>:/O2>>"
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"
 	"$<$<PLATFORM_ID:Linux>:-std=c++2a>"
@@ -65,9 +64,9 @@ target_compile_options(
 target_link_libraries(
 	MBot-GameHouse PRIVATE
 	DiscordCoreAPI::DiscordCoreAPI
-	"${VCPKG_INSTALLED_DIR}/lib/mongoc-1.0.lib"
-	"${VCPKG_INSTALLED_DIR}/lib/mongocxx.lib"
-	"${VCPKG_INSTALLED_DIR}/lib/bsoncxx.lib"
+	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
+	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
+	"${VCPKG_INSTALLED_DIR_NEW}/lib/bsoncxx.lib"
 )
 
 set_target_properties(

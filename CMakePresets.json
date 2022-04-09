@@ -47,7 +47,7 @@
       "name": "windows-default-config",
       "displayName": "Windows x64 Release - Config",
       "description": "Target Windows with the Visual Studio development environment.",
-      "generator": "Visual Studio 17 2022",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/Build/Release",
       "architecture": {
         "value": "x64",
@@ -62,7 +62,7 @@
       "name": "windows-dbg-default-config",
       "displayName": "Windows x64 Debug - Config",
       "description": "Target Windows with the Visual Studio development environment.",
-      "generator": "Visual Studio 17 2022",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/Build/Debug",
       "architecture": {
         "value": "x64",
