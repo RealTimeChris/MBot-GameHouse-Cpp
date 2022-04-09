@@ -51,7 +51,7 @@ target_compile_features(
 target_compile_options(
 	MBot-GameHouse PUBLIC
 	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Release>:/O2>>"
-	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"cm,a
+	"$<$<PLATFORM_ID:Windows>:$<$<CONFIG:Debug>:/MDd>>"
 	"$<$<PLATFORM_ID:Linux>:-lpthread>"
 	"$<$<PLATFORM_ID:Windows>:/bigobj>"
 	"$<$<PLATFORM_ID:Windows>:/W4>"
