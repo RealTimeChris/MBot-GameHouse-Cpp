@@ -37,8 +37,6 @@ project(MBot-GameHouse LANGUAGES CXX)
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
-string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
-
 add_executable (
 	MBot-GameHouse
 	"main.cpp"
