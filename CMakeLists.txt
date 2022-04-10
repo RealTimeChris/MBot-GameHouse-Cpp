@@ -1,7 +1,7 @@
 # Set this value...
-set(VCPKG_BASE_DIR "")
+set(VCPKG_BASE_DIR "C:/vcpkg")
 # Or this value
-set(CMAKE_CONFIG_FILE_PATH "C:/Program Files (x86)/discordcoreapi_proj/share/discordcoreapi")
+set(CMAKE_CONFIG_FILE_PATH "")
 
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
