@@ -1,7 +1,7 @@
 # Set this value...
-set(VCPKG_BASE_DIR "C:/vcpkg")
+set(VCPKG_BASE_DIR "")
 # Or this value
-set(CMAKE_CONFIG_FILE_PATH "")
+set(CMAKE_CONFIG_FILE_PATH "C:/Program Files (x86)/discordcoreapi_proj/share/discordcoreapi")
 
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
@@ -11,7 +11,7 @@ if (VCPKG_BASE_DIR)
 	set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE PATH "The toolchain file.")
 	set(ENV{CMAKE_TOOLCHAIN_FILE} "${THE_TOOLCHAIN_PATH}")
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
-	set(VCPKG_INSTALLED_DIR_NEW "${VCPKG_BASE_DIR}/installed/x64-windows")
+	set(VCPKG_INSTALLED_DIR_NEW "${VCPKG_BASE_DIR}/installed/x64-${OS_NAME}")
 elseif (CMAKE_CONFIG_FILE_PATH)
 	set(DiscordCoreAPI_DIR ${CMAKE_CONFIG_FILE_PATH})
 else()
