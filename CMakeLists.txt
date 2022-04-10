@@ -20,7 +20,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 include(generate_product_version)
 
-cmake_minimum_required(VERSION 3.21.2)
+cmake_minimum_required(VERSION 3.22)
 
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
