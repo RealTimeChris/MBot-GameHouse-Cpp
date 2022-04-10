@@ -49,12 +49,8 @@
       "description": "Target Windows with the Visual Studio development environment.",
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/Build/Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Windows" ] }
-      },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Windows" ] } },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
       "architecture": {
         "value": "x64",
         "strategy": "set"
@@ -71,12 +67,8 @@
       "description": "Target Windows with the Visual Studio development environment.",
       "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/Build/Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Windows" ] }
-      },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Windows" ] } },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" },
       "architecture": {
         "value": "x64",
         "strategy": "set"
@@ -93,12 +85,8 @@
       "description": "Target Linux with the g++-11 compiler.",
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/Build/Release",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Linux" ] }
-      },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Linux" ] } },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -111,13 +99,8 @@
       "description": "Target Linux with the g++-11 compiler.",
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/Build/Debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      },
-      "c": null,
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Linux" ] }
-      },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "hostOS": [ "Linux" ] } },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" },
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
