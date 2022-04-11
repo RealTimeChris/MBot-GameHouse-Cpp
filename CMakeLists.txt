@@ -42,12 +42,6 @@ add_executable (
 	"${VERSION_FILES_OUTPUT_VARIABLE}"
 )
 
-target_compile_features(
-	MBot-GameHouse PUBLIC
-	"$<$<PLATFORM_ID:Windows>:cxx_std_23>"
-	"$<$<PLATFORM_ID:Linux>:cxx_std_20>"
-)
-
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
 target_link_libraries(
