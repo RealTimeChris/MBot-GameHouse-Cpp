@@ -34,6 +34,7 @@ generate_product_version(
    VERSION_PATCH 0
    VERSION_REVISION 0
 )
+
 project(MBot-GameHouse LANGUAGES CXX)
 
 add_executable (
