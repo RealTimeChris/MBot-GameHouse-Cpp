@@ -1,7 +1,7 @@
 # Set this value...
 set(VCPKG_BASE_DIR "C:/vcpkg")
 # Or this value
-set(CMAKE_CONFIG_FILE_PATH "")
+set(CMAKE_CONFIG_FILE_PATH "C:/Program Files (x86)/discordcoreapi_proj/share/discordcoreapi")
 
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
@@ -45,12 +45,38 @@ add_executable (
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+	foreach(LIBRARY ${RUNTIME_RELEASE_LIBRARIES})
+	add_custom_command(
+		TARGET MBot-GameHouse POST_BUILD
+		COMMAND "${CMAKE_COMMAND}" -E copy "$<BUILD_INTERFACE:$<$<CONFIG:Release>:${LIBRARY}>>" "$<BUILD_INTERFACE:$<TARGET_FILE_DIR:MBot-GameHouse>>"
+		COMMAND_EXPAND_LISTS
+	)
+	endforeach()
+endif()
+
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	foreach(LIBRARY ${RUNTIME_DEBUG_LIBRARIES})
+	add_custom_command(
+		TARGET MBot-GameHouse POST_BUILD
+		COMMAND "${CMAKE_COMMAND}" -E copy "$<BUILD_INTERFACE:$<$<CONFIG:Debug>:${LIBRARY}>>" "$<BUILD_INTERFACE:$<TARGET_FILE_DIR:MBot-GameHouse>>"
+		COMMAND_EXPAND_LISTS
+	)
+	endforeach()
+endif()
+set(VCPKG_INSTALLED_DIR_NEW "C:/vcpkg/installed/x64-windows")
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/bsoncxx.lib"
+)
+
+add_custom_command(
+	TARGET MBot-GameHouse POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_RUNTIME_DLLS:MBot-GameHouse>" "$<TARGET_FILE_DIR:MBot-GameHouse>"
+	COMMAND_EXPAND_LISTS
 )
 
 set_target_properties(
@@ -61,4 +87,3 @@ set_target_properties(
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 	PDB_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 )
-
