@@ -1,5 +1,6 @@
+cmake_minimum_required(VERSION 3.22)
 # Set this value...
-set(VCPKG_BASE_DIR "")
+set(VCPKG_BASE_DIR "C:/vcpkg")
 # Or this value
 set(CMAKE_CONFIG_FILE_PATH "C:/Program Files (x86)/discordcoreapi_proj/share/discordcoreapi")
 
@@ -21,8 +22,6 @@ endif()
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
 include(generate_product_version)
-
-cmake_minimum_required(VERSION 3.22)
 
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
@@ -64,19 +63,13 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	)
 	endforeach()
 endif()
-set(VCPKG_INSTALLED_DIR_NEW "C:/vcpkg/installed/x64-windows")
+
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
 	"${VCPKG_INSTALLED_DIR_NEW}/lib/bsoncxx.lib"
-)
-
-add_custom_command(
-	TARGET MBot-GameHouse POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_RUNTIME_DLLS:MBot-GameHouse>" "$<TARGET_FILE_DIR:MBot-GameHouse>"
-	COMMAND_EXPAND_LISTS
 )
 
 set_target_properties(
