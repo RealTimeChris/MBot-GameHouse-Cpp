@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
 # Set this value...
-set(VCPKG_BASE_DIR "C:/vcpkg")
+set(VCPKG_BASE_DIR "")
 # Or this value
-set(CMAKE_CONFIG_FILE_PATH "")
+set(CMAKE_CONFIG_FILE_PATH "C:/Program Files/discordcoreapi_proj/share/discordcoreapi")
 
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
@@ -43,7 +43,7 @@ add_executable (
 )
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
-
+set(VCPKG_INSTALLED_DIR_NEW "C:/vcpkg/installed/x64-windows")
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
