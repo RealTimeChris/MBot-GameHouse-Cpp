@@ -44,6 +44,23 @@ add_executable (
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
+target_link_libraries(
+	MBot-GameHouse PUBLIC
+	DiscordCoreAPI::DiscordCoreAPI
+	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
+	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
+	"${VCPKG_INSTALLED_DIR_NEW}/lib/bsoncxx.lib"
+)
+
+set_target_properties(
+	MBot-GameHouse PROPERTIES 
+	OUTPUT_NAME "MBot-GameHouse-Cpp"
+	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
+	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
+	PDB_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
+)
+
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
 	foreach(LIBRARY ${RUNTIME_RELEASE_LIBRARIES})
 	add_custom_command(
@@ -64,19 +81,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	endforeach()
 endif()
 
-target_link_libraries(
-	MBot-GameHouse PUBLIC
-	DiscordCoreAPI::DiscordCoreAPI
-	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
-	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
-	"${VCPKG_INSTALLED_DIR_NEW}/lib/bsoncxx.lib"
-)
-
-set_target_properties(
-	MBot-GameHouse PROPERTIES 
-	OUTPUT_NAME "MBot-GameHouse-Cpp"
-	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
-	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
-	PDB_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
+add_custom_command(
+		TARGET MBot-GameHouse POST_BUILD
+		COMMAND "${CMAKE_COMMAND}" -E copy "$<BUILD_INTERFACE:$<TARGET_FILE:DiscordCoreAPI::DiscordCoreAPI>>" "$<BUILD_INTERFACE:$<TARGET_FILE_DIR:MBot-GameHouse>>"
+		COMMAND_EXPAND_LISTS
 )
