@@ -7,10 +7,6 @@ set(CMAKE_CONFIG_FILE_PATH "")
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
 if (VCPKG_BASE_DIR)
-	set(THE_TOOLCHAIN_PATH "${VCPKG_BASE_DIR}/scripts/buildsystems/vcpkg.cmake")
-
-	set(CMAKE_TOOLCHAIN_FILE "${THE_TOOLCHAIN_PATH}" CACHE FILEPATH "The toolchain file.")
-	set(ENV{CMAKE_TOOLCHAIN_FILE} "${THE_TOOLCHAIN_PATH}")
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 	set(VCPKG_INSTALLED_DIR_NEW "${VCPKG_BASE_DIR}/installed/x64-${OS_NAME}")
 elseif (CMAKE_CONFIG_FILE_PATH)
@@ -21,7 +17,7 @@ endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
-include(generate_product_version)
+include(GenerateProductVersion)
 
 generate_product_version(
    VERSION_FILES_OUTPUT_VARIABLE
@@ -36,7 +32,7 @@ generate_product_version(
 
 project(MBot-GameHouse LANGUAGES CXX)
 
-add_executable (
+add_executable(
 	MBot-GameHouse
 	"main.cpp"
 	"${VERSION_FILES_OUTPUT_VARIABLE}"
@@ -55,6 +51,7 @@ target_link_libraries(
 set_target_properties(
 	MBot-GameHouse PROPERTIES 
 	OUTPUT_NAME "MBot-GameHouse-Cpp"
+	VS_GLOBAL_VcpkgEnabled true
 	ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 	LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
@@ -63,7 +60,7 @@ set_target_properties(
 
 if (WIN32)
 	add_custom_command(TARGET MBot-GameHouse POST_BUILD
-	  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:MBot-GameHouse> $<TARGET_FILE_DIR:MBot-GameHouse>
+	COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:MBot-GameHouse> $<TARGET_FILE_DIR:MBot-GameHouse>
 	  COMMAND_EXPAND_LISTS
 	)
 endif()
