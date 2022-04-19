@@ -1,14 +1,19 @@
 cmake_minimum_required(VERSION 3.22)
 # Set this value...
-set(VCPKG_BASE_DIR "C:/vcpkg")
+set(VCPKG_ROOT "C:/vcpkg")
 # Or this value
 set(CMAKE_CONFIG_FILE_PATH "")
 
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
-if (VCPKG_BASE_DIR)
+if (VCPKG_ROOT)
+	set(VCPKG_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+	if(NOT CMAKE_TOOLCHAIN_FILE AND VCPKG_TOOLCHAIN_FILE)
+		set(CMAKE_TOOLCHAIN_FILE "${VCPKG_TOOLCHAIN_FILE}" CACHE FILEPATH "CMake toolchain file.")
+		message(STATUS "Vcpkg toolchain found: $CACHE{CMAKE_TOOLCHAIN_FILE}")
+	endif()
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
-	set(VCPKG_INSTALLED_DIR_NEW "${VCPKG_BASE_DIR}/installed/x64-${OS_NAME}")
+	set(VCPKG_INSTALLED_DIR "${VCPKG_ROOT}/installed/x64-${OS_NAME}")
 elseif (CMAKE_CONFIG_FILE_PATH)
 	set(DiscordCoreAPI_DIR ${CMAKE_CONFIG_FILE_PATH})
 else()
@@ -43,9 +48,9 @@ find_package(DiscordCoreAPI CONFIG REQUIRED)
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
-	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongoc-1.0.lib"
-	"${VCPKG_INSTALLED_DIR_NEW}/lib/mongocxx.lib"
-	"${VCPKG_INSTALLED_DIR_NEW}/lib/bsoncxx.lib"
+	"${VCPKG_INSTALLED_DIR}/lib/mongoc-1.0.lib"
+	"${VCPKG_INSTALLED_DIR}/lib/mongocxx.lib"
+	"${VCPKG_INSTALLED_DIR}/lib/bsoncxx.lib"
 )
 
 set_target_properties(
