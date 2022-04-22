@@ -25,14 +25,14 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 include(GenerateProductVersion)
 
 generate_product_version(
-   PRODUCT_INFO
-   NAME "MBot-GameHouse-Cpp"
-   ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
-   ORIGINAL_FILENAME "MBot-GameHouse-Cpp.exe"
-   VERSION_MAJOR "1"
-   VERSION_MINOR "0"
-   VERSION_PATCH "0"
-   VERSION_REVISION "0"
+	PRODUCT_INFO
+	NAME "MBot-GameHouse-Cpp"
+	ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
+	ORIGINAL_FILENAME "MBot-GameHouse-Cpp.exe"
+	VERSION_MAJOR "1"
+	VERSION_MINOR "0"
+	VERSION_PATCH "0"
+	VERSION_REVISION "0"
 )
 
 project(MBot-GameHouse LANGUAGES CXX)
