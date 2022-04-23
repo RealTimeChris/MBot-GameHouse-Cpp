@@ -7,11 +7,7 @@ set(CMAKE_CONFIG_FILE_PATH "")
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
 if (VCPKG_ROOT)
-	set(VCPKG_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-	if(VCPKG_TOOLCHAIN_FILE)
-		message(STATUS "Vcpkg toolchain found: ${VCPKG_TOOLCHAIN_FILE}")
-		include("${VCPKG_TOOLCHAIN_FILE}")
-	endif()
+	include("${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 	set(VCPKG_INSTALLED_DIR "${VCPKG_ROOT}/installed/x64-${OS_NAME}")
 elseif (CMAKE_CONFIG_FILE_PATH)
@@ -43,7 +39,7 @@ add_executable(
 	"${PRODUCT_INFO}"
 )
 
-find_package(DiscordCoreAPI CONFIG REQUIRED)
+find_package(DiscordCoreAPI REQUIRED)
 
 target_link_libraries(
 	MBot-GameHouse PUBLIC
