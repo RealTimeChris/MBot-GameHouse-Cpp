@@ -8,9 +8,9 @@ set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
 if (VCPKG_ROOT)
 	set(VCPKG_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
-	if(NOT CMAKE_TOOLCHAIN_FILE AND VCPKG_TOOLCHAIN_FILE)
-		set(CMAKE_TOOLCHAIN_FILE "${VCPKG_TOOLCHAIN_FILE}" CACHE FILEPATH "CMake toolchain file.")
-		message(STATUS "Vcpkg toolchain found: $CACHE{CMAKE_TOOLCHAIN_FILE}")
+	if(VCPKG_TOOLCHAIN_FILE)
+		message(STATUS "Vcpkg toolchain found: ${VCPKG_TOOLCHAIN_FILE}")
+		include("${VCPKG_TOOLCHAIN_FILE}")
 	endif()
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
 	set(VCPKG_INSTALLED_DIR "${VCPKG_ROOT}/installed/x64-${OS_NAME}")
@@ -65,8 +65,8 @@ set_target_properties(
 
 if (WIN32 AND NOT VCPKG_ROOT)
 	add_custom_command(
-		TARGET MBot-MusicHouse POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:MBot-MusicHouse> $<TARGET_FILE_DIR:MBot-MusicHouse>
+		TARGET MBot-GameHouse POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:MBot-GameHouse> $<TARGET_FILE_DIR:MBot-GameHouse>
 		COMMAND_EXPAND_LISTS
 	)
 endif()
