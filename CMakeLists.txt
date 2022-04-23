@@ -39,7 +39,7 @@ add_executable(
 	"${PRODUCT_INFO}"
 )
 
-find_package(DiscordCoreAPI REQUIRED)
+find_package(DiscordCoreAPI CONFIG REQUIRED)
 
 target_link_libraries(
 	MBot-GameHouse PUBLIC
