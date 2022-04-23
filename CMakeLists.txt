@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.22)
 # Set this value...
-set(VCPKG_ROOT "")
+set(VCPKG_ROOT_DIR "C:/vcpkg")
 # Or this value
-set(CMAKE_CONFIG_FILE_PATH "C:/Program Files/discordcoreapi_proj/share/discordcoreapi")
+set(CMAKE_CONFIG_FILE_PATH "")
 
 set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
-if (VCPKG_ROOT)
-	include("${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
+if (VCPKG_ROOT_DIR)
+	include("${VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake")
 	string(TOLOWER "${CMAKE_HOST_SYSTEM_NAME}" OS_NAME)
-	set(VCPKG_INSTALLED_DIR "${VCPKG_ROOT}/installed/x64-${OS_NAME}")
+	set(VCPKG_INSTALLED_DIR "${VCPKG_ROOT_DIR}/installed/x64-${OS_NAME}")
 elseif (CMAKE_CONFIG_FILE_PATH)
 	set(DiscordCoreAPI_DIR "${CMAKE_CONFIG_FILE_PATH}")
 else()
