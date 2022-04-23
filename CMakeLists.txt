@@ -40,7 +40,7 @@ add_executable(
 )
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
-set(VCPKG_INSTALLED_DIR "C:/vcpkg/installed/x64-windows")
+
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
