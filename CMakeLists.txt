@@ -4,7 +4,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 # Set this value...
 set(VCPKG_ROOT_DIR "")
 # OR this value...
-set(VCPKG_TOOLCHAIN_FILE "C:/Program Files/discordcoreapi_proj_new_location/share/discordcoreapi")
+set(CMAKE_CONFIG_FILE_PATH "C:/Program Files/discordcoreapi_proj_new_location/share/discordcoreapi")
 # AND these values.
 set(CURL_INCLUDE_DIR "C:/Users/Chris/Downloads/curlNew/include")
 set(CURL_RELEASE_ROOT "C:/Users/Chris/Downloads/curlNew/Build/lib/Release")
@@ -68,6 +68,7 @@ elseif(VCPKG_ROOT_DIR)
 		if(DEFINED VCPKG_ROOT_DIR AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
 			set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake" CACHE FILEPATH "The CMake toolchain file.")
 			message(STATUS "Found CMake toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
+			set(DiscordCoreAPI_DIR "${CMAKE_CONFIG_FILE_PATH}")
 		endif()
 	endif()
 	set(VCPKG_BASE_DIR "${VCPKG_ROOT_DIR}/installed")
