@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.22)
 project(MBot-GameHouse VERSION 1.00 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
-# Set this value... OR
+# Set this value...
 set(VCPKG_ROOT_DIR "")
 # OR this value...
 set(VCPKG_TOOLCHAIN_FILE "C:/Program Files/discordcoreapi_proj_new_location/share/discordcoreapi")
-# Or these values.
+# AND these values.
 set(CURL_INCLUDE_DIR "C:/Users/Chris/Downloads/curlNew/include")
 set(CURL_RELEASE_ROOT "C:/Users/Chris/Downloads/curlNew/Build/lib/Release")
 set(CURL_DEBUG_ROOT "C:/Users/Chris/Downloads/curlNew/Build/lib/Debug")
