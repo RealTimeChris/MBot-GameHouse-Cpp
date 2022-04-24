@@ -8,8 +8,10 @@ set(CMAKE_CONFIGURATION_TYPES "$CACHE{CMAKE_BUILD_TYPE}")
 
 if (VCPKG_ROOT_DIR)
 	if (WIN32)
+		set(LIBRARY_SUFFIX ".lib")
 		include("${VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake")
 	elseif(UNIX)
+		set(LIBRARY_SUFFIX ".a")
 		if(DEFINED VCPKG_ROOT_DIR AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
 			set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT_DIR}/scripts/buildsystems/vcpkg.cmake" CACHE FILEPATH "The CMake toolchain file.")
 			message(STATUS "Found CMake toolchain file: ${CMAKE_TOOLCHAIN_FILE}")
@@ -51,9 +53,9 @@ find_package(DiscordCoreAPI CONFIG REQUIRED)
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
-	"${VCPKG_INSTALLED_DIR}/lib/mongoc-1.0.lib"
-	"${VCPKG_INSTALLED_DIR}/lib/mongocxx.lib"
-	"${VCPKG_INSTALLED_DIR}/lib/bsoncxx.lib"
+	"${VCPKG_INSTALLED_DIR}/lib/mongoc-1.0${LIBRARY_SUFFIX}"
+	"${VCPKG_INSTALLED_DIR}/lib/mongocxx${LIBRARY_SUFFIX}"
+	"${VCPKG_INSTALLED_DIR}/lib/bsoncxx${LIBRARY_SUFFIX}"
 )
 
 set_target_properties(
