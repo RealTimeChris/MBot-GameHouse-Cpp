@@ -9,14 +9,15 @@
 	VERSION_REVISION "0"
 )
 
-find_curl("${CURL_RELEASE_ROOT}" "${CURL_DEBUG_ROOT}")
-find_ffmpeg("${FFMPEG_RELEASE_ROOT}" "${FFMPEG_DEBUG_ROOT}")
-find_glib("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}")
-find_intl("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}")
-find_libz("${LIBZ_RELEASE_ROOT}" "${LIBZ_DEBUG_ROOT}")
-find_openssl("${OPENSSL_RELEASE_ROOT}" "${OPENSSL_DEBUG_ROOT}")
-find_opus("${OPUS_RELEASE_ROOT}" "${OPUS_DEBUG_ROOT}")
-find_sodium("${SODIUM_RELEASE_ROOT}" "${SODIUM_DEBUG_ROOT}")
+find_curl("${CURL_RELEASE_ROOT}" "${CURL_DEBUG_ROOT}" "${CURL_INCLUDE_DIR}")
+find_ffmpeg("${FFMPEG_RELEASE_ROOT}" "${FFMPEG_DEBUG_ROOT}" "${FFMPEG_INCLUDE_DIR}")
+find_glib("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}" "${GLIB_INCLUDE_DIR}")
+find_intl("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}" "${GLIB_INCLUDE_DIR}")
+find_libz("${LIBZ_RELEASE_ROOT}" "${LIBZ_DEBUG_ROOT}" "${LIBZ_INCLUDE_DIR}")
+find_openssl("${OPENSSL_RELEASE_ROOT}" "${OPENSSL_DEBUG_ROOT}" "${OPENSSL_INCLUDE_DIR}")
+find_opus("${OPUS_RELEASE_ROOT}" "${OPUS_DEBUG_ROOT}" "${OPUS_INCLUDE_DIR}")
+find_sodium("${SODIUM_RELEASE_ROOT}" "${SODIUM_DEBUG_ROOT}" "${SODIUM_INCLUDE_DIR}")
+find_nlohmann_json("${NLOHMANN_INCLUDE_DIR}")
 
 add_executable(
 	MBot-GameHouse
@@ -42,7 +43,7 @@ find_package(DiscordCoreAPI CONFIG REQUIRED)
 
 target_link_libraries(
 	MBot-GameHouse PUBLIC
-	DiscordCoreAPI::DiscordCoreAPI	
+	DiscordCoreAPI::DiscordCoreAPI
 	"${VCPKG_INSTALLED_DIR}/lib/mongoc-1.0${LIBRARY_SUFFIX}"
 	"${VCPKG_INSTALLED_DIR}/lib/mongocxx${LIBRARY_SUFFIX}"
 	"${VCPKG_INSTALLED_DIR}/lib/bsoncxx${LIBRARY_SUFFIX}"
