@@ -26,16 +26,12 @@ add_executable(
 )
 
 if (DEFINED ENV{EnableASAN})
-	option(ASAN_ENABLED "Build this target with AddressSanitizer" ON)
-
-	if(ASAN_ENABLED)
-		if(MSVC)
-			target_compile_options(MBot-GameHouse PUBLIC /fsanitize=address /Zi)
-			target_link_options(MBot-GameHouse PUBLIC /fsanitize=address /DEBUG)
-		else()
-			target_compile_options(MBot-GameHouse PUBLIC -fsanitize=address <additional-options>)
-			add_compile_definitions(MBot-GameHouse PUBLIC -fsanitize=address)
-		endif()
+	if(MSVC)
+		target_compile_options(MBot-GameHouse PUBLIC /fsanitize=address /Zi)
+		target_link_options(MBot-GameHouse PUBLIC /fsanitize=address /DEBUG)
+	else()
+		target_compile_options(MBot-GameHouse PUBLIC -fsanitize=address <additional-options>)
+		add_compile_definitions(MBot-GameHouse PUBLIC -fsanitize=address)
 	endif()
 endif()
 
