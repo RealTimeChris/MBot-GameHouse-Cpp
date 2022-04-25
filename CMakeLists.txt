@@ -1,7 +1,7 @@
 # Set this value...
-set(VCPKG_ROOT_DIR "")
+set(VCPKG_ROOT_DIR "C:/vcpkg")
 # OR this value...
-set(CMAKE_CONFIG_FILE_PATH "C:/vcpkg")
+set(CMAKE_CONFIG_FILE_PATH "")
 # AND these values.
 set(CURL_INCLUDE_DIR "C:/Users/Chris/Downloads/curlNew/include")
 set(CURL_RELEASE_ROOT "C:/Users/Chris/Downloads/curlNew/Build/lib/Release")
