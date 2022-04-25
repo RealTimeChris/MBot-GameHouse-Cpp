@@ -62,7 +62,7 @@ set_target_properties(
 if (WIN32 AND NOT VCPKG_ROOT)
 	add_custom_command(
 		TARGET MBot-GameHouse POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:MBot-GameHouse> $<TARGET_FILE_DIR:MBot-GameHouse>
+		COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_RUNTIME_DLLS:MBot-GameHouse>" "$<TARGET_FILE_DIR:MBot-GameHouse>"
 		COMMAND_EXPAND_LISTS
 	)
 endif()
