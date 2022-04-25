@@ -1,9 +1,9 @@
-# find_glib(RELEASE_ROOT_DIR DEBUG_ROOT_DIR)
+# find_glib(RELEASE_ROOT_DIR DEBUG_ROOT_DIR INCLUDE_DIR)
 #
 # This function locates the Libz library, using a couple of provided paths for searching.
 #
 # Usage:
-#	find_glib(RELEASE_ROOT_DIR DEBUG_ROOT_DIR)
+#	find_glib(RELEASE_ROOT_DIR DEBUG_ROOT_DIR INCLUDE_DIR)
 # Where:
 #	RELEASE_ROOT_DIR = The directory containing the RELEASE version of the library, or library's linker file.
 #	DEBUG_ROOT_DIR = The directory containing the DEBUG version of the library, or library's linker file.
@@ -49,16 +49,16 @@ function(find_glib RELEASE_ROOT_DIR DEBUG_ROOT_DIR INCLUDE_DIR)
 				GLIB::Glib PROPERTIES 
 				IMPORTED_LOCATION_RELEASE "${GLIB_RELEASE_DLL}" IMPORTED_LOCATION_DEBUG "${GLIB_DEBUG_DLL}"
 				IMPORTED_IMPLIB_RELEASE "${GLIB_RELEASE_LIBRARY}" IMPORTED_IMPLIB_DEBUG "${GLIB_DEBUG_LIBRARY}"
-				PUBLIC_HEADER "${INCLUDE_DIR}"
 			)
+			target_include_directories(GLIB::Glib INTERFACE "${INCLUDE_DIR}")
 			message(STATUS "Found Glib Dlls!")
 		else()
 			add_library(GLIB::Glib STATIC IMPORTED GLOBAL)
 			set_target_properties(
 				GLIB::Glib PROPERTIES 
 				IMPORTED_LOCATION_RELEASE "${GLIB_RELEASE_LIBRARY}" IMPORTED_LOCATION_DEBUG "${GLIB_DEBUG_LIBRARY}"
-				PUBLIC_HEADER "${INCLUDE_DIR}"
 			)
+			target_include_directories(GLIB::Glib INTERFACE "${INCLUDE_DIR}")
 			unset(GLIB_RELEASE_DLL CACHE)
 			unset(GLIB_DEBUG_DLL CACHE)
 			message(STATUS "Couldn't find Glib Dlls - linking statically!")
