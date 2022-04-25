@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(MBot-GameHouse VERSION 1.00 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
 # Set this value...
-set(VCPKG_ROOT_DIR "")
+set(VCPKG_ROOT_DIR "C:/vcpkg")
 # OR this value...
 set(CMAKE_CONFIG_FILE_PATH "")
 # AND these values.
