@@ -29,7 +29,7 @@ set(NLOHMANN_INCLUDE_DIR "")
 cmake_minimum_required(VERSION 3.22)
 project(MBot-GameHouse VERSION 1.00 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake;${CMAKE_SOURCE_DIR}/CMake/Find-Scripts")
-set(CMAKE_CONFIGURATION_TYPES "Release;Debug")
+set(CMAKE_CONFIGURATION_TYPES "${CMAKE_BUILD_TYPE}")
 
 include(GenerateProductVersion)
 include(FindCurl)
