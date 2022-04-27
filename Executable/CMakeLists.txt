@@ -30,13 +30,13 @@ if (DEFINED ENV{EnableASAN})
 		target_compile_options(MBot-GameHouse PUBLIC /fsanitize=address /Zi)
 		target_link_options(MBot-GameHouse PUBLIC /fsanitize=address /DEBUG)
 	else()
-		target_compile_options(MBot-GameHouse PUBLIC -fsanitize=address <additional-options>)
+		target_compile_options(MBot-GameHouse PUBLIC -fsanitize=address)
 		add_compile_definitions(MBot-GameHouse PUBLIC -fsanitize=address)
 	endif()
 endif()
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
-set(VCPKG_INSTALLED_DIR "C:/vcpkg/installed/x64-windows")
+
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
