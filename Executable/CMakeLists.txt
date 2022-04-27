@@ -55,7 +55,12 @@ set_target_properties(
 )
 
 if (WIN32 AND NOT VCPKG_ROOT)
-	cmake_path(GET PDB_FILE FILENAME PDB_FILE_NAME)
+	if (EXISTS "${RELEASE_PDB_FILE}")
+		cmake_path(GET RELEASE_PDB_FILE FILENAME RELEASE_PDB_FILE_NAME)
+	endif()
+	if (EXISTS "${DEBUG_PDB_FILE}")
+		cmake_path(GET DEBUG_PDB_FILE FILENAME DEBUG_PDB_FILE_NAME)
+	endif()
 
 	add_custom_command(
 		TARGET MBot-GameHouse POST_BUILD
@@ -64,7 +69,7 @@ if (WIN32 AND NOT VCPKG_ROOT)
 	)
 	add_custom_command(
 		TARGET MBot-GameHouse POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "${PDB_FILE}" "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>/${PDB_FILE_NAME}"
+		COMMAND ${CMAKE_COMMAND} -E copy "$<IF:$<CONFIG:Debug>,${DEBUG_PDB_FILE},${RELEASE_PDB_FILE}>" "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>/${PDB_FILE_NAME}"
 		COMMAND_EXPAND_LISTS
 	)
 endif()
