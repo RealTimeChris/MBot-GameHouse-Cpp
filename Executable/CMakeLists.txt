@@ -28,10 +28,9 @@ add_executable(
 if (DEFINED ENV{EnableASAN})
 	if(MSVC)
 		target_compile_options(MBot-GameHouse PUBLIC /fsanitize=address /Zi)
-		target_link_options(MBot-GameHouse PUBLIC /fsanitize=address /DEBUG)
 	else()
 		target_compile_options(MBot-GameHouse PUBLIC -fsanitize=address)
-		add_compile_definitions(MBot-GameHouse PUBLIC -fsanitize=address)
+		target_link_options(MBot-GameHouse PUBLIC -fsanitize=address -libasan-static)
 	endif()
 endif()
 
