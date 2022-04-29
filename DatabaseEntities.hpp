@@ -26,7 +26,6 @@ namespace DiscordCoreAPI {
 		int32_t hoursOfDepositCooldown{ 24 };
 		std::string currencyName{ "MBux" };
 		std::string userName{ "" };
-		std::string prefix{ "!" };
 		std::string userId{ "" };
 	};
 
@@ -248,7 +247,6 @@ namespace DiscordCoreAPI {
 				buildDoc.append(kvp("userId", discordUserData.userId));
 				buildDoc.append(kvp("userName", discordUserData.userName));
 				buildDoc.append(kvp("currencyName", discordUserData.currencyName));
-				buildDoc.append(kvp("prefix", discordUserData.prefix));
 				buildDoc.append(kvp("hoursOfDepositCooldown", bsoncxx::types::b_int32(discordUserData.hoursOfDepositCooldown)));
 				buildDoc.append(kvp("hoursOfDrugSaleCooldown", bsoncxx::types::b_int32(discordUserData.hoursOfDrugSaleCooldown)));
 				buildDoc.append(kvp("hoursOfRobberyCooldown", bsoncxx::types::b_double(discordUserData.hoursOfRobberyCooldown)));
@@ -272,7 +270,6 @@ namespace DiscordCoreAPI {
 				userData.hoursOfDepositCooldown = docValue.view()["hoursOfDepositCooldown"].get_int32();
 				userData.hoursOfDrugSaleCooldown = docValue.view()["hoursOfDrugSaleCooldown"].get_int32();
 				userData.hoursOfRobberyCooldown = ( float )docValue.view()["hoursOfRobberyCooldown"].get_double();
-				userData.prefix = docValue.view()["prefix"].get_utf8().value.to_string();
 				userData.userId = docValue.view()["userId"].get_utf8().value.to_string();
 				auto botCommandersArray = docValue.view()["botCommanders"].get_array();
 				std::vector<std::string> newVector;
