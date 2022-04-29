@@ -44,7 +44,7 @@
       "inheritConfigureEnvironment": true,
       "name": "Linux-Release-With-ASAN",
       "verbose": true
-    },
+     },
     {
       "configuration": "Debug",
       "configurePreset": "Linux-Debug-With-ASAN",

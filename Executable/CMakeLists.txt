@@ -28,15 +28,14 @@ add_executable(
 if (DEFINED ENV{EnableASAN})
 	if(MSVC)
 		target_compile_options(MBot-GameHouse PUBLIC "/fsanitize=address" "/Zi" "/Debug")
-		target_link_options(MBot-GameHouse PUBLIC "/incremental:no" "/Debug")	
 	else()
-		target_compile_options(MBot-GameHouse PUBLIC "-fsanitize=address")
+		target_compile_options(MBot-GameHouse PUBLIC "-fsanitize=address" "/Debug")
 		target_link_options(MBot-GameHouse PUBLIC "-fsanitize=address" "-libasan-static")
 	endif()
 endif()
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
-set(VCPKG_INSTALLED_DIR "C:/vcpkg/installed/x64-windows")
+
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
