@@ -36,7 +36,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -47,13 +47,13 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-					{ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
-											  .get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
+						.get();
 				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
 					{ .guildMemberId = argsNew.discordCoreClient->getBotUser().id, .guildId = argsNew.eventData.getGuildId() })
 											.get();
-				std::unique_ptr<InputEventData> inputData = std::make_unique<InputEventData>();
+				InputEventData inputData{};
 				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					EmbedData msgEmbed;
@@ -128,7 +128,7 @@ namespace DiscordCoreAPI {
 				dataPackage.addButton(false, "Tails", "Tails", ButtonStyle::Success, "🐍");
 				dataPackage.addMessageEmbed(msgEmbed);
 				inputData = InputEvents::respondToEvent(dataPackage);
-				ButtonCollector button2(*inputData);
+				ButtonCollector button2(inputData);
 				std::vector<ButtonResponseData> buttonInteractionData = button2.collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 				if (buttonInteractionData.at(0).buttonId == "") {
 					std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
@@ -161,7 +161,7 @@ namespace DiscordCoreAPI {
 					msgEmbed3.setTimeStamp(getTimeAndDate());
 					msgEmbed3.setTitle("__**Heads, or Tails**__");
 					msgEmbed3.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					RespondToInputEventData dataPackage02{ *inputData };
+					RespondToInputEventData dataPackage02{ inputData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed3);
 					InputEvents::respondToEvent(dataPackage02);

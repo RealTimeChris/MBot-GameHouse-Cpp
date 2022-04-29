@@ -35,7 +35,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -129,45 +129,45 @@ namespace DiscordCoreAPI {
 				msgEmbed0.setTimeStamp(getTimeAndDate());
 				msgEmbed0.setTitle("__**Slots Game:**__");
 
-				std::unique_ptr<InputEventData> newEvent01 = std::make_unique<InputEventData>(argsNew.eventData);
+				InputEventData newEvent01 = argsNew.eventData;
 
-				RespondToInputEventData dataPackage(*newEvent01);
+				RespondToInputEventData dataPackage(newEvent01);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed0);
-				*newEvent01 = *InputEvents::respondToEvent(dataPackage);
+				newEvent01 = InputEvents::respondToEvent(dataPackage);
 				BaseFunctionArguments argsNew00 = argsNew;
-				std::function theFunction00 = [&](InputEventData* newEvent01) -> void {
+				std::function<void()> theFunction00 = [&]() mutable -> void {
 					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[9]] +
 						"][:question:][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " + discordUser.data.currencyName +
 						"\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
-					BaseFunctionArguments argsNew01 = *const_cast<BaseFunctionArguments*>(&argsNew00);
+					BaseFunctionArguments argsNew01 = BaseFunctionArguments(argsNew00);
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew01.eventData.getUserName(), argsNew01.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
 					msgEmbed.setDescription(msgString1);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Slots Game:**__");
-					RespondToInputEventData dataPackage(*newEvent01);
+					RespondToInputEventData dataPackage(argsNew01.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				};
 				BaseFunctionArguments argsNewer = argsNew;
-				std::function theFunction01 = [&](InputEventData* newEvent01) -> void {
+				std::function<void()> theFunction01 = [&]() mutable -> void {
 					std::string msgString2 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][" + slotReel[reelIndices2[7]] + "][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][:question:]\n" + "[" + slotReel[reelIndices1[9]] + "][" +
 						slotReel[reelIndices2[9]] + "][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " +
 						discordUser.data.currencyName + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
-					BaseFunctionArguments argsNew01 = *const_cast<BaseFunctionArguments*>(&argsNewer);
+					BaseFunctionArguments argsNew01 = BaseFunctionArguments(argsNew01);
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew01.eventData.getUserName(), argsNew01.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
 					msgEmbed.setDescription(msgString2);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Slots Game:**__");
-					RespondToInputEventData dataPackage(*newEvent01);
+					RespondToInputEventData dataPackage(argsNew01.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -175,8 +175,8 @@ namespace DiscordCoreAPI {
 				};
 
 				BaseFunctionArguments argsNew02 = argsNew;
-				std::function<void(InputEventData*)> theFunction = [&](InputEventData* newEvent01) -> void {
-					BaseFunctionArguments argsNew03 = *const_cast<BaseFunctionArguments*>(&argsNew02);
+				std::function<void()> theFunction = [&]() mutable -> void {
+					BaseFunctionArguments argsNew03 = BaseFunctionArguments(argsNew02);
 					std::string gameResultTypeNew;
 					int32_t payoutAmountNew = payoutAmount;
 					GuildMember guildMemberNew =
@@ -211,7 +211,7 @@ namespace DiscordCoreAPI {
 						discordGuild.data.casinoStats.largestSlotsPayout.userName = guildMember.user.userName;
 					}
 					discordGuild.writeDataToDB();
-					InputEventData newEvent02 = *newEvent01;
+					InputEventData newEvent02 = argsNew02.eventData;
 					if (betAmountOld > ( int32_t )discordGuildMember.data.currency.wallet) {
 						std::string msgString3 = "__**Slot Results:**__\n[:x:][:x:][:x:]\n[:x:][:x:][:x:]\n[:x:][:x:][:x:]\n------\n__**Your Wager:**__ " +
 							std::to_string(betAmountOld) + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " +
@@ -228,7 +228,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(newEvent02);
 						dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						newEvent02 = *InputEvents::respondToEvent(dataPackage);
+						newEvent02 = InputEvents::respondToEvent(dataPackage);
 						return;
 					}
 
@@ -260,12 +260,12 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(newEvent02);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					newEvent02 = *InputEvents::respondToEvent(dataPackage);
+					newEvent02 = InputEvents::respondToEvent(dataPackage);
 					return;
 				};
-				ThreadPool::executeFunctionAfterTimePeriod(theFunction00, 3000, true, newEvent01.get());
-				ThreadPool::executeFunctionAfterTimePeriod(theFunction01, 3000, true, newEvent01.get());
-				ThreadPool::executeFunctionAfterTimePeriod(theFunction, 3000, true, newEvent01.get());
+				ThreadPool::executeFunctionAfterTimePeriod(theFunction00, 3000, true);
+				ThreadPool::executeFunctionAfterTimePeriod(theFunction01, 3000, true);
+				ThreadPool::executeFunctionAfterTimePeriod(theFunction, 3000, true);
 				return;
 			} catch (...) {
 				reportException("Slots::execute()");

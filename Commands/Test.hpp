@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 				dataPackage.addContent("TESTING");
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
-				RespondToInputEventData dataPackage02{ *newEvent };
+				RespondToInputEventData dataPackage02{ newEvent };
 				dataPackage02.addContent("TESTING!");
 				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
 				auto newEvent02 = InputEvents::respondToEvent(dataPackage02);

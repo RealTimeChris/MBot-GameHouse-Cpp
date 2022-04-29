@@ -105,7 +105,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -133,12 +133,12 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
 				std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
-				std::unique_ptr<InputEventData> event02 = std::make_unique<InputEventData>(argsNew.eventData);
+				InputEventData event02 = argsNew.eventData;
 
 				for (uint32_t x = 0; x < discordGuild.data.guildShop.roles.size(); x += 1) {
 					bool isRoleFound = false;
@@ -186,10 +186,10 @@ namespace DiscordCoreAPI {
 				msgEmbedRoles.setTimeStamp(getTimeAndDate());
 				msgEmbedRoles.setTitle("__**Welcome to the Shop:**__");
 				std::vector<SelectMenuResponseData> values;
-				RespondToInputEventData dataPackage(*event02);
+				RespondToInputEventData dataPackage(event02);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 				event02 = InputEvents::respondToEvent(dataPackage);
-				RespondToInputEventData dataPackage02(*event02);
+				RespondToInputEventData dataPackage02(event02);
 				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
 				dataPackage02.addMessageEmbed(msgEmbed);
 				dataPackage02.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
@@ -199,7 +199,7 @@ namespace DiscordCoreAPI {
 				while (1) {
 				start:
 					EmbedData currentEmbed;
-					ButtonCollector newButton(*event02);
+					ButtonCollector newButton(event02);
 					auto buttonData = newButton.collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 					if (buttonData.at(0).buttonId == "items") {
 						currentEmbed = msgEmbedItems;
@@ -224,7 +224,7 @@ namespace DiscordCoreAPI {
 						break;
 					}
 
-					SelectMenuCollector selectMenu(*event02);
+					SelectMenuCollector selectMenu(event02);
 					values = selectMenu.collectSelectMenuData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 					for (auto& value: values) {
 						for (auto& value2: value.values) {
@@ -289,10 +289,10 @@ namespace DiscordCoreAPI {
 							msgEmbed02.setDescription(msgString);
 							msgEmbed02.setTimeStamp(getTimeAndDate());
 							msgEmbed02.setTitle("__**Duplicate Object:**__");
-							RespondToInputEventData dataPackage03(*event02);
+							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(msgEmbed02);
-							std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage03);
+							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 							InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 							continue;
 						}
@@ -309,10 +309,10 @@ namespace DiscordCoreAPI {
 								msgEmbed03.setDescription(msgString);
 								msgEmbed03.setTimeStamp(getTimeAndDate());
 								msgEmbed03.setTitle("__**Insufficient Funds:**__");
-								RespondToInputEventData dataPackage03(*event02);
+								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 								dataPackage03.addMessageEmbed(msgEmbed03);
-								std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage03);
+								InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 								InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 								break;
 							}
@@ -338,10 +338,10 @@ namespace DiscordCoreAPI {
 							msgEmbed04.setDescription(msgString);
 							msgEmbed04.setAuthor(guildMember.user.userName, guildMember.user.avatar);
 							msgEmbed04.setColor(discordGuild.data.borderColor);
-							RespondToInputEventData dataPackage03(*event02);
+							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(msgEmbed04);
-							std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage03);
+							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 
 							uint32_t maxIdx = 0;
 							uint32_t len = ( uint32_t )discordGuildMember.data.roles.size();
@@ -370,11 +370,11 @@ namespace DiscordCoreAPI {
 								msgEmbed06.setAuthor(guildMember.user.userName, guildMember.user.avatar);
 								msgEmbed06.setColor(discordGuild.data.borderColor);
 								msgEmbed06.setTitle("__**Insufficient Funds:**__");
-								RespondToInputEventData dataPackage03(*event02);
+								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 								dataPackage03.addMessageEmbed(msgEmbed06);
-								std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage03);
-								InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
+								InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
+								InputEvents::deleteInputEventResponseAsync(event01, 20000);
 								break;
 							}
 
@@ -412,10 +412,10 @@ namespace DiscordCoreAPI {
 							msgEmbed05.setDescription(msgString);
 							msgEmbed05.setAuthor(guildMember.user.userName, guildMember.user.avatar);
 							msgEmbed05.setColor(discordGuild.data.borderColor);
-							RespondToInputEventData dataPackage03(*event02);
+							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(msgEmbed05);
-							std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage03);
+							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 						}
 					}
 				}

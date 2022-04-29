@@ -40,7 +40,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -74,7 +74,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+					InputEventData event = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 3 || theInt < -100 || theInt > 0) {
@@ -89,7 +89,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> eventNew = InputEvents::respondToEvent(dataPackage);
+					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 4 || !regex_search(argsNew.commandData.optionsArgs.at(3), itemCostRegExp) ||
@@ -104,7 +104,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 5 || !regex_search(argsNew.commandData.optionsArgs.at(4), emojiRegExp)) {
@@ -118,7 +118,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -144,7 +144,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+						InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 						return;
 					}
 				}
@@ -175,7 +175,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+				InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 				return;
 			} catch (...) {
 				reportException("AddShopItem::execute()");

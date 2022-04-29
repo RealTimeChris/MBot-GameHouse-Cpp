@@ -8,14 +8,14 @@
 #include "HelperFunctions.hpp"
 
 void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordFromGuildMember,
-	DiscordCoreAPI::DiscordGuildMember* discordToGuildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData* newEvent,
+	DiscordCoreAPI::DiscordGuildMember* discordToGuildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
 	int32_t* betAmount, DiscordCoreAPI::RespondToInputEventData dataPackageNew, std::string* msgEmbedString, std::string* fromUserIDNew,
 	std::string* toUserIDNew) {
 	discordFromGuildMember->getDataFromDB();
 	int32_t fromUserCurrency = discordFromGuildMember->data.currency.wallet;
 	discordToGuildMember->getDataFromDB();
 	int32_t toUserCurrency = discordToGuildMember->data.currency.wallet;
-	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ .userId = newEvent->getRequesterId() }).get();
+	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ .userId = newEvent.getRequesterId() }).get();
 	*fromUserIDNew;
 
 	if (*betAmount > fromUserCurrency) {
@@ -28,10 +28,10 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		messageEmbed3.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		messageEmbed3.setColor(discordGuild->data.borderColor);
 		messageEmbed3.setTitle("__**Insufficient Funds:**__");
-		DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent);
+		DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 		dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Deferred_Response);
 		auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
-		DiscordCoreAPI::RespondToInputEventData dataPackage2(*newEvent02);
+		DiscordCoreAPI::RespondToInputEventData dataPackage2(newEvent02);
 		dataPackage2.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 		dataPackageNew.addMessageEmbed(messageEmbed3);
 		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
@@ -47,10 +47,10 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		messageEmbed4.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		messageEmbed4.setColor(discordGuild->data.borderColor);
 		messageEmbed4.setTitle("__**Insufficient Funds:**__");
-		DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent);
+		DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 		dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Deferred_Response);
 		auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackage);
-		DiscordCoreAPI::RespondToInputEventData dataPackage02(*newEvent02);
+		DiscordCoreAPI::RespondToInputEventData dataPackage02(newEvent02);
 		dataPackage02.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 		dataPackageNew.addMessageEmbed(messageEmbed4);
 		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
@@ -281,14 +281,14 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		messageEmbeds[0].setDescription(finalStrings[0]);
 		dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		dataPackageNew.addMessageEmbed(messageEmbeds[0]);
-		*newEvent = *DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
+		newEvent = DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
 	}
 	dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 	dataPackageNew.addMessageEmbed(messageEmbeds[0]);
 	auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEvent(dataPackageNew);
 
 	uint32_t currentPageIndex = 0;
-	moveThroughMessagePages(*fromUserIDNew, std::make_unique<DiscordCoreAPI::InputEventData>(*newEvent), currentPageIndex, messageEmbeds, false, 120000);
+	moveThroughMessagePages(*fromUserIDNew, newEvent, currentPageIndex, messageEmbeds, false, 120000);
 }
 
 void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::DiscordGuild discordGuild, DiscordCoreAPI::InputEventData originalEvent) {
@@ -334,7 +334,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -436,7 +436,7 @@ namespace DiscordCoreAPI {
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setTitle("__**IT'S TIME TO DUEL!**__");
 				messageEmbed.setColor(discordGuild.data.borderColor);
-				std::unique_ptr<InputEventData> newEvent02 = std::make_unique<InputEventData>(argsNew.eventData);
+				InputEventData newEvent02 = argsNew.eventData;
 				RespondToInputEventData dataPackage2(argsNew.eventData);
 				dataPackage2.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage2.addMessageEmbed(messageEmbed);
@@ -444,13 +444,13 @@ namespace DiscordCoreAPI {
 				dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
 				dataPackage2.addButton(false, "cross", "Reject", ButtonStyle::Success, "❌");
 				newEvent02 = InputEvents::respondToEvent(dataPackage2);
-				ButtonCollector button(*newEvent02);
+				ButtonCollector button(newEvent02);
 				std::vector<ButtonResponseData> buttonInteractionData = button.collectButtonData(false, 120000, 1, toUserID).get();
 				RespondToInputEventData dataPackageNew(buttonInteractionData.at(0).interactionData);
 				if (buttonInteractionData.at(0).buttonId == "empty") {
-					executeExit(fromUserID, toUserID, discordGuild, *newEvent02);
+					executeExit(fromUserID, toUserID, discordGuild, newEvent02);
 				} else if (buttonInteractionData.at(0).buttonId == "check") {
-					executeCheck(argsNew, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02.get(), &betAmount, dataPackageNew,
+					executeCheck(argsNew, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02, &betAmount, dataPackageNew,
 						&msgEmbedString, &fromUserID, &toUserID);
 				} else if (buttonInteractionData.at(0).buttonId == "cross") {
 					std::string rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer!";

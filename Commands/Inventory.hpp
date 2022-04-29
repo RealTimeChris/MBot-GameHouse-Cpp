@@ -35,7 +35,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -98,7 +98,7 @@ namespace DiscordCoreAPI {
 				std::string userName = currentGuildMember.user.userName;
 
 				std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
-				std::unique_ptr<InputEventData> event02 = std::make_unique<InputEventData>(argsNew.eventData);
+				InputEventData event02 = argsNew.eventData;
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
@@ -206,7 +206,7 @@ namespace DiscordCoreAPI {
 					messageEmbed.setTitle("__**Empty Inventory:**__");
 					messageEmbed.setColor(discordGuild.data.borderColor);
 					messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					RespondToInputEventData dataPackage(*event02);
+					RespondToInputEventData dataPackage(event02);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
 					event02 = InputEvents::respondToEvent(dataPackage);
@@ -214,12 +214,12 @@ namespace DiscordCoreAPI {
 				}
 
 				uint32_t currentPageIndex = 0;
-				RespondToInputEventData dataPackage(*event02);
+				RespondToInputEventData dataPackage(event02);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 				event02 = InputEvents::respondToEvent(dataPackage);
 
 
-				moveThroughMessagePages(userID, std::make_unique<InputEventData>(*event02), currentPageIndex, finalMsgEmbedsArray, true, 120000);
+				moveThroughMessagePages(userID, event02, currentPageIndex, finalMsgEmbedsArray, true, 120000);
 				return;
 			} catch (...) {
 				reportException("Inventory::execute()");

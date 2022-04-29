@@ -36,7 +36,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -68,7 +68,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+						InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 						return;
 					}
 					std::cmatch matchResults;
@@ -76,8 +76,7 @@ namespace DiscordCoreAPI {
 					userID = matchResults.str();
 				}
 
-				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
 
 				if (guildMember.user.id == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
@@ -90,7 +89,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -114,7 +113,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
+				InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 			} catch (...) {
 				reportException("Balance::execute()");
 			}

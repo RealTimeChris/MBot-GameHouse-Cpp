@@ -215,12 +215,12 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 }
 
 void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
-	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData* newEvent,
+	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
 	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand,
 	std::vector<uint32_t>* userAceIndices, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
 	DiscordCoreAPI::EmbedData finalEmbed, DiscordCoreAPI::ActionRowData component) {
 	discordGuildMember->getDataFromDB();
-	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ newEvent->getRequesterId() }).get();
+	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ newEvent.getRequesterId() }).get();
 
 	uint32_t fineAmount = 0;
 	fineAmount = 1 * *betAmount;
@@ -430,9 +430,9 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 		buttonInteraction->addComponentRow(component);
 		buttonInteraction->addMessageEmbed(msgEmbed);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
-		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button = std::make_unique<DiscordCoreAPI::ButtonCollector>(*newEvent);
+		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button = std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent);
 		std::unique_ptr<std::vector<DiscordCoreAPI::ButtonResponseData>> buttonInteractionData =
-			std::make_unique<std::vector<DiscordCoreAPI::ButtonResponseData>>(button->collectButtonData(false, 120000, 1, newEvent->getRequesterId()).get());
+			std::make_unique<std::vector<DiscordCoreAPI::ButtonResponseData>>(button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get());
 		DiscordCoreAPI::RespondToInputEventData inputData{ buttonInteractionData->at(0).interactionData };
 		if (buttonInteractionData->at(0).buttonId == "") {
 			std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
@@ -444,7 +444,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 			msgEmbed2.setDescription(timeOutString);
 			std::vector<DiscordCoreAPI::EmbedData> embeds;
 			embeds.push_back(msgEmbed2);
-			DiscordCoreAPI::RespondToInputEventData dataPackage{ *newEvent };
+			DiscordCoreAPI::RespondToInputEventData dataPackage{ newEvent };
 			dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			inputData.addMessageEmbed(msgEmbed2);
 			dataPackage.addMessageEmbed(msgEmbed2);
@@ -464,7 +464,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 };
 
 void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
-	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData* newEvent,
+	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
 	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand,
 	std::vector<uint32_t>* userAceIndices, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
 	DiscordCoreAPI::EmbedData finalEmbed, DiscordCoreAPI::ActionRowData component) {
@@ -484,19 +484,19 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 		msgEmbed.setColor("00FF00");
 		msgEmbed.setTitle("__**Blackjack:**__");
 		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		std::unique_ptr<DiscordCoreAPI::InputEventData> eventData002 = std::make_unique<DiscordCoreAPI::InputEventData>(*newEvent);
+		DiscordCoreAPI::InputEventData eventData002 = newEvent;
 		msgEmbed.setDescription(finalEmbed.description);
 		msgEmbed.addField(finalEmbed.fields[0].name, finalEmbed.fields[0].value, finalEmbed.fields[0].Inline);
 		msgEmbed.addField(finalEmbed.fields[1].name, finalEmbed.fields[1].value, finalEmbed.fields[1].Inline);
 		msgEmbed.addField("__**Game Status: In Play**__", failedFooterString, false);
-		for (auto& value: newEvent->getComponents()) {
+		for (auto& value: newEvent.getComponents()) {
 			buttonInteraction->addComponentRow(value);
 		}
 		buttonInteraction->addMessageEmbed(msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		eventData002 = DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
-		DiscordCoreAPI::ButtonCollector button(*newEvent);
-		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, newEvent->getRequesterId()).get();
+		DiscordCoreAPI::ButtonCollector button(newEvent);
+		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get();
 		DiscordCoreAPI::RespondToInputEventData inputData{ buttonIntData.at(0).interactionData };
 		if (buttonIntData.at(0).buttonId == "check") {
 			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
@@ -512,7 +512,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 			msgEmbed2.setTitle("__**Blackjack Game:**__");
 			msgEmbed2.setAuthor(guildMember->user.userName, guildMember->user.avatar);
 			msgEmbed2.setDescription(timeOutString);
-			DiscordCoreAPI::RespondToInputEventData dataPackage{ *newEvent };
+			DiscordCoreAPI::RespondToInputEventData dataPackage{ newEvent };
 			dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			dataPackage.addMessageEmbed(msgEmbed2);
 			buttonInteraction->addMessageEmbed(msgEmbed2);
@@ -687,7 +687,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -700,9 +700,9 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-					{ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
-											  .get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
+						.get();
 				GuildMember botMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get();
 				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
@@ -716,7 +716,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -733,7 +733,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -757,7 +757,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				std::string finalMsgString;
@@ -858,7 +858,7 @@ namespace DiscordCoreAPI {
 					canWeDoubleDown = true;
 				}
 
-				std::unique_ptr<DiscordCoreAPI::InputEventData> event001 = std::make_unique<InputEventData>(argsNew.eventData);
+				DiscordCoreAPI::InputEventData event001 = argsNew.eventData;
 
 				EmbedData finalMessageEmbed;
 				finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -882,7 +882,7 @@ namespace DiscordCoreAPI {
 					}
 					event001 = InputEvents::respondToEvent(replyInteractionData);
 				}
-				DiscordCoreAPI::ButtonCollector button(*event001);
+				DiscordCoreAPI::ButtonCollector button(event001);
 				std::vector<ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 				if (buttonIntData.at(0).buttonId == "exit" || buttonIntData.at(0).buttonId == "empty") {
 					std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
@@ -899,7 +899,7 @@ namespace DiscordCoreAPI {
 					return;
 				} else {
 				}
-				auto components = event001->getComponents();
+				auto components = event001.getComponents();
 				if (canWeDoubleDown) {
 					components.at(0).components.erase(components.at(0).components.begin() + 2);
 				}
@@ -907,14 +907,14 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
-					executeCheckResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001.get(), &buttonInteraction,
-						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
+					executeCheckResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001, &buttonInteraction, &newCardCount,
+						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
 					executeCrossResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, &buttonInteraction, &userHand,
 						&dealerAceIndices, &userID, &dealerHand, finalMessageEmbed);
 				} else if (buttonIntData.at(0).buttonId == "double") {
-					executeDoubleResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001.get(), &buttonInteraction,
-						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
+					executeDoubleResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001, &buttonInteraction, &newCardCount,
+						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
 				};
 
 				return;

@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				GuildMember guildMember =
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 
 				uint32_t currentCount = 0;
 				std::vector<Guild> theCache = Guilds::getAllGuildsAsync().get();
-				std::unique_ptr<InputEventData> inputEvent = std::make_unique<InputEventData>(argsNew.eventData);
+				InputEventData inputEvent = argsNew.eventData;
 				for (auto& value: theCache) {
 					std::string msgString = "__Guild Name:__ " + value.name + "\n";
 					msgString += "__Guild ID:__ " + value.id + "\n";

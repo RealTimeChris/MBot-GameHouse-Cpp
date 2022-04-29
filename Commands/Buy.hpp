@@ -36,7 +36,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -55,8 +55,7 @@ namespace DiscordCoreAPI {
 				GuildMember guildMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				std::vector<Role> rolesArray =
-					Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData.getGuildId() }).get();
+				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData.getGuildId() }).get();
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
@@ -83,7 +82,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+						InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 						x -= 1;
 					}
 					discordGuildMember.writeDataToDB();
@@ -117,7 +116,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -148,7 +147,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -167,7 +166,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+						InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 						return;
 					}
 
@@ -195,7 +194,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 
 					uint32_t maxIdx = 0;
 					InventoryRole tempItem;
@@ -228,7 +227,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+						InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 						return;
 					}
 
@@ -270,7 +269,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				return;

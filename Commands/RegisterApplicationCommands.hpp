@@ -28,9 +28,9 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(argsNew.eventData);
+				InputEventData newEvent = argsNew.eventData;
 
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);

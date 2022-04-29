@@ -36,7 +36,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -54,9 +54,9 @@ namespace DiscordCoreAPI {
 				uint32_t msPerMinute = 60 * msPerSecond;
 				uint32_t msPerHour = 60 * msPerMinute;
 
-				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-					{ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
-											  .get();
+				GuildMember guildMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
+						.get();
 				DiscordGuildMember discordGuildMember(guildMember);
 				User currentUser = Users::getUserAsync({ .userId = argsNew.eventData.getRequesterId() }).get();
 				uint32_t lastTimeWorked = discordGuildMember.data.lastTimeWorked;
@@ -84,7 +84,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 
 					discordGuildMember.data.lastTimeWorked =
 						( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -114,7 +114,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
 				}
 			} catch (...) {
 				reportException("SellDrugs::execute()");

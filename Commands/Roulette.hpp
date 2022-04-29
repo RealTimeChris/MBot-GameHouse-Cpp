@@ -166,7 +166,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
@@ -244,9 +244,9 @@ namespace DiscordCoreAPI {
 					":black_large_square:29", ":black_large_square:28", ":black_large_square:35", ":black_large_square:26" };
 
 				if (whatAreWeDoing == "bet") {
-					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-						{ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
-												  .get();
+					GuildMember guildMember =
+						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
+							.get();
 					DiscordGuildMember discordGuildMember(guildMember);
 
 					uint32_t currentBetAmount = 0;
@@ -647,7 +647,7 @@ namespace DiscordCoreAPI {
 
 					int32_t currentIndex = 3;
 					currentIndex = 3;
-					std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(argsNew.eventData);
+					InputEventData newEvent = argsNew.eventData;
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
@@ -655,7 +655,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Roulette Ball Rolling:**__");
 					if (currentIndex == 3) {
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						newEvent = InputEvents::respondToEvent(dataPackage);
@@ -671,7 +671,7 @@ namespace DiscordCoreAPI {
 							"------\n__**" + std::to_string(currentIndex * 10) + " seconds remaining to place your roulette bets!**__\n------");
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Roulette Ball Rolling:**__");
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*newEvent);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						InputEvents::respondToEvent(dataPackage);
