@@ -27,25 +27,25 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
-				bool areWeInAm = areWeInADM(*argsNew.eventData, channel);
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
+				bool areWeInAm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInAm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
-																					  .guildMemberId = argsNew.eventData->getAuthorId(),
-																					  .guildId = argsNew.eventData->getGuildId(),
+																					  .guildMemberId = argsNew.eventData.getAuthorId(),
+																					  .guildId = argsNew.eventData.getGuildId(),
 																				  })
 											  .get();
 
-				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, *argsNew.eventData, discordGuild, channel, guildMember);
+				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdminPermission == false) {
 					return;
@@ -79,29 +79,29 @@ namespace DiscordCoreAPI {
 				if (isRoleFound == false) {
 					msgString = "------\n**Sorry, but that role was not found in the shop's inventory!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Role Issue:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
-				Roles::removeGuildRoleAsync({ .guildId = argsNew.eventData->getGuildId(), .roleId = roleID }).get();
+				Roles::removeGuildRoleAsync({ .guildId = argsNew.eventData.getGuildId(), .roleId = roleID }).get();
 
 				msgString += "You've just deleted a role from the shop / server!\n------\n__**Role Name:**__ " + realRoleName + "\n------";
 
 				EmbedData messageEmbed;
-				messageEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				messageEmbed.setDescription(msgString);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setTitle("__**Shop/Server Role Deleted:**__");
 				messageEmbed.setColor(discordGuild.data.borderColor);
-				RespondToInputEventData dataPackage(*argsNew.eventData);
+				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);

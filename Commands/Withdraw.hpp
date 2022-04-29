@@ -27,20 +27,20 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (!areWeAllowed) {
 					return;
@@ -49,8 +49,8 @@ namespace DiscordCoreAPI {
 				uint32_t withdrawAmount = 0;
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
-																					  .guildMemberId = argsNew.eventData->getAuthorId(),
-																					  .guildId = argsNew.eventData->getGuildId(),
+																					  .guildMemberId = argsNew.eventData.getAuthorId(),
+																					  .guildId = argsNew.eventData.getGuildId(),
 																				  })
 											  .get();
 				DiscordGuildMember discordGuildMember(guildMember);
@@ -60,12 +60,12 @@ namespace DiscordCoreAPI {
 					std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -79,12 +79,12 @@ namespace DiscordCoreAPI {
 				if (withdrawAmount > discordGuildMember.data.currency.bank) {
 					std::string msgString = "-------\n**Sorry, but you do not have sufficient funds to withdraw that much!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Insufficient Funds:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -102,12 +102,12 @@ namespace DiscordCoreAPI {
 					std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Bank Withdrawal:**__");
-				RespondToInputEventData dataPackage{ *argsNew.eventData };
+				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);

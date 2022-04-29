@@ -28,13 +28,13 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(*argsNew.eventData);
+				std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(argsNew.eventData);
 
-				RespondToInputEventData dataPackage(*argsNew.eventData);
+				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-				if (argsNew.eventData->eventType == InteractionType::Application_Command) {
+				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
 					newEvent = InputEvents::respondToEvent(dataPackage);
 				}
 
@@ -621,15 +621,15 @@ namespace DiscordCoreAPI {
 				createTestData.description = "Test command.";
 				ApplicationCommands::createGlobalApplicationCommandAsync(createTestData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription("------\nNicely done, you've registered some commands!\n------");
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Register Application Commands Complete:**__");
-				RespondToInputEventData dataPackage02(*argsNew.eventData);
+				RespondToInputEventData dataPackage02(argsNew.eventData);
 				dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 				dataPackage02.addMessageEmbed(msgEmbed);
 				auto event = InputEvents::respondToEvent(dataPackage02);

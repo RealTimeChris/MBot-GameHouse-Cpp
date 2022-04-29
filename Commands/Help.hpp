@@ -28,17 +28,17 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
 				if (channel.type != ChannelType::Dm) {
-					InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+					InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 				}
 
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				bool isItFirst{ true };
-				std::unique_ptr<InputEventData> newEvent01{ std::make_unique<InputEventData>(*argsNew.eventData) };
+				std::unique_ptr<InputEventData> newEvent01{ std::make_unique<InputEventData>(argsNew.eventData) };
 				RespondToInputEventData responseData{ *newEvent01 };
 				while (1) {
 					std::vector<std::vector<SelectOptionData>> selectOptions;
@@ -86,7 +86,7 @@ namespace DiscordCoreAPI {
 					int32_t counter02{ 0 };
 					std::string messageNew = "------\nSelect which page of help items you would like to view, by clicking a button below!\n------";
 					EmbedData msgEmbed{};
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setDescription(messageNew);
@@ -121,7 +121,7 @@ namespace DiscordCoreAPI {
 						InputEvents::respondToEvent(responseData);
 					}
 					ButtonCollector button(*newEvent01);
-					auto buttonData = button.collectButtonData(false, 120000, 1, argsNew.eventData->getRequesterId()).get();
+					auto buttonData = button.collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 					int32_t counter03{ 0 };
 					std::vector<RespondToInputEventData> editInteractionResponseData00;
 					for (auto& value: selectOptionsNew) {
@@ -166,7 +166,7 @@ namespace DiscordCoreAPI {
 						break;
 					}
 					SelectMenuCollector selectMenu(*newEvent01);
-					auto selectMenuReturnData = selectMenu.collectSelectMenuData(false, 120000, 1, argsNew.eventData->getRequesterId()).get();
+					auto selectMenuReturnData = selectMenu.collectSelectMenuData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 					EmbedData newEmbed{};
 					for (auto& [key, value]: argsNew.discordCoreClient->commandController.getFunctions()) {
 						for (auto& valueNew: key) {
@@ -195,7 +195,7 @@ namespace DiscordCoreAPI {
 					responseData02.addButton(false, "back", "Back", ButtonStyle::Success, "🔙");
 					responseData02.addButton(false, "exit", "Exit", ButtonStyle::Success, "❌");
 					newEvent = InputEvents::respondToEvent(responseData02);
-					auto buttonReturnData02 = ButtonCollector{ *newEvent01 }.collectButtonData(false, 120000, 1, argsNew.eventData->getRequesterId()).get();
+					auto buttonReturnData02 = ButtonCollector{ *newEvent01 }.collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 					if (buttonReturnData02.at(0).buttonId == "back") {
 						responseData = RespondToInputEventData{ buttonReturnData02.at(0).interactionData };
 						continue;

@@ -28,21 +28,21 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
-				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData->getGuildId() }).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
+				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
 						.get();
-				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, *argsNew.eventData, discordGuild, channel, guildMember);
+				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 				if (!doWeHaveAdminPermission) {
 					return;
 				}
@@ -53,12 +53,12 @@ namespace DiscordCoreAPI {
 					std::string msgString =
 						"------\n**Please, enter a hex-color value between 0 and FeFeFe! (!setbordercolor = BOTNAME, HEXCOLORVALUE)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -70,13 +70,13 @@ namespace DiscordCoreAPI {
 					discordGuild.writeDataToDB();
 
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription("Nicely done, you've updated the default border color for this bot!\n------\n__**Border Color Values:**__ " +
 						discordGuild.data.borderColor + "\n------");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Updated Border Color:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);

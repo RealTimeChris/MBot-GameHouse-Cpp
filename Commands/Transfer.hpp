@@ -27,19 +27,19 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (!areWeAllowed) {
 					return;
@@ -50,12 +50,12 @@ namespace DiscordCoreAPI {
 				if (!regex_search(argsNew.commandData.optionsArgs[0], amountRegExp) || std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid number for amount! (!transfer = AMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -65,23 +65,23 @@ namespace DiscordCoreAPI {
 				std::cmatch matchResults{};
 				regex_search(argsNew.commandData.optionsArgs[1].c_str(), matchResults, userMentionRegExp);
 				std::string toUserID = matchResults.str();
-				std::string fromUserID = argsNew.eventData->getAuthorId();
+				std::string fromUserID = argsNew.eventData.getAuthorId();
 				uint32_t amount = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs[0]);
 				GuildMember toUserMember = GuildMembers::getCachedGuildMemberAsync({
 																					   .guildMemberId = toUserID,
-																					   .guildId = argsNew.eventData->getGuildId(),
+																					   .guildId = argsNew.eventData.getGuildId(),
 																				   })
 											   .get();
 
 				if (toUserID == fromUserID) {
 					std::string msgString = "------\n**Sorry, but you cannot transfer to yourself!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Transfer Issue:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -91,12 +91,12 @@ namespace DiscordCoreAPI {
 				if (toUserMember.user.userName == "" || discordToGuildMember.data.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**User Issue:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -105,7 +105,7 @@ namespace DiscordCoreAPI {
 
 				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({
 																						  .guildMemberId = fromUserID,
-																						  .guildId = argsNew.eventData->getGuildId(),
+																						  .guildId = argsNew.eventData.getGuildId(),
 																					  })
 												  .get();
 				DiscordGuildMember discordFromGuildMember(fromGuildMember);
@@ -113,12 +113,12 @@ namespace DiscordCoreAPI {
 				if (amount > discordFromGuildMember.data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you don't have sufficient funds in your wallet for that transfer!**\n-------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Insufficient Funds:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -137,12 +137,12 @@ namespace DiscordCoreAPI {
 					" " + discordUser.data.currencyName;
 				msgString += "\n<@!" + toUserID + ">: " + std::to_string(discordToGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Balance Transfer:**__");
-				RespondToInputEventData dataPackage(*argsNew.eventData);
+				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				dataPackage.addContent("<@!" + toUserID + ">");

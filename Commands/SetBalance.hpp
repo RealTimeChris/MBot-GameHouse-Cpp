@@ -29,29 +29,29 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
 						.get();
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (!areWeAllowed) {
 					return;
 				}
 
-				bool areTheyACommander = doWeHaveAdminPermissions(argsNew, *argsNew.eventData, discordGuild, channel, guildMember);
+				bool areTheyACommander = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 
 				if (!areTheyACommander) {
 					return;
@@ -67,12 +67,12 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\n**Please enter a valid desired balance! (!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -83,31 +83,31 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\n**Please enter a valid balance type! Bank or Wallet! (!setbalance = NEWBALANCE, BALANCETYPE, "
 											"@USERMENTION, or just !setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 3) {
-					targetUserID = argsNew.eventData->getRequesterId();
+					targetUserID = argsNew.eventData.getRequesterId();
 				} else if (argsNew.commandData.optionsArgs.size() == 3 && !regex_search(argsNew.commandData.optionsArgs.at(2), userMentionRegExp) &&
 					!regex_search(argsNew.commandData.optionsArgs.at(2), userIDRegExp)) {
 					std::string msgString = "------\n**Please enter a valid target user mention, or leave it blank to select yourself as the target! "
 											"(!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -123,17 +123,17 @@ namespace DiscordCoreAPI {
 				std::string balanceType = argsNew.commandData.optionsArgs.at(1);
 
 				GuildMember targetMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 
 				if (targetMember.user.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user could not be found!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**User Issue:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -165,12 +165,12 @@ namespace DiscordCoreAPI {
 
 				EmbedData messageEmbed;
 				messageEmbed.setTimeStamp(getTimeAndDate());
-				messageEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				messageEmbed.setColor(discordGuild.data.borderColor);
 				messageEmbed.setDescription(msgString);
 				messageEmbed.setTimeStamp(getTimeAndDate());
 				messageEmbed.setTitle("__**Set New Balance:**__");
-				RespondToInputEventData dataPackage{ *argsNew.eventData };
+				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addContent("<@!" + targetUserID + ">");
 				dataPackage.addMessageEmbed(messageEmbed);

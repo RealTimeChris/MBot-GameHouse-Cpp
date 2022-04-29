@@ -28,27 +28,27 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData));
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData));
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
-																					  .guildMemberId = argsNew.eventData->getAuthorId(),
-																					  .guildId = argsNew.eventData->getGuildId(),
+																					  .guildMemberId = argsNew.eventData.getAuthorId(),
+																					  .guildId = argsNew.eventData.getGuildId(),
 																				  })
 											  .get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
-				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, *argsNew.eventData, discordGuild, channel, guildMember);
+				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdminPermission == false) {
 					return;
@@ -67,7 +67,7 @@ namespace DiscordCoreAPI {
 				std::string userID;
 				std::regex userMentionRegExp("<@!\\d{18}>");
 				if (argsNew.commandData.optionsArgs.size() == 1) {
-					userID = argsNew.eventData->getAuthorId();
+					userID = argsNew.eventData.getAuthorId();
 				} else {
 					std::string argOne = argsNew.commandData.optionsArgs.at(1);
 					std::cmatch matchResultsNew;
@@ -78,19 +78,19 @@ namespace DiscordCoreAPI {
 
 				GuildMember targetMember = GuildMembers::getGuildMemberAsync({
 																				 .guildMemberId = userID,
-																				 .guildId = argsNew.eventData->getGuildId(),
+																				 .guildId = argsNew.eventData.getGuildId(),
 																			 })
 											   .get();
 
 				if (targetMember.user.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**User Issue:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -102,12 +102,12 @@ namespace DiscordCoreAPI {
 				if (guildMemberData.data.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user data could not be found!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**User Issue:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -142,12 +142,12 @@ namespace DiscordCoreAPI {
 				if (isObjectFound == false) {
 					std::string msgString = "-------\n**Sorry, but the item was not found in the inventory!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Item Issue:**__");
-					RespondToInputEventData dataPackage(*argsNew.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -158,7 +158,7 @@ namespace DiscordCoreAPI {
 
 				if (objectType == "role") {
 					Roles::removeGuildMemberRoleAsync({
-														  .guildId = argsNew.eventData->getGuildId(),
+														  .guildId = argsNew.eventData.getGuildId(),
 														  .userId = targetMember.user.id,
 														  .roleId = roleID,
 													  })
@@ -172,11 +172,11 @@ namespace DiscordCoreAPI {
 					messageEmbed.setTitle("__**Item Removed:**__");
 				}
 
-				messageEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl())
+				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl())
 					.setColor(discordGuild.data.borderColor)
 					.setDescription(msgString)
 					.setTimeStamp(getTimeAndDate());
-				RespondToInputEventData dataPackage(*argsNew.eventData);
+				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);

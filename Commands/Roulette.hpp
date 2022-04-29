@@ -159,19 +159,19 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -185,12 +185,12 @@ namespace DiscordCoreAPI {
 					if (discordGuild.data.rouletteGame.currentlySpinning == true) {
 						std::string msgString = "------\n**Please, wait until the current game is over, before starting another one!**\n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Game Issue:**__");
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -201,12 +201,12 @@ namespace DiscordCoreAPI {
 					if (discordGuild.data.rouletteGame.currentlySpinning == false) {
 						std::string msgString = "------\n**Please, start a roulette game before placing any bets!**\n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Game Issue:**__");
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -218,12 +218,12 @@ namespace DiscordCoreAPI {
 					if (std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
 						std::string msgString = "------\n**Please, enter a valid betting amount! (!roulette = bet, BETAMOUNT, BETTYPE, BETOPTIONS)** \n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -245,7 +245,7 @@ namespace DiscordCoreAPI {
 
 				if (whatAreWeDoing == "bet") {
 					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-						{ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+						{ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
 												  .get();
 					DiscordGuildMember discordGuildMember(guildMember);
 
@@ -260,12 +260,12 @@ namespace DiscordCoreAPI {
 					if ((currentBetAmount + betAmount) > discordGuildMember.data.currency.wallet) {
 						std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet for placing that bet!**\n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Insufficient Funds:**__");
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -284,12 +284,12 @@ namespace DiscordCoreAPI {
 						std::string msgString = "------\n**Please enter a valid bet type!Enter '!help = roulette' for more info!(!roulette = BETAMOUNT, "
 												"BETTYPE, BETOPTIONS)** \n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-						DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -329,12 +329,12 @@ namespace DiscordCoreAPI {
 								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid value from the roulette wheel!(1 - 36)**\n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -344,12 +344,12 @@ namespace DiscordCoreAPI {
 							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 36) {
 								std::string msgString = "------\n**Please enter a value between 1 and 36!**\n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -372,12 +372,12 @@ namespace DiscordCoreAPI {
 								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your split!(1 - 35)** \n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -387,12 +387,12 @@ namespace DiscordCoreAPI {
 							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 35) {
 								std::string msgString = "-------\n**Please enter a value between 1 and 35!**\n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -412,12 +412,12 @@ namespace DiscordCoreAPI {
 								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your street!(1 - 34)** \n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -427,12 +427,12 @@ namespace DiscordCoreAPI {
 							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 34) {
 								std::string msgString = "-------\n**Please enter a value between 1 and 34!**\n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -464,12 +464,12 @@ namespace DiscordCoreAPI {
 								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your sixline!**\n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -479,12 +479,12 @@ namespace DiscordCoreAPI {
 							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 31) {
 								std::string msgString = "------\n * *Please enter a value between 1 and 31!**\n------";
 								EmbedData msgEmbed;
-								msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+								msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 								msgEmbed.setColor(discordGuild.data.borderColor);
 								msgEmbed.setDescription(msgString);
 								msgEmbed.setTimeStamp(getTimeAndDate());
 								msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-								DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(msgEmbed);
 								auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -613,7 +613,7 @@ namespace DiscordCoreAPI {
 						betAmount,
 						betOptions,
 						betType,
-						argsNew.eventData->getAuthorId(),
+						argsNew.eventData.getAuthorId(),
 					};
 
 					discordGuild.data.rouletteGame.rouletteBets.push_back(newRouletteBet);
@@ -623,7 +623,7 @@ namespace DiscordCoreAPI {
 					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					std::string winningNumbersNew;
 					for (uint32_t x = 0; x < winningNumbers.size(); x += 1) {
@@ -636,7 +636,7 @@ namespace DiscordCoreAPI {
 						"\n__**Your winning payout would be:**__\n" + std::to_string(payoutAmount) + " " + discordUser.data.currencyName + "\n------");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Roulette Bet Placed:**__");
-					DiscordCoreAPI::RespondToInputEventData dataPackage(*argsNew.eventData);
+					DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
@@ -647,9 +647,9 @@ namespace DiscordCoreAPI {
 
 					int32_t currentIndex = 3;
 					currentIndex = 3;
-					std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(*argsNew.eventData);
+					std::unique_ptr<InputEventData> newEvent = std::make_unique<InputEventData>(argsNew.eventData);
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription("------\n__**" + std::to_string(currentIndex * 10) + " seconds remaining to place your roulette bets!**__\n------");
 					msgEmbed.setTimeStamp(getTimeAndDate());
@@ -665,7 +665,7 @@ namespace DiscordCoreAPI {
 					currentIndex -= 1;
 					std::function<void()> function01 = [&]() {
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(
 							"------\n__**" + std::to_string(currentIndex * 10) + " seconds remaining to place your roulette bets!**__\n------");
@@ -684,7 +684,7 @@ namespace DiscordCoreAPI {
 							stream << static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 38.0f);
 							std::string finalRoll = stream.str();
 
-							calculateResults(finalRoll, *argsNew.eventData, discordUser, redNumbers, blackNumbers);
+							calculateResults(finalRoll, argsNew.eventData, discordUser, redNumbers, blackNumbers);
 						}
 					};
 

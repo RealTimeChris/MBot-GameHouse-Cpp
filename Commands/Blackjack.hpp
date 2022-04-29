@@ -679,20 +679,20 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -701,19 +701,19 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-					{ .guildMemberId = argsNew.eventData->getRequesterId(), .guildId = argsNew.eventData->getGuildId() })
+					{ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
 											  .get();
 				GuildMember botMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData->getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get();
 				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Permissions Issue:**__");
-					DiscordCoreAPI::RespondToInputEventData dataPackage{ *argsNew.eventData };
+					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -725,12 +725,12 @@ namespace DiscordCoreAPI {
 					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid bet amount!(!blackjack = BETAMOUNT)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					DiscordCoreAPI::RespondToInputEventData dataPackage{ *argsNew.eventData };
+					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -749,12 +749,12 @@ namespace DiscordCoreAPI {
 				if (betAmount > discordGuildMember.data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you have insufficient funds for placing that wager!**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Funds:**__");
-					DiscordCoreAPI::RespondToInputEventData dataPackage{ *argsNew.eventData };
+					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -798,7 +798,7 @@ namespace DiscordCoreAPI {
 							discordUser.data.currencyName + "\n------";
 
 						EmbedData finalMessageEmbed;
-						finalMessageEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						finalMessageEmbed.setTimeStamp(getTimeAndDate());
 						finalMessageEmbed.setColor("0000FF");
 						finalMessageEmbed.setDescription(finalMsgString);
@@ -810,7 +810,7 @@ namespace DiscordCoreAPI {
 							"Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 						finalMessageEmbed.addField("__**Game Status: Tie**__", footerMsgString2, false);
 
-						DiscordCoreAPI::RespondToInputEventData dataPackage{ *argsNew.eventData };
+						DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(finalMessageEmbed);
 						InputEvents::respondToEvent(dataPackage);
@@ -838,7 +838,7 @@ namespace DiscordCoreAPI {
 						"\n------";
 
 					DiscordCoreAPI::EmbedData finalMessageEmbed;
-					finalMessageEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					finalMessageEmbed.setTimeStamp(getTimeAndDate());
 					finalMessageEmbed.setColor("00FF00");
 					finalMessageEmbed.setDescription(finalMsgString);
@@ -847,7 +847,7 @@ namespace DiscordCoreAPI {
 					finalMessageEmbed.addField("Dealer's Hand: ", dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
 					finalMessageEmbed.addField("Player's Hand: ", userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 					finalMessageEmbed.addField("__**Game Status: Player Wins**__", footerMsgString2, false);
-					DiscordCoreAPI::RespondToInputEventData dataPackage{ *argsNew.eventData };
+					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(finalMessageEmbed);
 					InputEvents::respondToEvent(dataPackage);
@@ -858,10 +858,10 @@ namespace DiscordCoreAPI {
 					canWeDoubleDown = true;
 				}
 
-				std::unique_ptr<DiscordCoreAPI::InputEventData> event001 = std::make_unique<InputEventData>(*argsNew.eventData);
+				std::unique_ptr<DiscordCoreAPI::InputEventData> event001 = std::make_unique<InputEventData>(argsNew.eventData);
 
 				EmbedData finalMessageEmbed;
-				finalMessageEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				finalMessageEmbed.setTimeStamp(getTimeAndDate());
 				finalMessageEmbed.setColor("00FF00");
 				finalMessageEmbed.setDescription(finalMsgString);
@@ -871,8 +871,8 @@ namespace DiscordCoreAPI {
 				finalMessageEmbed.addField(
 					"Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 				finalMessageEmbed.addField("__**Game Status: In Play**__", footerMsgString, false);
-				if (argsNew.eventData->eventType == InteractionType::Application_Command) {
-					RespondToInputEventData replyInteractionData(*argsNew.eventData);
+				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
+					RespondToInputEventData replyInteractionData(argsNew.eventData);
 					replyInteractionData.setResponseType(InputEventResponseType::Interaction_Response);
 					replyInteractionData.addMessageEmbed(finalMessageEmbed);
 					replyInteractionData.addButton(false, "check", "Hit", ButtonStyle::Success, "✅");
@@ -883,14 +883,14 @@ namespace DiscordCoreAPI {
 					event001 = InputEvents::respondToEvent(replyInteractionData);
 				}
 				DiscordCoreAPI::ButtonCollector button(*event001);
-				std::vector<ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, argsNew.eventData->getRequesterId()).get();
+				std::vector<ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 				if (buttonIntData.at(0).buttonId == "exit" || buttonIntData.at(0).buttonId == "empty") {
 					std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
 					EmbedData msgEmbed2;
 					msgEmbed2.setColor("FF0000");
 					msgEmbed2.setTimeStamp(getTimeAndDate());
 					msgEmbed2.setTitle("__**Blackjack Game:**__");
-					msgEmbed2.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed2.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed2.setDescription(timeOutString);
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ buttonIntData.at(0).interactionData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);

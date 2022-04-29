@@ -28,30 +28,30 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData->getAuthorId(), .guildId = argsNew.eventData->getGuildId() })
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
 						.get();
 
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool doWeHaveAdmin = doWeHaveAdminPermissions(argsNew, *argsNew.eventData, discordGuild, channel, guildMember);
+				bool doWeHaveAdmin = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdmin == false) {
 					return;
 				}
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -66,12 +66,12 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\n**Please enter a valid self-mod value, between 0 and 100! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
@@ -81,12 +81,12 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\n**Please enter a valid opp-mod value between -100 and 0! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> eventNew = InputEvents::respondToEvent(dataPackage);
@@ -96,12 +96,12 @@ namespace DiscordCoreAPI {
 					std::stoll(argsNew.commandData.optionsArgs.at(3)) < 1) {
 					std::string msgString = "------\n**Please enter a valid item cost! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
@@ -110,12 +110,12 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() < 5 || !regex_search(argsNew.commandData.optionsArgs.at(4), emojiRegExp)) {
 					std::string msgString = "------\n**Please enter a valid emoji! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
@@ -136,12 +136,12 @@ namespace DiscordCoreAPI {
 					if (itemName == value.itemName) {
 						std::string msgString = "------\n**Sorry, but an item by that name already exists!**\n------";
 						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Item Issue:**__");
-						RespondToInputEventData dataPackage{ *argsNew.eventData };
+						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
 						std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);
@@ -167,12 +167,12 @@ namespace DiscordCoreAPI {
 				__Item Cost__: " +
 					std::to_string(itemCost) + " " + discordUser.data.currencyName + "\n__Emoji__: " + emoji;
 				EmbedData msgEmbed;
-				msgEmbed.setAuthor(argsNew.eventData->getUserName(), argsNew.eventData->getAvatarUrl());
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**New Shop Item Added:**__");
-				RespondToInputEventData dataPackage{ *argsNew.eventData };
+				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				std::unique_ptr<InputEventData> event = InputEvents::respondToEvent(dataPackage);

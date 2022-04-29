@@ -28,20 +28,20 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData->getChannelId() }).get();
+				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				bool areWeInADm = areWeInADM(*argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
 
 				if (areWeInADm == true) {
 					return;
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(*argsNew.eventData)).get();
+				InputEvents::deleteInputEventResponseAsync(std::make_unique<InputEventData>(argsNew.eventData)).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData->getGuildId() }).get();
+				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(*argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -55,10 +55,10 @@ namespace DiscordCoreAPI {
 				uint32_t msPerHour = 60 * msPerMinute;
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync(
-					{ .guildMemberId = argsNew.eventData->getRequesterId(), .guildId = argsNew.eventData->getGuildId() })
+					{ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
 											  .get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				User currentUser = Users::getUserAsync({ .userId = argsNew.eventData->getRequesterId() }).get();
+				User currentUser = Users::getUserAsync({ .userId = argsNew.eventData.getRequesterId() }).get();
 				uint32_t lastTimeWorked = discordGuildMember.data.lastTimeWorked;
 
 				uint32_t timeDifference = ( uint32_t )currentTime - lastTimeWorked;
@@ -81,7 +81,7 @@ namespace DiscordCoreAPI {
 					messageEmbed.setTitle("__**Drug Dealing:**__");
 					messageEmbed.setColor(discordGuild.data.borderColor);
 					messageEmbed.setTimeStamp(getTimeAndDate());
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);
@@ -111,7 +111,7 @@ namespace DiscordCoreAPI {
 					messageEmbed.setTitle("__**Drug Dealing:**__");
 					messageEmbed.setColor(discordGuild.data.borderColor);
 					messageEmbed.setTimeStamp(getTimeAndDate());
-					RespondToInputEventData dataPackage{ *argsNew.eventData };
+					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
 					std::unique_ptr<InputEventData> event01 = InputEvents::respondToEvent(dataPackage);

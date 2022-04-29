@@ -26,7 +26,7 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				RespondToInputEventData dataPackage{ *argsNew.eventData };
+				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.addContent("TESTING");
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				auto newEvent = InputEvents::respondToEvent(dataPackage);
