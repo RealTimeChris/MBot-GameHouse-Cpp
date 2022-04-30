@@ -418,7 +418,7 @@ namespace DiscordCoreAPI {
 					role.roleName = value["roleName"].get_utf8().value.to_string();
 					guildData.guildShop.roles.push_back(role);
 				}
-				auto largestBlackjackPayout=docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document();
+				auto largestBlackjackPayout = docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document();
 				guildData.casinoStats.largestBlackjackPayout.amount = largestBlackjackPayout.value["amount"].get_int32().value;
 				guildData.casinoStats.largestBlackjackPayout.timeStamp = largestBlackjackPayout.value["timeStamp"].get_utf8().value.to_string();
 				guildData.casinoStats.largestBlackjackPayout.userId = largestBlackjackPayout.value["userId"].get_utf8().value.to_string();
