@@ -68,6 +68,5 @@ if (WIN32 AND NOT EXISTS "${VCPKG_ROOT}")
 	add_custom_command(
 		TARGET MBot-GameHouse POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy "$<IF:$<CONFIG:Debug>,${DEBUG_PDB_FILE},${RELEASE_PDB_FILE}>" "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>/${PDB_FILE_NAME}"
-		COMMAND_EXPAND_LISTS
 	)
 endif()
