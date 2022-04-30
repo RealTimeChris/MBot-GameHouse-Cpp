@@ -65,30 +65,30 @@ namespace DiscordCoreAPI {
 
 				if (targetMember.user.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**User Issue:**__");
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setColor(discordGuild.data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**User Issue:**__");
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
+					dataPackage.addMessageEmbed(*msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
 				if (userID == targetUserID) {
 					std::string msgString = "------\n**You can't rob yourself, dumbass!**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**Robbery Issue:**__");
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setColor(discordGuild.data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Robbery Issue:**__");
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
+					dataPackage.addMessageEmbed(*msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
@@ -162,15 +162,15 @@ namespace DiscordCoreAPI {
 
 						if (currencyRobAmount < 0) {
 							std::string msgStringNew = "------\n**Cannot rob for debt!**\n------";
-							EmbedData msgEmbed;
-							msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-							msgEmbed.setColor(discordGuild.data.borderColor);
-							msgEmbed.setDescription(msgStringNew);
-							msgEmbed.setTimeStamp(getTimeAndDate());
-							msgEmbed.setTitle("__**Target Issue:**__");
+							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+							msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+							msgEmbed->setColor(discordGuild.data.borderColor);
+							msgEmbed->setDescription(msgStringNew);
+							msgEmbed->setTimeStamp(getTimeAndDate());
+							msgEmbed->setTitle("__**Target Issue:**__");
 							RespondToInputEventData dataPackage(argsNew.eventData);
 							dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-							dataPackage.addMessageEmbed(msgEmbed);
+							dataPackage.addMessageEmbed(*msgEmbed);
 							auto newEvent = InputEvents::respondToEvent(dataPackage);
 							return;
 						}
@@ -191,16 +191,16 @@ namespace DiscordCoreAPI {
 						discordGuildMember.data.lastTimeRobbed =
 							( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 						discordGuildMember.writeDataToDB();
-						EmbedData messageEmbed;
-						messageEmbed.setColor(discordGuild.data.borderColor);
-						messageEmbed.setDescription(msgString);
-						messageEmbed.setTimeStamp(getTimeAndDate());
-						messageEmbed.setTitle("__**Succesful Robbery:**__");
-						messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+						msgEmbed->setColor(discordGuild.data.borderColor);
+						msgEmbed->setDescription(msgString);
+						msgEmbed->setTimeStamp(getTimeAndDate());
+						msgEmbed->setTitle("__**Succesful Robbery:**__");
+						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 						dataPackage.addContent("<@!" + targetUserID + ">");
-						dataPackage.addMessageEmbed(messageEmbed);
+						dataPackage.addMessageEmbed(*msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
 					} else if (currentSuccessValue == false) {
 						int32_t finedPercentage = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 30.0f);
@@ -236,15 +236,15 @@ namespace DiscordCoreAPI {
 							( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 						discordGuildMember.writeDataToDB();
 
-						EmbedData messageEmbed;
-						messageEmbed.setColor(discordGuild.data.borderColor);
-						messageEmbed.setDescription(msgString);
-						messageEmbed.setTimeStamp(getTimeAndDate());
-						messageEmbed.setTitle("__**Failed Robbery:**__");
-						messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+						msgEmbed->setColor(discordGuild.data.borderColor);
+						msgEmbed->setDescription(msgString);
+						msgEmbed->setTimeStamp(getTimeAndDate());
+						msgEmbed->setTitle("__**Failed Robbery:**__");
+						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-						dataPackage.addMessageEmbed(messageEmbed);
+						dataPackage.addMessageEmbed(*msgEmbed);
 						auto newEvent = InputEvents::respondToEvent(dataPackage);
 					}
 				} else {
@@ -264,15 +264,15 @@ namespace DiscordCoreAPI {
 						msgString = "Sorry, but you need to wait " + std::to_string(secondsRemain) + " seconds before you can rob someone again!";
 					}
 
-					EmbedData messageEmbed;
-					messageEmbed.setColor(discordGuild.data.borderColor);
-					messageEmbed.setDescription(msgString);
-					messageEmbed.setTimeStamp(getTimeAndDate());
-					messageEmbed.setTitle("__**Failed Robbery:**__");
-					messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setColor(discordGuild.data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Failed Robbery:**__");
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(messageEmbed);
+					dataPackage.addMessageEmbed(*msgEmbed);
 					auto newEvent = InputEvents::respondToEvent(dataPackage);
 				}
 				return;

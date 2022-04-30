@@ -65,23 +65,23 @@ void checkAndSetAceValues(std::vector<DiscordCoreAPI::Card>* playerHand, std::ve
 	}
 }
 
-void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
+void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
 	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::RespondToInputEventData* buttonInteraction,
 	std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
-	DiscordCoreAPI::EmbedData finalEmbed) {
+	DiscordCoreAPI::EmbedData& finalEmbed) {
 	discordGuildMember->getDataFromDB();
 	uint32_t fineAmount = 0;
 	fineAmount = 1 * *betAmount;
 	if (fineAmount > discordGuildMember->data.currency.wallet) {
 		std::string inPlayFooterString = "------\n__***Sorry, but you have insufficient funds for placing that wager now!***__\n------";
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setColor("FF0000");
-		msgEmbed.setTitle("__**Blackjack Fail:**__");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setColor("FF0000");
+		msgEmbed->setTitle("__**Blackjack Fail:**__");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -139,41 +139,42 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 		discordGuildMember->data.currency.wallet += payAmount;
 		discordGuildMember->writeDataToDB();
 		auto botUser = argsNew.discordCoreClient->getBotUser();
-		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName +
-			"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
+		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser->data.currencyName +
+			"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName +
+			"\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed{};
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Win:**__");
-		msgEmbed.setColor("00FF00");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Player Wins**__", winFooterString, false);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Win:**__");
+		msgEmbed->setColor("00FF00");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Player Wins**__", winFooterString, false);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 
 		return;
 	} else if (newUserHandScore == newDealerHandScore) {
 		auto botUser = argsNew.discordCoreClient->getBotUser();
-		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
+		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
 		std::string tieFooterString = "------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser.data.currencyName + "\n------";
+			discordUser->data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Tie:**__");
-		msgEmbed.setColor("0000FF");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Tie**__", tieFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Tie:**__");
+		msgEmbed->setColor("0000FF");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Tie**__", tieFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -193,32 +194,32 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 		discordGuild->data.casinoStats.totalPayout += payAmount;
 		discordGuild->writeDataToDB();
 		auto botUser = argsNew.discordCoreClient->getBotUser();
-		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
+		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
 		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser.data.currencyName + "\n------";
+			discordUser->data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Loss:**__");
-		msgEmbed.setColor("FF0000");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Player Bust**__", bustFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Loss:**__");
+		msgEmbed->setColor("FF0000");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Player Bust**__", bustFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
 }
 
-void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
+void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
 	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
 	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand,
 	std::vector<uint32_t>* userAceIndices, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
-	DiscordCoreAPI::EmbedData finalEmbed, DiscordCoreAPI::ActionRowData component) {
+	DiscordCoreAPI::EmbedData& finalEmbed, DiscordCoreAPI::ActionRowData& component) {
 	discordGuildMember->getDataFromDB();
 	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ newEvent.getRequesterId() }).get();
 
@@ -228,15 +229,15 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 		std::string inPlayFooterString;
 		inPlayFooterString = "------\n__***Sorry, but you have insufficient funds for placing that wager now!***__\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setColor("FF0000");
-		msgEmbed.setTitle("__**Blackjack Fail:**__");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setColor("FF0000");
+		msgEmbed->setTitle("__**Blackjack Fail:**__");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
 	}
@@ -284,21 +285,21 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 			userHandString += (*userHand).at(x).suit + (*userHand).at(x).type;
 		}
 		auto botUser = argsNew.discordCoreClient->getBotUser();
-		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
+		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };	
 		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser.data.currencyName + "\n------";
+			discordUser->data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Loss:**__");
-		msgEmbed.setColor("FF0000");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Player Bust**__", bustFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Loss:**__");
+		msgEmbed->setColor("FF0000");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Player Bust**__", bustFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -338,18 +339,18 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 			std::string tieFooterString = "------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
 				discordUser.data.currencyName + "\n------";
 
-			DiscordCoreAPI::EmbedData msgEmbed;
-			msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-			msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-			msgEmbed.setTitle("__**Blackjack Tie:**__");
-			msgEmbed.setColor("0000FF");
-			msgEmbed.setFooter("Cards Remaining: " + discordGuild->data.blackjackStack.size());
-			msgEmbed.setDescription(finalEmbed.description);
-			msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-			msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-			msgEmbed.addField("__**Game Status: Tie**__", tieFooterString, false);
-			msgEmbed.setDescription(finalEmbed.description);
-			buttonInteraction->addMessageEmbed(msgEmbed);
+			std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+			msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+			msgEmbed->setTitle("__**Blackjack Tie:**__");
+			msgEmbed->setColor("0000FF");
+			msgEmbed->setFooter("Cards Remaining: " + discordGuild->data.blackjackStack.size());
+			msgEmbed->setDescription(finalEmbed.description);
+			msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+			msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+			msgEmbed->addField("__**Game Status: Tie**__", tieFooterString, false);
+			msgEmbed->setDescription(finalEmbed.description);
+			buttonInteraction->addMessageEmbed(*msgEmbed);
 			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 			return;
@@ -380,24 +381,24 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 			}
 
 			auto botUser = argsNew.discordCoreClient->getBotUser();
-			DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
+			std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
 			std::string winFooterString;
-			winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName +
-				"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName +
+			winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser->data.currencyName +
+				"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName +
 				"\n------";
 
-			DiscordCoreAPI::EmbedData msgEmbed;
-			msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-			msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-			msgEmbed.setTitle("__**Blackjack Win:**__");
-			msgEmbed.setColor("00FF00");
-			msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-			msgEmbed.setDescription(finalEmbed.description);
-			msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-			msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-			msgEmbed.addField("__**Game Status: Player Wins**__", winFooterString, false);
-			msgEmbed.setDescription(finalEmbed.description);
-			buttonInteraction->addMessageEmbed(msgEmbed);
+			std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+			msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+			msgEmbed->setTitle("__**Blackjack Win:**__");
+			msgEmbed->setColor("00FF00");
+			msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+			msgEmbed->setDescription(finalEmbed.description);
+			msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+			msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+			msgEmbed->addField("__**Game Status: Player Wins**__", winFooterString, false);
+			msgEmbed->setDescription(finalEmbed.description);
+			buttonInteraction->addMessageEmbed(*msgEmbed);
 			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 			return;
@@ -414,21 +415,21 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 		}
 
 		std::string inPlayFooterString = "------\n------";
-		DiscordCoreAPI::EmbedData msgEmbed;
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		DiscordCoreAPI::InputEventData newData{};
-		msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack:**__");
-		msgEmbed.setColor("00FF00");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.setDescription(finalEmbed.description);
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: In Play**__", inPlayFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
+		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack:**__");
+		msgEmbed->setColor("00FF00");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->setDescription(finalEmbed.description);
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: In Play**__", inPlayFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		buttonInteraction->addComponentRow(component);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button = std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent);
 		std::unique_ptr<std::vector<DiscordCoreAPI::ButtonResponseData>> buttonInteractionData =
@@ -440,7 +441,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 			msgEmbed2.setColor("FF0000");
 			msgEmbed2.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 			msgEmbed2.setTitle("__**Blackjack Game:**__");
-			msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
+			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
 			msgEmbed2.setDescription(timeOutString);
 			std::vector<DiscordCoreAPI::EmbedData> embeds;
 			embeds.push_back(msgEmbed2);
@@ -463,11 +464,11 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discord
 	return;
 };
 
-void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
-	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
+void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
+	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData& newEvent,
 	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand,
 	std::vector<uint32_t>* userAceIndices, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
-	DiscordCoreAPI::EmbedData finalEmbed, DiscordCoreAPI::ActionRowData component) {
+	DiscordCoreAPI::EmbedData& finalEmbed, DiscordCoreAPI::ActionRowData& component) {
 	uint32_t fineAmount = 2 * *betAmount;
 	if (fineAmount > discordGuildMember->data.currency.wallet || *newCardCount > 2) {
 		std::string failedFooterString;
@@ -478,25 +479,25 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 			failedFooterString = "__***Sorry, but you have insufficient funds for placing that wager now!***__\n------\n✅ to Hit, ❎ to Stand.\n------";
 		}
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setColor("00FF00");
-		msgEmbed.setTitle("__**Blackjack:**__");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setColor("00FF00");
+		msgEmbed->setTitle("__**Blackjack:**__");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
 		DiscordCoreAPI::InputEventData eventData002 = newEvent;
-		msgEmbed.setDescription(finalEmbed.description);
-		msgEmbed.addField(finalEmbed.fields[0].name, finalEmbed.fields[0].value, finalEmbed.fields[0].Inline);
-		msgEmbed.addField(finalEmbed.fields[1].name, finalEmbed.fields[1].value, finalEmbed.fields[1].Inline);
-		msgEmbed.addField("__**Game Status: In Play**__", failedFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		msgEmbed->addField(finalEmbed.fields[0].name, finalEmbed.fields[0].value, finalEmbed.fields[0].Inline);
+		msgEmbed->addField(finalEmbed.fields[1].name, finalEmbed.fields[1].value, finalEmbed.fields[1].Inline);
+		msgEmbed->addField("__**Game Status: In Play**__", failedFooterString, false);
 		for (auto& value: newEvent.getComponents()) {
 			buttonInteraction->addComponentRow(value);
 		}
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		eventData002 = DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
-		DiscordCoreAPI::ButtonCollector button(newEvent);
-		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get();
+		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button{ std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent) };
+		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get();
 		DiscordCoreAPI::RespondToInputEventData inputData{ buttonIntData.at(0).interactionData };
 		if (buttonIntData.at(0).buttonId == "check") {
 			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
@@ -585,17 +586,17 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName +
 			"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Win:**__");
-		msgEmbed.setColor("00FF00");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Player Wins**__", winFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Win:**__");
+		msgEmbed->setColor("00FF00");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Player Wins**__", winFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -605,17 +606,17 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 		std::string tieFooterString = "------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
 			discordUser.data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Tie:**__");
-		msgEmbed.setColor("0000FF");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Tie**__", tieFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Tie:**__");
+		msgEmbed->setColor("0000FF");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Tie**__", tieFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -640,17 +641,17 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments argsNew, Discor
 		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
 			discordUser.data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed;
-		msgEmbed.setAuthor(guildMember->user.userName, guildMember->user.avatar);
-		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
-		msgEmbed.setTitle("__**Blackjack Loss:**__");
-		msgEmbed.setColor("FF0000");
-		msgEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-		msgEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
-		msgEmbed.addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
-		msgEmbed.addField("__**Game Status: Player Bust**__", bustFooterString, false);
-		msgEmbed.setDescription(finalEmbed.description);
-		buttonInteraction->addMessageEmbed(msgEmbed);
+		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
+		msgEmbed->setTitle("__**Blackjack Loss:**__");
+		msgEmbed->setColor("FF0000");
+		msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+		msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHandString, true);
+		msgEmbed->addField("Player's Hand: " + std::to_string(newUserHandScore), userHandString, true);
+		msgEmbed->addField("__**Game Status: Player Bust**__", bustFooterString, false);
+		msgEmbed->setDescription(finalEmbed.description);
+		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		return;
@@ -673,15 +674,14 @@ namespace DiscordCoreAPI {
 		}
 
 		std::unique_ptr<BaseFunction> create() {
-			std::unique_ptr<BaseFunction> newPtr = std::make_unique<Blackjack>();
-			return newPtr;
+			return std::make_unique<Blackjack>();
 		}
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
+				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
 
-				bool areWeInADm = areWeInADM(argsNew.eventData, channel);
+				bool areWeInADm = areWeInADM(argsNew.eventData, *channel);
 
 				if (areWeInADm == true) {
 					return;
@@ -689,10 +689,10 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
-				DiscordGuild discordGuild(guild);
+				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
+				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
-				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);
 
 				if (areWeAllowed == false) {
 					return;
@@ -700,23 +700,23 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
-				GuildMember guildMember =
+				std::unique_ptr<GuildMember> guildMember{ std::make_unique<GuildMember>(
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
-				GuildMember botMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get();
-				if (!botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages)) {
+						.get()) };
+				std::unique_ptr<GuildMember> botMember{ std::make_unique<GuildMember>(
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get()) };
+				if (!botMember->permissions.checkForPermission(*botMember, *channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**Permissions Issue:**__");
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setColor(discordGuild->data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Permissions Issue:**__");
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					dataPackage.addMessageEmbed(*msgEmbed);
+					InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -724,16 +724,16 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() == 0 || !std::regex_search(argsNew.commandData.optionsArgs.at(0), betRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid bet amount!(!blackjack = BETAMOUNT)**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**Missing Or Invalid Arguments:**__");
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setColor(discordGuild->data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Missing Or Invalid Arguments:**__");
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					dataPackage.addMessageEmbed(*msgEmbed);
+					InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 
@@ -743,21 +743,21 @@ namespace DiscordCoreAPI {
 
 				std::srand(( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 
-				std::string userID = guildMember.user.id;
-				DiscordCoreAPI::DiscordGuildMember discordGuildMember(guildMember);
+				std::string userID = guildMember->user.id;
+				std::unique_ptr<DiscordCoreAPI::DiscordGuildMember> discordGuildMember{ std::make_unique<DiscordCoreAPI::DiscordGuildMember>(*guildMember) };
 
-				if (betAmount > discordGuildMember.data.currency.wallet) {
+				if (betAmount > discordGuildMember->data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you have insufficient funds for placing that wager!**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**Missing Funds:**__");
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setColor(discordGuild->data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Missing Funds:**__");
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					dataPackage.addMessageEmbed(*msgEmbed);
+					InputEvents::respondToEvent(dataPackage);
 					return;
 				}
 				std::string finalMsgString;
@@ -765,24 +765,24 @@ namespace DiscordCoreAPI {
 
 				std::string footerMsgStringOld = "------\n------";
 
-				discordGuild.getDataFromDB();
+				discordGuild->getDataFromDB();
 				std::vector<Card> userHand;
 				std::vector<uint32_t> userAceIndices;
-				userHand.push_back(drawNextBlackjackCard(&discordGuild.data.blackjackStack));
+				userHand.push_back(drawNextBlackjackCard(&discordGuild->data.blackjackStack));
 				checkAndSetAceValues(&userHand, &userAceIndices);
-				userHand.push_back(drawNextBlackjackCard(&discordGuild.data.blackjackStack));
+				userHand.push_back(drawNextBlackjackCard(&discordGuild->data.blackjackStack));
 				checkAndSetAceValues(&userHand, &userAceIndices);
 				uint32_t userHandScore = userHand.at(0).value + userHand.at(1).value;
-				discordGuild.writeDataToDB();
+				discordGuild->writeDataToDB();
 
 				std::vector<Card> dealerHand;
 				std::vector<uint32_t> dealerAceIndices;
-				dealerHand.push_back(drawNextBlackjackCard(&discordGuild.data.blackjackStack));
+				dealerHand.push_back(drawNextBlackjackCard(&discordGuild->data.blackjackStack));
 				checkAndSetAceValues(&dealerHand, &dealerAceIndices);
-				dealerHand.push_back(drawNextBlackjackCard(&discordGuild.data.blackjackStack));
+				dealerHand.push_back(drawNextBlackjackCard(&discordGuild->data.blackjackStack));
 				checkAndSetAceValues(&dealerHand, &dealerAceIndices);
 				uint32_t newDealerHandScore = dealerHand[0].value;
-				discordGuild.writeDataToDB();
+				discordGuild->writeDataToDB();
 				std::string footerMsgString = footerMsgStringOld;
 
 				if (userHandScore == 21) {
@@ -794,62 +794,62 @@ namespace DiscordCoreAPI {
 					newDealerHandScore = dealerHand[0].value + dealerHand[1].value;
 					std::string footerMsgString2;
 					if (newDealerHandScore == 21) {
-						footerMsgString2 = "\n------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " +
+						footerMsgString2 = "\n------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
 							discordUser.data.currencyName + "\n------";
 
-						EmbedData finalMessageEmbed;
-						finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-						finalMessageEmbed.setTimeStamp(getTimeAndDate());
-						finalMessageEmbed.setColor("0000FF");
-						finalMessageEmbed.setDescription(finalMsgString);
-						finalMessageEmbed.setTitle("__**Blackjack Tie:**__");
-						finalMessageEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild.data.blackjackStack.size()));
-						finalMessageEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore),
+						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+						msgEmbed->setTimeStamp(getTimeAndDate());
+						msgEmbed->setColor("0000FF");
+						msgEmbed->setDescription(finalMsgString);
+						msgEmbed->setTitle("__**Blackjack Tie:**__");
+						msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+						msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore),
 							dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
-						finalMessageEmbed.addField(
+						msgEmbed->addField(
 							"Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
-						finalMessageEmbed.addField("__**Game Status: Tie**__", footerMsgString2, false);
+						msgEmbed->addField("__**Game Status: Tie**__", footerMsgString2, false);
 
 						DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
-						dataPackage.addMessageEmbed(finalMessageEmbed);
+						dataPackage.addMessageEmbed(*msgEmbed);
 						InputEvents::respondToEvent(dataPackage);
 
 						return;
 					}
 
-					discordGuildMember.getDataFromDB();
+					discordGuildMember->getDataFromDB();
 					int32_t payAmount = ( uint32_t )trunc(1.5 * betAmount);
-					discordGuildMember.data.currency.wallet += payAmount;
-					discordGuildMember.writeDataToDB();
-					discordGuild.getDataFromDB();
-					if (payAmount > discordGuild.data.casinoStats.largestBlackjackPayout.amount) {
-						discordGuild.data.casinoStats.largestBlackjackPayout.amount = payAmount;
-						discordGuild.data.casinoStats.largestBlackjackPayout.timeStamp = getTimeAndDate();
-						discordGuild.data.casinoStats.largestBlackjackPayout.userId = userID;
-						discordGuild.data.casinoStats.largestBlackjackPayout.userName = guildMember.user.userName;
+					discordGuildMember->data.currency.wallet += payAmount;
+					discordGuildMember->writeDataToDB();
+					discordGuild->getDataFromDB();
+					if (payAmount > discordGuild->data.casinoStats.largestBlackjackPayout.amount) {
+						discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
+						discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = getTimeAndDate();
+						discordGuild->data.casinoStats.largestBlackjackPayout.userId = userID;
+						discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
 					}
-					discordGuild.data.casinoStats.totalBlackjackPayout += payAmount;
-					discordGuild.data.casinoStats.totalPayout += payAmount;
-					discordGuild.writeDataToDB();
+					discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
+					discordGuild->data.casinoStats.totalPayout += payAmount;
+					discordGuild->writeDataToDB();
 
 					footerMsgString2 = "\n------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName +
-						"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName +
+						"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName +
 						"\n------";
 
-					DiscordCoreAPI::EmbedData finalMessageEmbed;
-					finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					finalMessageEmbed.setTimeStamp(getTimeAndDate());
-					finalMessageEmbed.setColor("00FF00");
-					finalMessageEmbed.setDescription(finalMsgString);
-					finalMessageEmbed.setTitle("__**Blackjack Win:**__");
-					finalMessageEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild.data.blackjackStack.size()));
-					finalMessageEmbed.addField("Dealer's Hand: ", dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
-					finalMessageEmbed.addField("Player's Hand: ", userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
-					finalMessageEmbed.addField("__**Game Status: Player Wins**__", footerMsgString2, false);
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setColor("00FF00");
+					msgEmbed->setDescription(finalMsgString);
+					msgEmbed->setTitle("__**Blackjack Win:**__");
+					msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+					msgEmbed->addField("Dealer's Hand: ", dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
+					msgEmbed->addField("Player's Hand: ", userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
+					msgEmbed->addField("__**Game Status: Player Wins**__", footerMsgString2, false);
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
-					dataPackage.addMessageEmbed(finalMessageEmbed);
+					dataPackage.addMessageEmbed(*msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				}
@@ -860,21 +860,21 @@ namespace DiscordCoreAPI {
 
 				DiscordCoreAPI::InputEventData event001 = argsNew.eventData;
 
-				EmbedData finalMessageEmbed;
-				finalMessageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				finalMessageEmbed.setTimeStamp(getTimeAndDate());
-				finalMessageEmbed.setColor("00FF00");
-				finalMessageEmbed.setDescription(finalMsgString);
-				finalMessageEmbed.setTitle("__**Blackjack:**__");
-				finalMessageEmbed.setFooter("Cards Remaining: " + std::to_string(discordGuild.data.blackjackStack.size()));
-				finalMessageEmbed.addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type, true);
-				finalMessageEmbed.addField(
+				std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+				msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+				msgEmbed->setTimeStamp(getTimeAndDate());
+				msgEmbed->setColor("00FF00");
+				msgEmbed->setDescription(finalMsgString);
+				msgEmbed->setTitle("__**Blackjack:**__");
+				msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
+				msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type, true);
+				msgEmbed->addField(
 					"Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
-				finalMessageEmbed.addField("__**Game Status: In Play**__", footerMsgString, false);
+				msgEmbed->addField("__**Game Status: In Play**__", footerMsgString, false);
 				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
 					RespondToInputEventData replyInteractionData(argsNew.eventData);
 					replyInteractionData.setResponseType(InputEventResponseType::Interaction_Response);
-					replyInteractionData.addMessageEmbed(finalMessageEmbed);
+					replyInteractionData.addMessageEmbed(*msgEmbed);
 					replyInteractionData.addButton(false, "check", "Hit", ButtonStyle::Success, "✅");
 					replyInteractionData.addButton(false, "cross", "Stand", ButtonStyle::Success, "❎");
 					if (canWeDoubleDown) {
@@ -882,19 +882,19 @@ namespace DiscordCoreAPI {
 					}
 					event001 = InputEvents::respondToEvent(replyInteractionData);
 				}
-				DiscordCoreAPI::ButtonCollector button(event001);
-				std::vector<ButtonResponseData> buttonIntData = button.collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
+				std::unique_ptr<DiscordCoreAPI::ButtonCollector> button{ std::make_unique<DiscordCoreAPI::ButtonCollector>(event001) };
+				std::vector<ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 				if (buttonIntData.at(0).buttonId == "exit" || buttonIntData.at(0).buttonId == "empty") {
 					std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
-					EmbedData msgEmbed2;
-					msgEmbed2.setColor("FF0000");
-					msgEmbed2.setTimeStamp(getTimeAndDate());
-					msgEmbed2.setTitle("__**Blackjack Game:**__");
-					msgEmbed2.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed2.setDescription(timeOutString);
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setColor("FF0000");
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Blackjack Game:**__");
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setDescription(timeOutString);
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ buttonIntData.at(0).interactionData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed2);
+					dataPackage.addMessageEmbed(*msgEmbed);
 					event001 = InputEvents::respondToEvent(dataPackage);
 					return;
 				} else {
@@ -907,14 +907,15 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
-					executeCheckResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001, &buttonInteraction, &newCardCount,
-						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
+					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction,
+						&newCardCount,
+						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed,components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
-					executeCrossResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, &buttonInteraction, &userHand,
-						&dealerAceIndices, &userID, &dealerHand, finalMessageEmbed);
+					executeCrossResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), &buttonInteraction, &userHand,
+						&dealerAceIndices, &userID, &dealerHand, *msgEmbed);
 				} else if (buttonIntData.at(0).buttonId == "double") {
-					executeDoubleResponse(argsNew, &discordGuildMember, &betAmount, &guildMember, &discordGuild, event001, &buttonInteraction, &newCardCount,
-						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, finalMessageEmbed, components.at(0));
+					executeDoubleResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction,
+						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
 				};
 
 				return;

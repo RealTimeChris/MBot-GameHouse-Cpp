@@ -83,7 +83,7 @@ namespace DiscordCoreAPI {
 		Shop() {
 			this->commandName = "shop";
 			this->helpDescription = "View the server's item and role shop!";
-			EmbedData msgEmbed;
+			DiscordCoreAPI::EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nSimply enter /shop.\n------");
 			msgEmbed.setTitle("__**Shop Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -124,15 +124,15 @@ namespace DiscordCoreAPI {
 											.get();
 				if (!(botMember.permissions.checkForPermission(botMember, channel, Permission::Manage_Messages))) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this command!**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**Permissions Issue:**__");
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed->setColor(discordGuild.data.borderColor);
+					msgEmbed->setDescription(msgString);
+					msgEmbed->setTimeStamp(getTimeAndDate());
+					msgEmbed->setTitle("__**Permissions Issue:**__");
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
+					dataPackage.addMessageEmbed(*msgEmbed);
 					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
 					return;
 				}
@@ -153,26 +153,26 @@ namespace DiscordCoreAPI {
 						discordGuild.data.guildShop.roles.erase(discordGuild.data.guildShop.roles.begin() + x);
 						discordGuild.writeDataToDB();
 						std::string msgString = "------\n**Removing guild role " + shopRole.roleName + " from guild cache!**\n------";
-						EmbedData msgEmbed;
-						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-						msgEmbed.setColor(discordGuild.data.borderColor);
-						msgEmbed.setDescription(msgString);
-						msgEmbed.setTimeStamp(getTimeAndDate());
-						msgEmbed.setTitle("__**Removed Guild Role:**__");
+						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+						msgEmbed->setColor(discordGuild.data.borderColor);
+						msgEmbed->setDescription(msgString);
+						msgEmbed->setTimeStamp(getTimeAndDate());
+						msgEmbed->setTitle("__**Removed Guild Role:**__");
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-						dataPackage.addMessageEmbed(msgEmbed);
+						dataPackage.addMessageEmbed(*msgEmbed);
 						InputEvents::respondToEvent(dataPackage);
 						x -= 1;
 					}
 				}
 
-				EmbedData msgEmbed;
-				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				msgEmbed.setDescription("------\n__**Select which part of the shop you would like to browse!**__\n------");
-				msgEmbed.setColor(discordGuild.data.borderColor);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Welcome to the Shop:**__");
+				std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+				msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+				msgEmbed->setDescription("------\n__**Select which part of the shop you would like to browse!**__\n------");
+				msgEmbed->setColor(discordGuild.data.borderColor);
+				msgEmbed->setTimeStamp(getTimeAndDate());
+				msgEmbed->setTitle("__**Welcome to the Shop:**__");
 				EmbedData msgEmbedItems;
 				msgEmbedItems.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbedItems.setDescription("------\n__**Select one or more items which you would like to purchase, from the drop-down menu!**__\n------");
@@ -191,7 +191,7 @@ namespace DiscordCoreAPI {
 				event02 = InputEvents::respondToEvent(dataPackage);
 				RespondToInputEventData dataPackage02(event02);
 				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
-				dataPackage02.addMessageEmbed(msgEmbed);
+				dataPackage02.addMessageEmbed(*msgEmbed);
 				dataPackage02.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
 				dataPackage02.addButton(false, "roles", "Roles", ButtonStyle::Primary, "🔥");
 				dataPackage02.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
@@ -199,8 +199,8 @@ namespace DiscordCoreAPI {
 				while (1) {
 				start:
 					EmbedData currentEmbed;
-					ButtonCollector newButton(event02);
-					auto buttonData = newButton.collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
+					std::unique_ptr<ButtonCollector> newButton{ std::make_unique<ButtonCollector>(event02) };
+					auto buttonData = newButton->collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 					if (buttonData.at(0).buttonId == "items") {
 						currentEmbed = msgEmbedItems;
 					} else if (buttonData.at(0).buttonId == "roles") {
@@ -224,14 +224,14 @@ namespace DiscordCoreAPI {
 						break;
 					}
 
-					SelectMenuCollector selectMenu(event02);
-					values = selectMenu.collectSelectMenuData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
+					std::unique_ptr<SelectMenuCollector> selectMenu{ std::make_unique<SelectMenuCollector>(event02) };
+					values = selectMenu->collectSelectMenuData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 					for (auto& value: values) {
 						for (auto& value2: value.values) {
 							if (value2 == "go_back" || values.size() == 0) {
 								RespondToInputEventData dataPackage03(value.interactionData);
 								dataPackage03.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
-								dataPackage03.addMessageEmbed(msgEmbed);
+								dataPackage03.addMessageEmbed(*msgEmbed);
 								dataPackage03.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
 								dataPackage03.addButton(false, "roles", "Roles", ButtonStyle::Primary, "🔥");
 								dataPackage03.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
@@ -303,15 +303,15 @@ namespace DiscordCoreAPI {
 
 							if (roleCost > userBalance) {
 								std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
-								EmbedData msgEmbed03;
-								msgEmbed03.setAuthor(guildMember.user.userName, guildMember.user.avatar);
-								msgEmbed03.setColor(discordGuild.data.borderColor);
-								msgEmbed03.setDescription(msgString);
-								msgEmbed03.setTimeStamp(getTimeAndDate());
-								msgEmbed03.setTitle("__**Insufficient Funds:**__");
+								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+								msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+								msgEmbed->setColor(discordGuild.data.borderColor);
+								msgEmbed->setDescription(msgString);
+								msgEmbed->setTimeStamp(getTimeAndDate());
+								msgEmbed->setTitle("__**Insufficient Funds:**__");
 								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-								dataPackage03.addMessageEmbed(msgEmbed03);
+								dataPackage03.addMessageEmbed(*msgEmbed);
 								InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 								InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 								break;
@@ -332,15 +332,15 @@ namespace DiscordCoreAPI {
 							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType +
 								".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName +
 								")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
-							EmbedData msgEmbed04;
-							msgEmbed04.setTitle("__**New Role Purchased:**__");
-							msgEmbed04.setTimeStamp(getTimeAndDate());
-							msgEmbed04.setDescription(msgString);
-							msgEmbed04.setAuthor(guildMember.user.userName, guildMember.user.avatar);
-							msgEmbed04.setColor(discordGuild.data.borderColor);
+							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+							msgEmbed->setTitle("__**New Role Purchased:**__");
+							msgEmbed->setTimeStamp(getTimeAndDate());
+							msgEmbed->setDescription(msgString);
+							msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed->setColor(discordGuild.data.borderColor);
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-							dataPackage03.addMessageEmbed(msgEmbed04);
+							dataPackage03.addMessageEmbed(*msgEmbed);
 							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 
 							uint32_t maxIdx = 0;
@@ -364,15 +364,15 @@ namespace DiscordCoreAPI {
 
 							if (itemCost > userBalance) {
 								std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
-								EmbedData msgEmbed06;
-								msgEmbed06.setTimeStamp(getTimeAndDate());
-								msgEmbed06.setDescription(msgString);
-								msgEmbed06.setAuthor(guildMember.user.userName, guildMember.user.avatar);
-								msgEmbed06.setColor(discordGuild.data.borderColor);
-								msgEmbed06.setTitle("__**Insufficient Funds:**__");
+								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+								msgEmbed->setTimeStamp(getTimeAndDate());
+								msgEmbed->setDescription(msgString);
+								msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+								msgEmbed->setColor(discordGuild.data.borderColor);
+								msgEmbed->setTitle("__**Insufficient Funds:**__");
 								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-								dataPackage03.addMessageEmbed(msgEmbed06);
+								dataPackage03.addMessageEmbed(*msgEmbed);
 								InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 								InputEvents::deleteInputEventResponseAsync(event01, 20000);
 								break;
@@ -390,8 +390,8 @@ namespace DiscordCoreAPI {
 							std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType +
 								".\n------\n__**It is as follows:**__ " + itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " +
 								std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
-							EmbedData msgEmbed05;
-							msgEmbed05.setTitle("__**New Item Purchased:**__");
+							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+							msgEmbed->setTitle("__**New Item Purchased:**__");
 
 							uint32_t maxIdx = 0;
 							InventoryItem tempItem;
@@ -408,13 +408,13 @@ namespace DiscordCoreAPI {
 								discordGuildMember.data.items.at(maxIdx) = tempItem;
 							}
 							discordGuildMember.writeDataToDB();
-							msgEmbed05.setTimeStamp(getTimeAndDate());
-							msgEmbed05.setDescription(msgString);
-							msgEmbed05.setAuthor(guildMember.user.userName, guildMember.user.avatar);
-							msgEmbed05.setColor(discordGuild.data.borderColor);
+							msgEmbed->setTimeStamp(getTimeAndDate());
+							msgEmbed->setDescription(msgString);
+							msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed->setColor(discordGuild.data.borderColor);
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-							dataPackage03.addMessageEmbed(msgEmbed05);
+							dataPackage03.addMessageEmbed(*msgEmbed);
 							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 						}
 					}

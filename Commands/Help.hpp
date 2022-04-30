@@ -120,8 +120,8 @@ namespace DiscordCoreAPI {
 						responseData.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						InputEvents::respondToEvent(responseData);
 					}
-					ButtonCollector button(newEvent01);
-					auto buttonData = button.collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
+					std::unique_ptr<ButtonCollector> button{ std::make_unique<ButtonCollector>(newEvent01) };
+					auto buttonData = button->collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
 					int32_t counter03{ 0 };
 					std::vector<RespondToInputEventData> editInteractionResponseData00;
 					for (auto& value: selectOptionsNew) {
@@ -165,8 +165,8 @@ namespace DiscordCoreAPI {
 					} else {
 						break;
 					}
-					SelectMenuCollector selectMenu(newEvent01);
-					auto selectMenuReturnData = selectMenu.collectSelectMenuData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
+					std::unique_ptr<SelectMenuCollector> selectMenu{ std::make_unique<SelectMenuCollector>(newEvent01) };
+					auto selectMenuReturnData = selectMenu->collectSelectMenuData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
 					EmbedData newEmbed{};
 					for (auto& [key, value]: newArgs.discordCoreClient->commandController.getFunctions()) {
 						for (auto& valueNew: key) {
