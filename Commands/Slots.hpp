@@ -129,58 +129,49 @@ namespace DiscordCoreAPI {
 				msgEmbed0.setTimeStamp(getTimeAndDate());
 				msgEmbed0.setTitle("__**Slots Game:**__");
 
-				InputEventData newEvent01 = argsNew.eventData;
-
-				RespondToInputEventData dataPackage(newEvent01);
+				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed0);
-				newEvent01 = InputEvents::respondToEvent(dataPackage);
-				BaseFunctionArguments argsNew00 = argsNew;
-				std::function<void()> theFunction00 = [&]() mutable -> void {
+				InputEvents::respondToEvent(dataPackage);
+				std::function<void()> theFunction00 = [=]() mutable -> void {
 					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[9]] +
 						"][:question:][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " + discordUser.data.currencyName +
 						"\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
-					BaseFunctionArguments argsNew01 = BaseFunctionArguments(argsNew00);
 					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew01.eventData.getUserName(), argsNew01.eventData.getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
 					msgEmbed.setDescription(msgString1);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Slots Game:**__");
-					RespondToInputEventData dataPackage(argsNew01.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				};
-				BaseFunctionArguments argsNewer = argsNew;
-				std::function<void()> theFunction01 = [&]() mutable -> void {
+				std::function<void()> theFunction01 = [=]() mutable -> void {
 					std::string msgString2 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][" + slotReel[reelIndices2[7]] + "][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][:question:]\n" + "[" + slotReel[reelIndices1[9]] + "][" +
 						slotReel[reelIndices2[9]] + "][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " +
 						discordUser.data.currencyName + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
-					BaseFunctionArguments argsNew01 = BaseFunctionArguments(argsNew01);
 					EmbedData msgEmbed{};
-					msgEmbed.setAuthor(argsNew01.eventData.getUserName(), argsNew01.eventData.getAvatarUrl());
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
 					msgEmbed.setDescription(msgString2);
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Slots Game:**__");
-					RespondToInputEventData dataPackage(argsNew01.eventData);
+					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
 					InputEvents::respondToEvent(dataPackage);
 					return;
 				};
-
-				BaseFunctionArguments argsNew02 = argsNew;
-				std::function<void()> theFunction = [&]() mutable -> void {
-					BaseFunctionArguments argsNew03 = BaseFunctionArguments(argsNew02);
+				std::function<void()> theFunction = [=]() mutable -> void {
 					std::string gameResultTypeNew;
 					int32_t payoutAmountNew = payoutAmount;
 					GuildMember guildMemberNew =
-						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = guildMember.user.id, .guildId = argsNew03.eventData.getGuildId() }).get();
+						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = guildMember.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
 					DiscordGuildMember discordGuildMember(guildMemberNew);
 					DiscordGuild discordGuild(guild);
 					if (slotReel[reelIndices1[8]] == slotReel[reelIndices2[8]] && slotReel[reelIndices2[8]] == slotReel[reelIndices3[8]]) {
@@ -211,7 +202,7 @@ namespace DiscordCoreAPI {
 						discordGuild.data.casinoStats.largestSlotsPayout.userName = guildMember.user.userName;
 					}
 					discordGuild.writeDataToDB();
-					InputEventData newEvent02 = argsNew02.eventData;
+					InputEventData newEvent02 = argsNew.eventData;
 					if (betAmountOld > ( int32_t )discordGuildMember.data.currency.wallet) {
 						std::string msgString3 = "__**Slot Results:**__\n[:x:][:x:][:x:]\n[:x:][:x:][:x:]\n[:x:][:x:][:x:]\n------\n__**Your Wager:**__ " +
 							std::to_string(betAmountOld) + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " +
@@ -220,7 +211,7 @@ namespace DiscordCoreAPI {
 							std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 						EmbedData msgEmbed{};
-						msgEmbed.setAuthor(argsNew03.eventData.getUserName(), argsNew03.eventData.getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor("0000FE");
 						msgEmbed.setDescription(msgString3);
 						msgEmbed.setTimeStamp(getTimeAndDate());
@@ -245,13 +236,13 @@ namespace DiscordCoreAPI {
 
 					EmbedData msgEmbed{};
 					if (gameResultTypeNew == "Loss") {
-						msgEmbed.setAuthor(argsNew03.eventData.getUserName(), argsNew03.eventData.getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor("FE0000");
 						msgEmbed.setDescription(msgString4);
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setTitle("__**Slots Game:**__");
 					} else {
-						msgEmbed.setAuthor(argsNew03.eventData.getUserName(), argsNew03.eventData.getAvatarUrl());
+						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor("00FE00");
 						msgEmbed.setDescription(msgString4);
 						msgEmbed.setTimeStamp(getTimeAndDate());
