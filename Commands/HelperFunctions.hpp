@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		if (discordGuild.data.gameChannelIds.size() > 0) {
 			isItFound = false;
 			std::string msgString = "------\n**Sorry, but please do that in one of the following channels:**\n------\n";
-			EmbedData msgEmbed{};			
+			EmbedData msgEmbed{};
 			for (auto& value: discordGuild.data.gameChannelIds) {
 				if (eventData.getChannelId() == value) {
 					isItFound = true;
