@@ -247,9 +247,9 @@ namespace DiscordCoreAPI {
 				buildDoc.append(kvp("userId", discordUserData.userId.c_str()));
 				buildDoc.append(kvp("userName", discordUserData.userName.c_str()));
 				buildDoc.append(kvp("currencyName", discordUserData.currencyName.c_str()));
-				buildDoc.append(kvp("hoursOfDepositCooldown", discordUserData.hoursOfDepositCooldown));
-				buildDoc.append(kvp("hoursOfDrugSaleCooldown", discordUserData.hoursOfDrugSaleCooldown));
-				buildDoc.append(kvp("hoursOfRobberyCooldown", discordUserData.hoursOfRobberyCooldown));
+				buildDoc.append(kvp("hoursOfDepositCooldown", bsoncxx::types::b_int32(discordUserData.hoursOfDepositCooldown)));
+				buildDoc.append(kvp("hoursOfDrugSaleCooldown", bsoncxx::types::b_int32(discordUserData.hoursOfDrugSaleCooldown)));
+				buildDoc.append(kvp("hoursOfRobberyCooldown", bsoncxx::types::b_double(discordUserData.hoursOfRobberyCooldown)));
 				buildDoc.append(kvp("botCommanders", [discordUserData](bsoncxx::builder::basic::sub_array subArray) {
 					for (auto& value: discordUserData.botCommanders) {
 						subArray.append(value.c_str());
@@ -291,11 +291,12 @@ namespace DiscordCoreAPI {
 				buildDoc.append(kvp("_id", discordGuildData.guildId.c_str()));
 				buildDoc.append(kvp("guildId", discordGuildData.guildId.c_str()));
 				buildDoc.append(kvp("guildName", discordGuildData.guildName.c_str()));
-				buildDoc.append(kvp("memberCount", discordGuildData.memberCount));
+				buildDoc.append(kvp("memberCount", bsoncxx::types::b_int32(discordGuildData.memberCount)));
 				buildDoc.append(kvp("blackjackStack", [discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
 					for (auto& value: discordGuildData.blackjackStack) {
 						subArray.append([value](bsoncxx::builder::basic::sub_document subDocument) {
-							subDocument.append(kvp("suit", value.suit.c_str()), kvp("type", value.type.c_str()), kvp("value", value.value));
+							subDocument.append(
+								kvp("suit", value.suit.c_str()), kvp("type", value.type.c_str()), kvp("value", bsoncxx::types::b_int32(value.value)));
 						});
 					}
 				}));
@@ -310,8 +311,9 @@ namespace DiscordCoreAPI {
 						[discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
 							for (const auto& value: discordGuildData.guildShop.items) {
 								subArray.append([value](bsoncxx::builder::basic::sub_document subDocument2) {
-									subDocument2.append(kvp("itemName", value.itemName.c_str()), kvp("itemCost", value.itemCost)),
-										kvp("selfMod", value.selfMod), kvp("oppMod", value.oppMod), kvp("emoji", value.emoji.c_str());
+									subDocument2.append(kvp("itemName", value.itemName.c_str()), kvp("itemCost", bsoncxx::types::b_int32(value.itemCost)),
+										kvp("selfMod", bsoncxx::types::b_int32(value.selfMod)), kvp("oppMod", bsoncxx::types::b_int32(value.oppMod)),
+										kvp("emoji", value.emoji.c_str()));
 								});
 							}
 						})),
@@ -320,52 +322,52 @@ namespace DiscordCoreAPI {
 								subArray.append([value](bsoncxx::builder::basic::sub_document subDocument2) {
 									subDocument2.append(kvp("roleName", value.roleName.c_str()));
 									subDocument2.append(kvp("roleId", value.roleId.c_str()));
-									subDocument2.append(kvp("roleCost", value.roleCost));
+									subDocument2.append(kvp("roleCost", bsoncxx::types::b_int32(value.roleCost)));
 								});
 							}
 						}));
 				}));
 				buildDoc.append(kvp("casinoStats", [discordGuildData](bsoncxx::builder::basic::sub_document subDocument) {
 					subDocument.append(kvp("largestBlackjackPayout", [discordGuildData](bsoncxx::builder::basic::sub_document subDoc2) {
-						subDoc2.append(kvp("amount", discordGuildData.casinoStats.largestBlackjackPayout.amount));
+						subDoc2.append(kvp("amount", bsoncxx::types::b_int32(discordGuildData.casinoStats.largestBlackjackPayout.amount)));
 						subDoc2.append(kvp("userId", discordGuildData.casinoStats.largestBlackjackPayout.userId.c_str()));
 						subDoc2.append(kvp("timeStamp", discordGuildData.casinoStats.largestBlackjackPayout.timeStamp.c_str()));
 						subDoc2.append(kvp("userName", discordGuildData.casinoStats.largestBlackjackPayout.userName.c_str()));
 					}));
-					subDocument.append(kvp("totalBlackjackPayout", discordGuildData.casinoStats.totalBlackjackPayout));
+					subDocument.append(kvp("totalBlackjackPayout", bsoncxx::types::b_int32(discordGuildData.casinoStats.totalBlackjackPayout)));
 					subDocument.append(kvp("largestCoinFlipPayout", [discordGuildData](bsoncxx::builder::basic::sub_document subDoc2) {
-						subDoc2.append(kvp("amount", discordGuildData.casinoStats.largestCoinFlipPayout.amount));
+						subDoc2.append(kvp("amount", bsoncxx::types::b_int32(discordGuildData.casinoStats.largestCoinFlipPayout.amount)));
 						subDoc2.append(kvp("userId", discordGuildData.casinoStats.largestCoinFlipPayout.userId.c_str()));
 						subDoc2.append(kvp("timeStamp", discordGuildData.casinoStats.largestCoinFlipPayout.timeStamp.c_str()));
 						subDoc2.append(kvp("userName", discordGuildData.casinoStats.largestCoinFlipPayout.userName.c_str()));
 					}));
-					subDocument.append(kvp("totalCoinFlipPayout", discordGuildData.casinoStats.totalCoinFlipPayout));
+					subDocument.append(kvp("totalCoinFlipPayout", bsoncxx::types::b_int32(discordGuildData.casinoStats.totalCoinFlipPayout)));
 					subDocument.append(kvp("largestRoulettePayout", [discordGuildData](bsoncxx::builder::basic::sub_document subDoc2) {
-						subDoc2.append(kvp("amount", discordGuildData.casinoStats.largestRoulettePayout.amount));
+						subDoc2.append(kvp("amount", bsoncxx::types::b_int32(discordGuildData.casinoStats.largestRoulettePayout.amount)));
 						subDoc2.append(kvp("userId", discordGuildData.casinoStats.largestRoulettePayout.userId.c_str()));
 						subDoc2.append(kvp("timeStamp", discordGuildData.casinoStats.largestRoulettePayout.timeStamp.c_str()));
 						subDoc2.append(kvp("userName", discordGuildData.casinoStats.largestRoulettePayout.userName.c_str()));
 					}));
-					subDocument.append(kvp("totalRoulettePayout", discordGuildData.casinoStats.totalRoulettePayout));
+					subDocument.append(kvp("totalRoulettePayout", bsoncxx::types::b_int32(discordGuildData.casinoStats.totalRoulettePayout)));
 					subDocument.append(kvp("largestSlotsPayout", [discordGuildData](bsoncxx::builder::basic::sub_document subDoc2) {
-						subDoc2.append(kvp("amount", discordGuildData.casinoStats.largestSlotsPayout.amount));
+						subDoc2.append(kvp("amount", bsoncxx::types::b_int32(discordGuildData.casinoStats.largestSlotsPayout.amount)));
 						subDoc2.append(kvp("userId", discordGuildData.casinoStats.largestSlotsPayout.userId.c_str()));
 						subDoc2.append(kvp("timeStamp", discordGuildData.casinoStats.largestSlotsPayout.timeStamp.c_str()));
 						subDoc2.append(kvp("userName", discordGuildData.casinoStats.largestSlotsPayout.userName.c_str()));
 					}));
-					subDocument.append(kvp("totalSlotsPayout", discordGuildData.casinoStats.totalSlotsPayout));
-					subDocument.append(kvp("totalPayout", discordGuildData.casinoStats.totalPayout));
+					subDocument.append(kvp("totalSlotsPayout", bsoncxx::types::b_int32(discordGuildData.casinoStats.totalSlotsPayout)));
+					subDocument.append(kvp("totalPayout", bsoncxx::types::b_int32(discordGuildData.casinoStats.totalPayout)));
 				}));
 				buildDoc.append(kvp("rouletteGame", [discordGuildData](bsoncxx::builder::basic::sub_document subDocument) {
 					subDocument.append(kvp("rouletteBets",
 										   [discordGuildData](bsoncxx::builder::basic::sub_array subArray) {
 											   for (auto& value: discordGuildData.rouletteGame.rouletteBets) {
 												   subArray.append([value](bsoncxx::builder::basic::sub_document subDoc2) {
-													   subDoc2.append(kvp("betAmount", value.betAmount));
+													   subDoc2.append(kvp("betAmount", bsoncxx::types::b_int32(value.betAmount)));
 													   subDoc2.append(kvp("betOptions", value.betOptions.c_str()));
 													   subDoc2.append(kvp("betType", value.betType.c_str()));
 													   subDoc2.append(kvp("userId", value.userId.c_str()));
-													   subDoc2.append(kvp("payoutAmount", value.payoutAmount));
+													   subDoc2.append(kvp("payoutAmount", bsoncxx::types::b_int32(value.payoutAmount)));
 													   subDoc2.append(kvp("winningNumbers", [value](bsoncxx::builder::basic::sub_array subArray2) {
 														   for (auto& value2: value.winningNumbers) {
 															   subArray2.append(value2.c_str());
@@ -472,20 +474,22 @@ namespace DiscordCoreAPI {
 				buildDoc.append(kvp("globalId", discordGuildMemberData.globalId.c_str()));
 				buildDoc.append(kvp("userName", discordGuildMemberData.userName.c_str()));
 				buildDoc.append(kvp("displayName", discordGuildMemberData.displayName.c_str()));
-				buildDoc.append(kvp("lastTimeRobbed", discordGuildMemberData.lastTimeRobbed));
-				buildDoc.append(kvp("lastTimeWorked", discordGuildMemberData.lastTimeWorked));
+				buildDoc.append(kvp("lastTimeRobbed", bsoncxx::types::b_int32(discordGuildMemberData.lastTimeRobbed)));
+				buildDoc.append(kvp("lastTimeWorked", bsoncxx::types::b_int32(discordGuildMemberData.lastTimeWorked)));
 				buildDoc.append(kvp("currency", [discordGuildMemberData](bsoncxx::builder::basic::sub_document subDocument) {
-					subDocument.append(kvp("bank", discordGuildMemberData.currency.bank)), kvp("wallet", discordGuildMemberData.currency.wallet),
-						kvp("timeOfLastDeposit", discordGuildMemberData.currency.timeOfLastDeposit);
+					subDocument.append(kvp("bank", bsoncxx::types::b_int32(discordGuildMemberData.currency.bank)),
+						kvp("wallet", bsoncxx::types::b_int32(discordGuildMemberData.currency.wallet)),
+						kvp("timeOfLastDeposit", bsoncxx::types::b_int32(discordGuildMemberData.currency.timeOfLastDeposit)));
 				}));
 				buildDoc.append(kvp("items",
 					[discordGuildMemberData](bsoncxx::builder::basic::sub_array subArray) {
 						for (uint32_t x = 0; x < discordGuildMemberData.items.size(); x += 1) {
 							subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
 								subDocument.append(kvp("itemName", discordGuildMemberData.items.at(x).itemName.c_str()),
-									kvp("itemCost", discordGuildMemberData.items.at(x).itemCost)),
-									kvp("selfMod", discordGuildMemberData.items.at(x).selfMod), kvp("oppMod", discordGuildMemberData.items.at(x).oppMod),
-									kvp("emoji", discordGuildMemberData.items.at(x).emoji.c_str());
+									kvp("itemCost", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).itemCost)),
+									kvp("selfMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).selfMod)),
+									kvp("oppMod", bsoncxx::types::b_int32(discordGuildMemberData.items.at(x).oppMod)),
+									kvp("emoji", discordGuildMemberData.items.at(x).emoji.c_str()));
 							});
 						}
 					})),
@@ -494,7 +498,7 @@ namespace DiscordCoreAPI {
 							subArray.append([discordGuildMemberData, x](bsoncxx::builder::basic::sub_document subDocument) {
 								subDocument.append(kvp("roleName", discordGuildMemberData.roles.at(x).roleName.c_str()),
 									kvp("roleId", discordGuildMemberData.roles.at(x).roleId.c_str()),
-									kvp("roleCost", discordGuildMemberData.roles.at(x).roleCost));
+									kvp("roleCost", bsoncxx::types::b_int32(discordGuildMemberData.roles.at(x).roleCost)));
 							});
 						}
 					}));
