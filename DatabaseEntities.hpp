@@ -418,46 +418,29 @@ namespace DiscordCoreAPI {
 					role.roleName = value["roleName"].get_utf8().value.to_string();
 					guildData.guildShop.roles.push_back(role);
 				}
-				guildData.casinoStats.largestBlackjackPayout.amount =
-					docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestBlackjackPayout.timeStamp = docValue.view()["casinoStats"]
-																			 .get_document()
-																			 .value["largestBlackjackPayout"]
-																			 .get_document()
-																			 .value["timeStamp"]
-																			 .get_utf8()
-																			 .value.to_string();
-				guildData.casinoStats.largestBlackjackPayout.userId =
-					docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestBlackjackPayout.userName =
-					docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document().value["userName"].get_utf8().value.to_string();
+				auto largestBlackjackPayout=docValue.view()["casinoStats"].get_document().value["largestBlackjackPayout"].get_document();
+				guildData.casinoStats.largestBlackjackPayout.amount = largestBlackjackPayout.value["amount"].get_int32().value;
+				guildData.casinoStats.largestBlackjackPayout.timeStamp = largestBlackjackPayout.value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestBlackjackPayout.userId = largestBlackjackPayout.value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestBlackjackPayout.userName = largestBlackjackPayout.value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalBlackjackPayout = docValue.view()["casinoStats"].get_document().value["totalBlackjackPayout"].get_int32().value;
-				guildData.casinoStats.largestCoinFlipPayout.amount =
-					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestCoinFlipPayout.timeStamp =
-					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestCoinFlipPayout.userId =
-					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestCoinFlipPayout.userName =
-					docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document().value["userName"].get_utf8().value.to_string();
+				auto largestCoinflipPayout = docValue.view()["casinoStats"].get_document().value["largestCoinFlipPayout"].get_document();
+				guildData.casinoStats.largestCoinFlipPayout.amount = largestCoinflipPayout.value["amount"].get_int32().value;
+				guildData.casinoStats.largestCoinFlipPayout.timeStamp = largestCoinflipPayout.value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestCoinFlipPayout.userId = largestCoinflipPayout.value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestCoinFlipPayout.userName = largestCoinflipPayout.value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalCoinFlipPayout = docValue.view()["casinoStats"].get_document().value["totalCoinFlipPayout"].get_int32().value;
-				guildData.casinoStats.largestRoulettePayout.amount =
-					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestRoulettePayout.timeStamp =
-					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestRoulettePayout.userId =
-					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestRoulettePayout.userName =
-					docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document().value["userName"].get_utf8().value.to_string();
+				auto largestRoulettePayout = docValue.view()["casinoStats"].get_document().value["largestRoulettePayout"].get_document();
+				guildData.casinoStats.largestRoulettePayout.amount = largestRoulettePayout.value["amount"].get_int32().value;
+				guildData.casinoStats.largestRoulettePayout.timeStamp = largestRoulettePayout.value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestRoulettePayout.userId = largestRoulettePayout.value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestRoulettePayout.userName = largestRoulettePayout.value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalRoulettePayout = docValue.view()["casinoStats"].get_document().value["totalRoulettePayout"].get_int32().value;
-				guildData.casinoStats.largestSlotsPayout.amount =
-					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["amount"].get_int32().value;
-				guildData.casinoStats.largestSlotsPayout.timeStamp =
-					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestSlotsPayout.userId =
-					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["userId"].get_utf8().value.to_string();
-				guildData.casinoStats.largestSlotsPayout.userName =
-					docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document().value["userName"].get_utf8().value.to_string();
+				auto largestSlotsPayout = docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document();
+				guildData.casinoStats.largestSlotsPayout.amount = largestSlotsPayout.value["amount"].get_int32().value;
+				guildData.casinoStats.largestSlotsPayout.timeStamp = largestSlotsPayout.value["timeStamp"].get_utf8().value.to_string();
+				guildData.casinoStats.largestSlotsPayout.userId = largestSlotsPayout.value["userId"].get_utf8().value.to_string();
+				guildData.casinoStats.largestSlotsPayout.userName = largestSlotsPayout.value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalSlotsPayout = docValue.view()["casinoStats"].get_document().value["totalSlotsPayout"].get_int32().value;
 				guildData.casinoStats.totalPayout = docValue.view()["casinoStats"].get_document().value["totalPayout"].get_int32().value;
 				guildData.rouletteGame.currentlySpinning = docValue.view()["rouletteGame"].get_document().value["currentlySpinning"].get_bool().value;
