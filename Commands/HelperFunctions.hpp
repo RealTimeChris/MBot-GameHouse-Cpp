@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		if (discordGuild.data.gameChannelIds.size() > 0) {
 			isItFound = false;
 			std::string msgString = "------\n**Sorry, but please do that in one of the following channels:**\n------\n";
-			std::shared_ptr<EmbedData> msgEmbed(new EmbedData());
+			EmbedData msgEmbed{};			
 			for (auto& value: discordGuild.data.gameChannelIds) {
 				if (eventData.getChannelId() == value) {
 					isItFound = true;
@@ -25,15 +25,14 @@ namespace DiscordCoreAPI {
 			}
 			msgString += "------";
 			if (isItFound == false) {
-				msgEmbed->setAuthor(eventData.getUserName(), eventData.getAvatarUrl());
-				msgEmbed->setColor(discordGuild.data.borderColor);
-				msgEmbed->setDescription(msgString);
-				msgEmbed->setTitle("__**Permissions Issue:**__");
-				std::shared_ptr<RespondToInputEventData> replyMessageData(new RespondToInputEventData(eventData));
-				replyMessageData->addMessageEmbed(*msgEmbed);
-				;
-				replyMessageData->setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-				InputEvents::respondToEvent(*replyMessageData);
+				msgEmbed.setAuthor(eventData.getUserName(), eventData.getAvatarUrl());
+				msgEmbed.setColor(discordGuild.data.borderColor);
+				msgEmbed.setDescription(msgString);
+				msgEmbed.setTitle("__**Permissions Issue:**__");
+				RespondToInputEventData replyMessageData{ eventData };
+				replyMessageData.addMessageEmbed(msgEmbed);
+				replyMessageData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+				InputEvents::respondToEvent(replyMessageData);
 			}
 		}
 		return isItFound;
@@ -44,23 +43,23 @@ namespace DiscordCoreAPI {
 		if (currentChannelType == ChannelType::Dm) {
 			if (displayResponse) {
 				std::string msgString = "------\n**Sorry, but we can't do that in a direct message!**\n------";
-				std::unique_ptr<EmbedData> msgEmbed(new EmbedData());
-				msgEmbed->setAuthor(eventData.getMessageData().interaction.user.userName, eventData.getMessageData().author.avatar);
-				msgEmbed->setColor("FEFEFE");
-				msgEmbed->setDescription(msgString);
-				msgEmbed->setTimeStamp(getTimeAndDate());
-				msgEmbed->setTitle("__**Direct Message Issue:**__");
-				std::unique_ptr<RespondToInputEventData> responseData(new RespondToInputEventData(eventData));
-				responseData->setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-				responseData->addMessageEmbed(*msgEmbed);
-				auto event01 = InputEvents::respondToEvent(*responseData);
+				EmbedData msgEmbed{};
+				msgEmbed.setAuthor(eventData.getMessageData().interaction.user.userName, eventData.getMessageData().author.avatar);
+				msgEmbed.setColor("FEFEFE");
+				msgEmbed.setDescription(msgString);
+				msgEmbed.setTimeStamp(getTimeAndDate());
+				msgEmbed.setTitle("__**Direct Message Issue:**__");
+				RespondToInputEventData responseData{ eventData };
+				responseData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+				responseData.addMessageEmbed(msgEmbed);
+				auto event01 = InputEvents::respondToEvent(responseData);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	bool checkForBotCommanderStatus(GuildMember guildMember, DiscordUser discordUser) {
+	bool checkForBotCommanderStatus(GuildMember guildMember, DiscordUser& discordUser) {
 		bool areWeACommander;
 		for (auto& value: discordUser.data.botCommanders) {
 			if (guildMember.user.id == value) {
@@ -72,16 +71,15 @@ namespace DiscordCoreAPI {
 		return false;
 	}
 
-	bool doWeHaveAdminPermissions(BaseFunctionArguments argsNew, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember,
+	bool doWeHaveAdminPermissions(BaseFunctionArguments newArgs, InputEventData eventData, DiscordGuild discordGuild, Channel channel, GuildMember guildMember,
 		bool displayResponse = true) {
 		bool doWeHaveAdmin = guildMember.permissions.checkForPermission(guildMember, channel, Permission::Administrator);
 
 		if (doWeHaveAdmin) {
 			return true;
 		}
-
-		bool areWeACommander =
-			checkForBotCommanderStatus(guildMember, DiscordUser(argsNew.discordCoreClient->getBotUser().userName, argsNew.discordCoreClient->getBotUser().id));
+		DiscordCoreAPI::DiscordUser discordUser(newArgs.discordCoreClient->getBotUser().userName, newArgs.discordCoreClient->getBotUser().id);
+		bool areWeACommander = checkForBotCommanderStatus(guildMember, discordUser);
 
 		if (areWeACommander) {
 			return true;
@@ -89,20 +87,19 @@ namespace DiscordCoreAPI {
 
 		if (displayResponse) {
 			std::string msgString = "------\n**Sorry, but you don't have the permissions required for that!**\n------";
-			std::unique_ptr<EmbedData> msgEmbed(new EmbedData());
-			msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
-			msgEmbed->setColor(discordGuild.data.borderColor);
-			msgEmbed->setDescription(msgString);
-			msgEmbed->setTimeStamp(getTimeAndDate());
-			msgEmbed->setTitle("__**Permissions Issue:**__");
-			std::unique_ptr<RespondToInputEventData> dataPackage(new RespondToInputEventData(eventData));
-			dataPackage->addMessageEmbed(*msgEmbed);
-			dataPackage->setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-			InputEvents::respondToEvent(*dataPackage);
+			EmbedData msgEmbed{};
+			msgEmbed.setAuthor(guildMember.user.userName, guildMember.user.avatar);
+			msgEmbed.setColor(discordGuild.data.borderColor);
+			msgEmbed.setDescription(msgString);
+			msgEmbed.setTimeStamp(getTimeAndDate());
+			msgEmbed.setTitle("__**Permissions Issue:**__");
+			RespondToInputEventData dataPackage{ eventData };
+			dataPackage.addMessageEmbed(msgEmbed);
+			dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+			InputEvents::respondToEvent(dataPackage);
 		}
 		return false;
 	}
-
 	float applyAsymptoticTransform(float inputModValue, float horizontalStretch, float ceiling) {
 		float finalModValue = 0;
 		float newInputModValue = inputModValue;
