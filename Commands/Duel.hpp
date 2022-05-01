@@ -445,7 +445,7 @@ namespace DiscordCoreAPI {
 				newEvent02 = InputEvents::respondToEvent(dataPackage2);
 				std::unique_ptr<ButtonCollector> button{ std::make_unique<ButtonCollector>(newEvent02) };
 				std::vector<ButtonResponseData> buttonInteractionData = button->collectButtonData(false, 120000, 1, toUserID).get();
-				RespondToInputEventData dataPackageNew(buttonInteractionData.at(0).interactionData);
+				RespondToInputEventData dataPackageNew(*buttonInteractionData.at(0).interactionData);
 				if (buttonInteractionData.at(0).buttonId == "empty") {
 					executeExit(fromUserID, toUserID, discordGuild, newEvent02);
 				} else if (buttonInteractionData.at(0).buttonId == "check") {

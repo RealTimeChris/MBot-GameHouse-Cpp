@@ -207,7 +207,7 @@ namespace DiscordCoreAPI {
 						currentEmbed = msgEmbedRoles;
 					}
 					if (buttonData.at(0).buttonId == "roles" || buttonData.at(0).buttonId == "items") {
-						RespondToInputEventData dataPackage03(buttonData.at(0).interactionData);
+						RespondToInputEventData dataPackage03(*buttonData.at(0).interactionData);
 						dataPackage03.addMessageEmbed(currentEmbed);
 						dataPackage03.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 						if (buttonData.at(0).buttonId == "items") {
@@ -229,7 +229,7 @@ namespace DiscordCoreAPI {
 					for (auto& value: values) {
 						for (auto& value2: value.values) {
 							if (value2 == "go_back" || values.size() == 0) {
-								RespondToInputEventData dataPackage03(value.interactionData);
+								RespondToInputEventData dataPackage03(*value.interactionData);
 								dataPackage03.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 								dataPackage03.addMessageEmbed(*msgEmbed);
 								dataPackage03.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");

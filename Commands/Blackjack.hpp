@@ -434,7 +434,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button = std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent);
 		std::unique_ptr<std::vector<DiscordCoreAPI::ButtonResponseData>> buttonInteractionData =
 			std::make_unique<std::vector<DiscordCoreAPI::ButtonResponseData>>(button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get());
-		DiscordCoreAPI::RespondToInputEventData inputData{ buttonInteractionData->at(0).interactionData };
+		DiscordCoreAPI::RespondToInputEventData inputData{ *buttonInteractionData->at(0).interactionData };
 		if (buttonInteractionData->at(0).buttonId == "") {
 			std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
 			DiscordCoreAPI::EmbedData msgEmbed2;
@@ -498,7 +498,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		eventData002 = DiscordCoreAPI::InputEvents::respondToEvent(*buttonInteraction);
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button{ std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent) };
 		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get();
-		DiscordCoreAPI::RespondToInputEventData inputData{ buttonIntData.at(0).interactionData };
+		DiscordCoreAPI::RespondToInputEventData inputData{ *buttonIntData.at(0).interactionData };
 		if (buttonIntData.at(0).buttonId == "check") {
 			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
 				userAceIndices, dealerAceIndices, userID, dealerHand, finalEmbed, component);
@@ -892,7 +892,7 @@ namespace DiscordCoreAPI {
 					msgEmbed02->setTitle("__**Blackjack Game:**__");
 					msgEmbed02->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed02->setDescription(timeOutString);
-					DiscordCoreAPI::RespondToInputEventData dataPackage{ buttonIntData.at(0).interactionData };
+					DiscordCoreAPI::RespondToInputEventData dataPackage{ *buttonIntData.at(0).interactionData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed02);
 					event001 = InputEvents::respondToEvent(dataPackage);
@@ -904,7 +904,7 @@ namespace DiscordCoreAPI {
 					components.at(0).components.erase(components.at(0).components.begin() + 2);
 				}
 
-				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ buttonIntData.at(0).interactionData };
+				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ *buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
 					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction,

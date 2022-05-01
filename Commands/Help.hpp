@@ -132,7 +132,7 @@ namespace DiscordCoreAPI {
 						msgEmbed00.setDescription(msgString);
 						msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +
 							" of " + std::to_string(selectOptions.size()) + "**__");
-						RespondToInputEventData responseData03(buttonData.at(0).interactionData);
+						RespondToInputEventData responseData03(*buttonData.at(0).interactionData);
 						responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						responseData03.addMessageEmbed(msgEmbed00);
 						responseData03.addSelectMenu(false, "help_menu", value, "Commands", 1, 1);
@@ -148,7 +148,7 @@ namespace DiscordCoreAPI {
 							msgEmbed00.setDescription(messageNew);
 							msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +
 								" of " + std::to_string(selectOptions.size()) + "**__");
-							RespondToInputEventData responseData03(buttonData.at(0).interactionData);
+							RespondToInputEventData responseData03(*buttonData.at(0).interactionData);
 							responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 							responseData03.addMessageEmbed(msgEmbed00);
 							newEvent = InputEvents::respondToEvent(responseData03);
@@ -176,7 +176,7 @@ namespace DiscordCoreAPI {
 						}
 					}
 					if (selectMenuReturnData.at(0).values.at(0) == "go back") {
-						RespondToInputEventData responseData02(selectMenuReturnData.at(0).interactionData);
+						RespondToInputEventData responseData02(*selectMenuReturnData.at(0).interactionData);
 						responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						responseData02.addMessageEmbed(msgEmbed);
 						for (uint32_t x = 0; x < selectOptionsNew.size(); x += 1) {
@@ -189,7 +189,7 @@ namespace DiscordCoreAPI {
 						continue;
 					}
 
-					RespondToInputEventData responseData02(selectMenuReturnData.at(0).interactionData);
+					RespondToInputEventData responseData02(*selectMenuReturnData.at(0).interactionData);
 					responseData02.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 					responseData02.addMessageEmbed(newEmbed);
 					responseData02.addButton(false, "back", "Back", ButtonStyle::Success, "🔙");
@@ -197,10 +197,10 @@ namespace DiscordCoreAPI {
 					newEvent = InputEvents::respondToEvent(responseData02);
 					auto buttonReturnData02 = ButtonCollector{ newEvent01 }.collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
 					if (buttonReturnData02.at(0).buttonId == "back") {
-						responseData = RespondToInputEventData{ buttonReturnData02.at(0).interactionData };
+						responseData = RespondToInputEventData{ *buttonReturnData02.at(0).interactionData };
 						continue;
 					} else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
-						RespondToInputEventData responseData03(buttonReturnData02.at(0).interactionData);
+						RespondToInputEventData responseData03(*buttonReturnData02.at(0).interactionData);
 						responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						responseData03.addMessageEmbed(newEmbed);
 						newEvent = InputEvents::respondToEvent(responseData03);

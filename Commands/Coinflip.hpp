@@ -138,7 +138,7 @@ namespace DiscordCoreAPI {
 					msgEmbed2.setTitle("__**Heads, or Tails?:**__");
 					msgEmbed2.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed2.setDescription(timeOutString);
-					RespondToInputEventData dataPackage02{ buttonInteractionData.at(0).interactionData };
+					RespondToInputEventData dataPackage02{ *buttonInteractionData.at(0).interactionData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed2);
 					InputEvents::respondToEvent(dataPackage02);
@@ -189,7 +189,7 @@ namespace DiscordCoreAPI {
 					msgEmbed4.setTimeStamp(getTimeAndDate());
 					msgEmbed4.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed4.setTitle("__**Heads, or Tails?**__");
-					RespondToInputEventData dataPackage02{ buttonInteractionData.at(0).interactionData };
+					RespondToInputEventData dataPackage02{ *buttonInteractionData.at(0).interactionData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed4);
 					InputEvents::respondToEvent(dataPackage02);
@@ -208,7 +208,7 @@ namespace DiscordCoreAPI {
 					msgEmbed4.setTimeStamp(getTimeAndDate());
 					msgEmbed4.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed4.setTitle("__**Heads, or Tails?**__");
-					RespondToInputEventData dataPackage02{ buttonInteractionData.at(0).interactionData };
+					RespondToInputEventData dataPackage02{ *buttonInteractionData.at(0).interactionData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed4);
 					InputEvents::respondToEvent(dataPackage02);
