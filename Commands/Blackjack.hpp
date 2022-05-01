@@ -886,15 +886,15 @@ namespace DiscordCoreAPI {
 				std::vector<ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
 				if (buttonIntData.at(0).buttonId == "exit" || buttonIntData.at(0).buttonId == "empty") {
 					std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
-					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-					msgEmbed->setColor("FF0000");
-					msgEmbed->setTimeStamp(getTimeAndDate());
-					msgEmbed->setTitle("__**Blackjack Game:**__");
-					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed->setDescription(timeOutString);
+					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					msgEmbed02->setColor("FF0000");
+					msgEmbed02->setTimeStamp(getTimeAndDate());
+					msgEmbed02->setTitle("__**Blackjack Game:**__");
+					msgEmbed02->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					msgEmbed02->setDescription(timeOutString);
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ buttonIntData.at(0).interactionData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-					dataPackage.addMessageEmbed(*msgEmbed);
+					dataPackage.addMessageEmbed(*msgEmbed02);
 					event001 = InputEvents::respondToEvent(dataPackage);
 					return;
 				} else {

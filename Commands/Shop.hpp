@@ -303,15 +303,15 @@ namespace DiscordCoreAPI {
 
 							if (roleCost > userBalance) {
 								std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
-								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-								msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
-								msgEmbed->setColor(discordGuild.data.borderColor);
-								msgEmbed->setDescription(msgString);
-								msgEmbed->setTimeStamp(getTimeAndDate());
-								msgEmbed->setTitle("__**Insufficient Funds:**__");
+								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+								msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+								msgEmbed02->setColor(discordGuild.data.borderColor);
+								msgEmbed02->setDescription(msgString);
+								msgEmbed02->setTimeStamp(getTimeAndDate());
+								msgEmbed02->setTitle("__**Insufficient Funds:**__");
 								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-								dataPackage03.addMessageEmbed(*msgEmbed);
+								dataPackage03.addMessageEmbed(*msgEmbed02);
 								InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 								InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 								break;
@@ -332,15 +332,15 @@ namespace DiscordCoreAPI {
 							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType +
 								".\n------\n__**It is as follows:**__ <@&" + newRole.roleId + "> (" + newRole.roleName +
 								")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
-							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-							msgEmbed->setTitle("__**New Role Purchased:**__");
-							msgEmbed->setTimeStamp(getTimeAndDate());
-							msgEmbed->setDescription(msgString);
-							msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
-							msgEmbed->setColor(discordGuild.data.borderColor);
+							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+							msgEmbed02->setTitle("__**New Role Purchased:**__");
+							msgEmbed02->setTimeStamp(getTimeAndDate());
+							msgEmbed02->setDescription(msgString);
+							msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed02->setColor(discordGuild.data.borderColor);
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-							dataPackage03.addMessageEmbed(*msgEmbed);
+							dataPackage03.addMessageEmbed(*msgEmbed02);
 							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 
 							uint32_t maxIdx = 0;
@@ -364,15 +364,15 @@ namespace DiscordCoreAPI {
 
 							if (itemCost > userBalance) {
 								std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
-								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-								msgEmbed->setTimeStamp(getTimeAndDate());
-								msgEmbed->setDescription(msgString);
-								msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
-								msgEmbed->setColor(discordGuild.data.borderColor);
-								msgEmbed->setTitle("__**Insufficient Funds:**__");
+								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+								msgEmbed02->setTimeStamp(getTimeAndDate());
+								msgEmbed02->setDescription(msgString);
+								msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+								msgEmbed02->setColor(discordGuild.data.borderColor);
+								msgEmbed02->setTitle("__**Insufficient Funds:**__");
 								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-								dataPackage03.addMessageEmbed(*msgEmbed);
+								dataPackage03.addMessageEmbed(*msgEmbed02);
 								InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 								InputEvents::deleteInputEventResponseAsync(event01, 20000);
 								break;
@@ -390,8 +390,8 @@ namespace DiscordCoreAPI {
 							std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType +
 								".\n------\n__**It is as follows:**__ " + itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " +
 								std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
-							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-							msgEmbed->setTitle("__**New Item Purchased:**__");
+							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+							msgEmbed02->setTitle("__**New Item Purchased:**__");
 
 							uint32_t maxIdx = 0;
 							InventoryItem tempItem;
@@ -408,13 +408,13 @@ namespace DiscordCoreAPI {
 								discordGuildMember.data.items.at(maxIdx) = tempItem;
 							}
 							discordGuildMember.writeDataToDB();
-							msgEmbed->setTimeStamp(getTimeAndDate());
-							msgEmbed->setDescription(msgString);
-							msgEmbed->setAuthor(guildMember.user.userName, guildMember.user.avatar);
-							msgEmbed->setColor(discordGuild.data.borderColor);
+							msgEmbed02->setTimeStamp(getTimeAndDate());
+							msgEmbed02->setDescription(msgString);
+							msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed02->setColor(discordGuild.data.borderColor);
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
-							dataPackage03.addMessageEmbed(*msgEmbed);
+							dataPackage03.addMessageEmbed(*msgEmbed02);
 							InputEventData event01 = InputEvents::respondToEvent(dataPackage03);
 						}
 					}
