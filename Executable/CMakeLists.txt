@@ -14,10 +14,10 @@ find_ffmpeg("${FFMPEG_RELEASE_ROOT}" "${FFMPEG_DEBUG_ROOT}" "${FFMPEG_INCLUDE_DI
 find_glib("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}" "${GLIB_INCLUDE_DIR}")
 find_intl("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}" "${GLIB_INCLUDE_DIR}")
 find_libz("${LIBZ_RELEASE_ROOT}" "${LIBZ_DEBUG_ROOT}" "${LIBZ_INCLUDE_DIR}")
+find_nlohmann_json("${NLOHMANN_INCLUDE_DIR}")
 find_openssl("${OPENSSL_RELEASE_ROOT}" "${OPENSSL_DEBUG_ROOT}" "${OPENSSL_INCLUDE_DIR}")
 find_opus("${OPUS_RELEASE_ROOT}" "${OPUS_DEBUG_ROOT}" "${OPUS_INCLUDE_DIR}")
 find_sodium("${SODIUM_RELEASE_ROOT}" "${SODIUM_DEBUG_ROOT}" "${SODIUM_INCLUDE_DIR}")
-find_nlohmann_json("${NLOHMANN_INCLUDE_DIR}")
 
 add_executable(
 	MBot-GameHouse
@@ -28,7 +28,7 @@ add_executable(
 if (DEFINED ENV{EnableASAN})
 	if(MSVC)
 		target_compile_options(MBot-GameHouse PUBLIC "/fsanitize=address" "/Zi" "/Debug")
-		target_link_options(MBot-GameHouse PUBLIC "/incremental:no" "/Debug")
+		target_link_options(MBot-GameHouse PUBLIC "/incremental:no" "/Debug")	
 	else()
 		target_compile_options(MBot-GameHouse PUBLIC "-fsanitize=address")
 		target_link_options(MBot-GameHouse PUBLIC "-fsanitize=address" "-libasan-static")
