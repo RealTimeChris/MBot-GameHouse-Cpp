@@ -285,7 +285,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			userHandString += (*userHand).at(x).suit + (*userHand).at(x).type;
 		}
 		auto botUser = argsNew.discordCoreClient->getBotUser();
-		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };	
+		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
 		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
 			discordUser->data.currencyName + "\n------";
 
@@ -908,8 +908,7 @@ namespace DiscordCoreAPI {
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
 					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction,
-						&newCardCount,
-						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed,components.at(0));
+						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
 					executeCrossResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), &buttonInteraction, &userHand,
 						&dealerAceIndices, &userID, &dealerHand, *msgEmbed);
