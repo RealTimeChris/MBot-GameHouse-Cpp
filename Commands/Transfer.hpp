@@ -58,7 +58,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -84,7 +84,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				DiscordGuildMember discordToGuildMember(toUserMember);
@@ -99,7 +99,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -121,7 +121,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				discordFromGuildMember.data.currency.wallet -= amount;
@@ -146,7 +146,7 @@ namespace DiscordCoreAPI {
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
 				dataPackage.addContent("<@!" + toUserID + ">");
-				InputEvents::respondToEvent(dataPackage);
+				InputEvents::respondToEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("Transfer::execute()");

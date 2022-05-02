@@ -117,7 +117,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				InputEvents::respondToEvent(dataPackage);
+				InputEvents::respondToEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("CasinoStats::execute()");

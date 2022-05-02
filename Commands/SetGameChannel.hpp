@@ -63,7 +63,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData dataPackage(argsNew.eventData);
 							dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 							dataPackage.addMessageEmbed(messageEmbed);
-							auto newEvent = InputEvents::respondToEvent(dataPackage);
+							auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 							return;
 						}
 					}
@@ -79,7 +79,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.subCommandName == "remove") {
@@ -109,7 +109,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(messageEmbed);
-						auto newEvent = InputEvents::respondToEvent(dataPackage);
+						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 						return;
 					}
 
@@ -122,7 +122,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.subCommandName == "purge") {
@@ -154,7 +154,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.at(0).find("view") != std::string::npos) {
@@ -177,7 +177,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 

@@ -66,16 +66,16 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(messageEmbed);
-						inputEvent = InputEvents::respondToEvent(dataPackage);
+						inputEvent = InputEvents::respondToEventAsync(dataPackage).get();
 						RespondToInputEventData dataPackage02(argsNew.eventData);
 						dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 						dataPackage02.addMessageEmbed(messageEmbed);
-						inputEvent = InputEvents::respondToEvent(dataPackage02);
+						inputEvent = InputEvents::respondToEventAsync(dataPackage02).get();
 					} else {
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Follow_Up_Message);
 						dataPackage.addMessageEmbed(messageEmbed);
-						InputEvents::respondToEvent(dataPackage);
+						InputEvents::respondToEventAsync(dataPackage).get();
 					}
 					currentCount += 1;
 				};

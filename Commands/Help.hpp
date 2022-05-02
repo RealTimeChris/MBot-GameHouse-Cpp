@@ -115,10 +115,10 @@ namespace DiscordCoreAPI {
 					if (isItFirst) {
 						responseData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						isItFirst = false;
-						newEvent01 = InputEvents::respondToEvent(responseData);
+						newEvent01 = InputEvents::respondToEventAsync(responseData).get();
 					} else {
 						responseData.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
-						InputEvents::respondToEvent(responseData);
+						InputEvents::respondToEventAsync(responseData).get();
 					}
 					std::unique_ptr<ButtonCollector> button{ std::make_unique<ButtonCollector>(newEvent01) };
 					auto buttonData = button->collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
@@ -151,7 +151,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData responseData03(*buttonData.at(0).interactionData);
 							responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 							responseData03.addMessageEmbed(msgEmbed00);
-							newEvent = InputEvents::respondToEvent(responseData03);
+							newEvent = InputEvents::respondToEventAsync(responseData03).get();
 							break;
 						}
 						counter02 = 0;
@@ -161,7 +161,7 @@ namespace DiscordCoreAPI {
 								break;
 							}
 						}
-						newEvent = InputEvents::respondToEvent(editInteractionResponseData00.at(counter02));
+						newEvent = InputEvents::respondToEventAsync(editInteractionResponseData00.at(counter02)).get();
 					} else {
 						break;
 					}
@@ -185,7 +185,7 @@ namespace DiscordCoreAPI {
 							numberEmojiId.push_back(customId);
 						}
 						responseData02.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
-						newEvent = InputEvents::respondToEvent(responseData02);
+						newEvent = InputEvents::respondToEventAsync(responseData02).get();
 						continue;
 					}
 
@@ -194,7 +194,7 @@ namespace DiscordCoreAPI {
 					responseData02.addMessageEmbed(newEmbed);
 					responseData02.addButton(false, "back", "Back", ButtonStyle::Success, "🔙");
 					responseData02.addButton(false, "exit", "Exit", ButtonStyle::Success, "❌");
-					newEvent = InputEvents::respondToEvent(responseData02);
+					newEvent = InputEvents::respondToEventAsync(responseData02).get();
 					auto buttonReturnData02 = ButtonCollector{ newEvent01 }.collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
 					if (buttonReturnData02.at(0).buttonId == "back") {
 						responseData = RespondToInputEventData{ *buttonReturnData02.at(0).interactionData };
@@ -203,7 +203,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData responseData03(*buttonReturnData02.at(0).interactionData);
 						responseData03.setResponseType(InputEventResponseType::Edit_Ephemeral_Interaction_Response);
 						responseData03.addMessageEmbed(newEmbed);
-						newEvent = InputEvents::respondToEvent(responseData03);
+						newEvent = InputEvents::respondToEventAsync(responseData03).get();
 						break;
 					}
 				}

@@ -68,7 +68,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
+						InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
 						return;
 					}
 					std::cmatch matchResults;
@@ -89,7 +89,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
+					InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -113,7 +113,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				InputEventData eventNew = InputEvents::respondToEvent(dataPackage);
+				InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
 			} catch (...) {
 				reportException("Balance::execute()");
 			}

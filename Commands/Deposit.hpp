@@ -69,7 +69,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				} else if (regex_search(argsNew.commandData.optionsArgs[0], depositAmountRegExp)) {
 					depositAmount = ( uint32_t )std::stoll(matchResults.str());
@@ -86,7 +86,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -140,7 +140,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
-				auto newEvent = InputEvents::respondToEvent(dataPackage);
+				auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("Deposit::execute()");

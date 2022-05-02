@@ -35,7 +35,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
-					newEvent = InputEvents::respondToEvent(dataPackage);
+					newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 				}
 
 				CreateGlobalApplicationCommandData RegisterApplicationCommandsCommandData;
@@ -632,7 +632,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage02(argsNew.eventData);
 				dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 				dataPackage02.addMessageEmbed(msgEmbed);
-				auto event = InputEvents::respondToEvent(dataPackage02);
+				auto event = InputEvents::respondToEventAsync(dataPackage02).get();
 				return;
 			} catch (...) {
 				reportException("RegisterApplicationCommands::execute()");

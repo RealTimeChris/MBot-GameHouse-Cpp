@@ -65,7 +65,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -85,7 +85,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -107,7 +107,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -127,7 +127,7 @@ namespace DiscordCoreAPI {
 				dataPackage.addButton(false, "Heads", "Heads", ButtonStyle::Success, "🤯");
 				dataPackage.addButton(false, "Tails", "Tails", ButtonStyle::Success, "🐍");
 				dataPackage.addMessageEmbed(*msgEmbed);
-				inputData = InputEvents::respondToEvent(dataPackage);
+				inputData = InputEvents::respondToEventAsync(dataPackage).get();
 				std::unique_ptr<ButtonCollector> button2{ std::make_unique<ButtonCollector>(inputData) };
 				std::vector<ButtonResponseData> buttonInteractionData = button2->collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 				if (buttonInteractionData.at(0).buttonId == "") {
@@ -141,7 +141,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage02{ *buttonInteractionData.at(0).interactionData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed2);
-					InputEvents::respondToEvent(dataPackage02);
+					InputEvents::respondToEventAsync(dataPackage02).get();
 					return;
 				}
 
@@ -164,7 +164,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage02{ inputData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed3);
-					InputEvents::respondToEvent(dataPackage02);
+					InputEvents::respondToEventAsync(dataPackage02).get();
 					return;
 				}
 
@@ -192,7 +192,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage02{ *buttonInteractionData.at(0).interactionData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed4);
-					InputEvents::respondToEvent(dataPackage02);
+					InputEvents::respondToEventAsync(dataPackage02).get();
 				} else if (buttonInteractionData.at(0).buttonId == "Heads" && number <= 0.50 ||
 					buttonInteractionData.at(0).buttonId == "Tails" && number >= 0.50) {
 					discordGuildMember.data.currency.wallet -= betAmount;
@@ -211,7 +211,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage02{ *buttonInteractionData.at(0).interactionData };
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed4);
-					InputEvents::respondToEvent(dataPackage02);
+					InputEvents::respondToEventAsync(dataPackage02).get();
 				}
 				return;
 			} catch (...) {

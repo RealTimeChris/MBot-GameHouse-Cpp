@@ -74,7 +74,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -91,7 +91,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -121,7 +121,7 @@ namespace DiscordCoreAPI {
 						msgEmbed.setTitle("__**Role Issue:**__");
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-						event02 = InputEvents::respondToEvent(dataPackage);
+						event02 = InputEvents::respondToEventAsync(dataPackage).get();
 						InputEvents::deleteInputEventResponseAsync(std::move(event02), 20000);
 						x -= 1;
 					}
@@ -209,14 +209,14 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(event02);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					event02 = InputEvents::respondToEvent(dataPackage);
+					event02 = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
 				uint32_t currentPageIndex = 0;
 				RespondToInputEventData dataPackage(event02);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-				event02 = InputEvents::respondToEvent(dataPackage);
+				event02 = InputEvents::respondToEventAsync(dataPackage).get();
 
 
 				moveThroughMessagePages(userID, event02, currentPageIndex, finalMsgEmbedsArray, true, 120000);

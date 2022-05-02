@@ -84,7 +84,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 
 					discordGuildMember.data.lastTimeWorked =
 						( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -114,7 +114,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(messageEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 				}
 			} catch (...) {
 				reportException("SellDrugs::execute()");

@@ -75,7 +75,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 2 ||
@@ -91,7 +91,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 3) {
@@ -110,7 +110,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				} else if (argsNew.commandData.optionsArgs.at(2) != "") {
 					std::cmatch matchResults;
@@ -136,7 +136,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEvent(dataPackage);
+					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -174,7 +174,7 @@ namespace DiscordCoreAPI {
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addContent("<@!" + targetUserID + ">");
 				dataPackage.addMessageEmbed(messageEmbed);
-				auto newEvent = InputEvents::respondToEvent(dataPackage);
+				auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("SetBalance::execute");

@@ -53,7 +53,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
-				auto eventNew = InputEvents::respondToEvent(dataPackage);
+				auto eventNew = InputEvents::respondToEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("BotInfo::execute()");

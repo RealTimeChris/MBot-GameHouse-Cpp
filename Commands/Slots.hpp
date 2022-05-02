@@ -60,7 +60,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				} else {
 					std::cmatch matchResults;
@@ -84,7 +84,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -132,7 +132,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed0);
-				InputEvents::respondToEvent(dataPackage);
+				InputEvents::respondToEventAsync(dataPackage).get();
 				std::function<void()> theFunction00 = [=]() mutable -> void {
 					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" +
 						slotReel[reelIndices1[8]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[9]] +
@@ -147,7 +147,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				};
 				std::function<void()> theFunction01 = [=]() mutable -> void {
@@ -164,7 +164,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEvents::respondToEvent(dataPackage);
+					InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				};
 				std::function<void()> theFunction = [=]() mutable -> void {
@@ -219,7 +219,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(newEvent02);
 						dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						newEvent02 = InputEvents::respondToEvent(dataPackage);
+						newEvent02 = InputEvents::respondToEventAsync(dataPackage).get();
 						return;
 					}
 
@@ -251,7 +251,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(newEvent02);
 					dataPackage.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					newEvent02 = InputEvents::respondToEvent(dataPackage);
+					newEvent02 = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				};
 				ThreadPool::executeFunctionAfterTimePeriod(theFunction00, 3000, true);

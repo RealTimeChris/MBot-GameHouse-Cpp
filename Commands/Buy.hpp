@@ -82,7 +82,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+						InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 						x -= 1;
 					}
 					discordGuildMember.writeDataToDB();
@@ -116,7 +116,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -147,7 +147,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -166,7 +166,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+						InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 						return;
 					}
 
@@ -194,7 +194,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 
 					uint32_t maxIdx = 0;
 					InventoryRole tempItem;
@@ -227,7 +227,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+						InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 						return;
 					}
 
@@ -269,7 +269,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event01 = InputEvents::respondToEvent(dataPackage);
+					InputEventData event01 = InputEvents::respondToEventAsync(dataPackage).get();
 					return;
 				}
 				return;
