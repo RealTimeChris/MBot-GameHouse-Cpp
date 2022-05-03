@@ -40,6 +40,7 @@ find_package(DiscordCoreAPI CONFIG REQUIRED)
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
+	"$<IF:$<CONFIG:Debug>,${VCPKG_INSTALLED_DIR}/debug/lib/mongocxx${LIBRARY_SUFFIX},${VCPKG_INSTALLED_DIR}/lib/mongocxx${LIBRARY_SUFFIX}>"
 )
 
 set_target_properties(
