@@ -12,7 +12,7 @@
 find_curl("${CURL_RELEASE_ROOT}" "${CURL_DEBUG_ROOT}" "${CURL_INCLUDE_DIR}")
 find_ffmpeg("${FFMPEG_RELEASE_ROOT}" "${FFMPEG_DEBUG_ROOT}" "${FFMPEG_INCLUDE_DIR}")
 find_glib("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}" "${GLIB_INCLUDE_DIR}")
-find_intl("${GLIB_RELEASE_ROOT}" "${GLIB_DEBUG_ROOT}" "${GLIB_INCLUDE_DIR}")
+find_intl("${INTL_RELEASE_ROOT}" "${INTL_DEBUG_ROOT}" "${INTL_INCLUDE_DIR}")
 find_libz("${LIBZ_RELEASE_ROOT}" "${LIBZ_DEBUG_ROOT}" "${LIBZ_INCLUDE_DIR}")
 find_nlohmann_json("${NLOHMANN_INCLUDE_DIR}")
 find_openssl("${OPENSSL_RELEASE_ROOT}" "${OPENSSL_DEBUG_ROOT}" "${OPENSSL_INCLUDE_DIR}")
@@ -40,7 +40,6 @@ find_package(DiscordCoreAPI CONFIG REQUIRED)
 target_link_libraries(
 	MBot-GameHouse PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
-	"$<IF:$<CONFIG:Debug>,${VCPKG_INSTALLED_DIR}/debug/lib/mongocxx${LIBRARY_SUFFIX},${VCPKG_INSTALLED_DIR}/lib/mongocxx${LIBRARY_SUFFIX}>"
 )
 
 set_target_properties(
