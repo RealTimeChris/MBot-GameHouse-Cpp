@@ -96,7 +96,7 @@ elseif(EXISTS "${VCPKG_ROOT_DIR}")
 	set(SODIUM_RELEASE_ROOT "${VCPKG_INSTALLED_DIR}/lib")
 	set(SODIUM_DEBUG_ROOT "${VCPKG_INSTALLED_DIR}/debug/lib")
 else()
-	message(FATAL_ERROR "Please, set the VCPKG base directory, or the location of the discordcoreapi-config.cmake file!")
+	message(FATAL_ERROR "Please, set the VCPKG base directory, or the location of the DiscordCoreAPIConfig.cmake file!")
 endif()
 
 add_subdirectory(Executable)
