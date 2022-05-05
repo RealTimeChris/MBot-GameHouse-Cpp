@@ -28,7 +28,6 @@ project(MBot-GameHouse VERSION 1.00 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake;${CMAKE_SOURCE_DIR}/CMake/Find-Scripts")
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_BUILD_TYPE}")
 
-include(CMakePackageConfigHelpers)
 include(GenerateProductVersion)
 include(FindCurl)
 include(FindFFMPEG)
