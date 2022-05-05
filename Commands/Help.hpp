@@ -28,18 +28,10 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& newArgs) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ .channelId = newArgs.eventData.getChannelId() }).get();
-
-				if (channel.type != ChannelType::Dm) {
-					InputEvents::deleteInputEventResponseAsync(newArgs.eventData).get();
-				}
-
-
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get();
-				DiscordGuild discordGuild(guild);
 				bool isItFirst{ true };
 				InputEventData newEvent01(newArgs.eventData);
 				RespondToInputEventData responseData{ newEvent01 };
+
 				while (1) {
 					std::vector<std::vector<SelectOptionData>> selectOptions;
 					int32_t counter{ 0 };
@@ -87,7 +79,7 @@ namespace DiscordCoreAPI {
 					std::string messageNew = "------\nSelect which page of help items you would like to view, by clicking a button below!\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setColor("FeFeFe");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setDescription(messageNew);
 					msgEmbed.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Front Page**__");
@@ -127,7 +119,7 @@ namespace DiscordCoreAPI {
 					for (auto& value: selectOptionsNew) {
 						EmbedData msgEmbed00;
 						msgEmbed00.setAuthor(newEvent01.getUserName(), newEvent01.getAvatarUrl());
-						msgEmbed00.setColor(discordGuild.data.borderColor);
+						msgEmbed00.setColor("FeFeFe");
 						msgEmbed00.setTimeStamp(getTimeAndDate());
 						msgEmbed00.setDescription(msgString);
 						msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +
@@ -143,7 +135,7 @@ namespace DiscordCoreAPI {
 						if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
 							EmbedData msgEmbed00;
 							msgEmbed00.setAuthor(newEvent01.getUserName(), newEvent01.getAvatarUrl());
-							msgEmbed00.setColor(discordGuild.data.borderColor);
+							msgEmbed00.setColor("FeFeFe");
 							msgEmbed00.setTimeStamp(getTimeAndDate());
 							msgEmbed00.setDescription(messageNew);
 							msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +

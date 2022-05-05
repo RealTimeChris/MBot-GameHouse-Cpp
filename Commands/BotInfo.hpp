@@ -27,9 +27,6 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
-				DiscordGuild discordGuild(guild);
-
 				auto guilds = Guilds::getAllGuildsAsync().get();
 				int32_t userCount{ 0 };
 				for (auto& value: guilds) {
