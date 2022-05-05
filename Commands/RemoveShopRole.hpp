@@ -28,11 +28,6 @@ namespace DiscordCoreAPI {
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
-				bool areWeInAm = areWeInADM(argsNew.eventData, channel);
-
-				if (areWeInAm == true) {
-					return;
-				}
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 

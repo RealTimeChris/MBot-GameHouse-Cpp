@@ -160,11 +160,6 @@ namespace DiscordCoreAPI {
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
 				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
-				bool areWeInADm = areWeInADM(argsNew.eventData, *channel);
-
-				if (areWeInADm == true) {
-					return;
-				}
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 

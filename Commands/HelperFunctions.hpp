@@ -38,27 +38,6 @@ namespace DiscordCoreAPI {
 		return isItFound;
 	}
 
-	bool areWeInADM(InputEventData eventData, Channel channel, bool displayResponse = true) {
-		auto currentChannelType = channel.type;
-		if (currentChannelType == ChannelType::Dm) {
-			if (displayResponse) {
-				std::string msgString = "------\n**Sorry, but we can't do that in a direct message!**\n------";
-				EmbedData msgEmbed{};
-				msgEmbed.setAuthor(eventData.getMessageData().interaction.user.userName, eventData.getMessageData().author.avatar);
-				msgEmbed.setColor("FEFEFE");
-				msgEmbed.setDescription(msgString);
-				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.setTitle("__**Direct Message Issue:**__");
-				RespondToInputEventData responseData{ eventData };
-				responseData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-				responseData.addMessageEmbed(msgEmbed);
-				auto event01 = InputEvents::respondToEventAsync(responseData).get();
-			}
-			return true;
-		}
-		return false;
-	}
-
 	bool checkForBotCommanderStatus(GuildMember guildMember, DiscordUser& discordUser) {
 		bool areWeACommander;
 		for (auto& value: discordUser.data.botCommanders) {

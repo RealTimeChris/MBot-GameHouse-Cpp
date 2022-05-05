@@ -30,12 +30,6 @@ namespace DiscordCoreAPI {
 			try {
 				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
 
-				bool areWeInADm = areWeInADM(argsNew.eventData, *channel);
-
-				if (areWeInADm == true) {
-					return;
-				}
-
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
 				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };

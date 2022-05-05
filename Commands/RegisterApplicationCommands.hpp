@@ -40,6 +40,7 @@ namespace DiscordCoreAPI {
 
 				CreateGlobalApplicationCommandData RegisterApplicationCommandsCommandData;
 				RegisterApplicationCommandsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
+				RegisterApplicationCommandsCommandData.dmPermission = true;
 				RegisterApplicationCommandsCommandData.defaultPermission = true;
 				RegisterApplicationCommandsCommandData.description = "Register the programmatically designated slash commands.";
 				RegisterApplicationCommandsCommandData.name = "registerapplicationcommands";
@@ -48,6 +49,7 @@ namespace DiscordCoreAPI {
 
 				CreateGlobalApplicationCommandData createSellDrugsCommandData;
 				createSellDrugsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
+				createSellDrugsCommandData.dmPermission = false;
 				createSellDrugsCommandData.defaultPermission = true;
 				createSellDrugsCommandData.description = "Sell drugs in exchange for some currency!";
 				createSellDrugsCommandData.name = "selldrugs";
@@ -55,6 +57,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createSellDrugsCommandData).get();
 
 				CreateGlobalApplicationCommandData createBalanceCommandData;
+				createBalanceCommandData.dmPermission = false;
 				createBalanceCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createBalanceCommandData.defaultPermission = true;
 				createBalanceCommandData.description = "Check your or another person's currency balances.";
@@ -69,6 +72,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createBalanceCommandData).get();
 
 				CreateGlobalApplicationCommandData createAddShopItemCommandData;
+				createAddShopItemCommandData.dmPermission = false;
 				createAddShopItemCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createAddShopItemCommandData.defaultPermission = true;
 				createAddShopItemCommandData.description = "Add an item to the shop's inventory.";
@@ -84,10 +88,14 @@ namespace DiscordCoreAPI {
 				addShopItemCommandOptionTwo.required = true;
 				addShopItemCommandOptionTwo.type = ApplicationCommandOptionType::Integer;
 				addShopItemCommandOptionTwo.description = "The self-mod value of the item.";
+				addShopItemCommandOptionTwo.minValue = 0;
+				addShopItemCommandOptionTwo.maxValue = 1000;
 				createAddShopItemCommandData.options.push_back(addShopItemCommandOptionTwo);
 				ApplicationCommandOptionData addShopItemCommandOptionThree;
 				addShopItemCommandOptionThree.name = "oppmod";
 				addShopItemCommandOptionThree.required = true;
+				addShopItemCommandOptionThree.minValue = -1000;
+				addShopItemCommandOptionThree.maxValue = 0;
 				addShopItemCommandOptionThree.type = ApplicationCommandOptionType::Integer;
 				addShopItemCommandOptionThree.description = "The opp-mod value of the item.";
 				createAddShopItemCommandData.options.push_back(addShopItemCommandOptionThree);
@@ -95,6 +103,8 @@ namespace DiscordCoreAPI {
 				addShopItemCommandOptionFour.name = "itemcost";
 				addShopItemCommandOptionFour.required = true;
 				addShopItemCommandOptionFour.type = ApplicationCommandOptionType::Integer;
+				addShopItemCommandOptionFour.minValue = 0;
+				addShopItemCommandOptionFour.maxValue = 100000000;
 				addShopItemCommandOptionFour.description = "The value/cost of the item.";
 				createAddShopItemCommandData.options.push_back(addShopItemCommandOptionFour);
 				ApplicationCommandOptionData addShopItemCommandOptionFive;
@@ -107,6 +117,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createAddShopItemCommandData).get();
 
 				CreateGlobalApplicationCommandData createAddShopRoleCommandData;
+				createAddShopRoleCommandData.dmPermission = false;
 				createAddShopRoleCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createAddShopRoleCommandData.defaultPermission = true;
 				createAddShopRoleCommandData.description = "Add a role to the shop's inventory.";
@@ -126,6 +137,8 @@ namespace DiscordCoreAPI {
 				ApplicationCommandOptionData addShopRoleCommandOptionThree;
 				addShopRoleCommandOptionThree.name = "rolecost";
 				addShopRoleCommandOptionThree.required = true;
+				addShopRoleCommandOptionThree.minValue = 0;
+				addShopRoleCommandOptionThree.maxValue = 10000000;
 				addShopRoleCommandOptionThree.type = ApplicationCommandOptionType::Integer;
 				addShopRoleCommandOptionThree.description = "The value/cost of the role.";
 				createAddShopRoleCommandData.options.push_back(addShopRoleCommandOptionThree);
@@ -133,6 +146,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createAddShopRoleCommandData).get();
 
 				CreateGlobalApplicationCommandData createCoinflipRoleCommandData;
+				createCoinflipRoleCommandData.dmPermission = false;
 				createCoinflipRoleCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createCoinflipRoleCommandData.defaultPermission = true;
 				createCoinflipRoleCommandData.description = "Play heads or tails.";
@@ -141,18 +155,23 @@ namespace DiscordCoreAPI {
 				coinflipCommandOptionOne.name = "betamount";
 				coinflipCommandOptionOne.required = true;
 				coinflipCommandOptionOne.type = ApplicationCommandOptionType::Integer;
+				coinflipCommandOptionOne.minValue = 1;
+				coinflipCommandOptionOne.maxValue = 100000000;
 				coinflipCommandOptionOne.description = "The wager you would like to place.";
 				createCoinflipRoleCommandData.options.push_back(coinflipCommandOptionOne);
 				createCoinflipRoleCommandData.type = ApplicationCommandType::Chat_Input;
 				ApplicationCommands::createGlobalApplicationCommandAsync(createCoinflipRoleCommandData).get();
 
 				CreateGlobalApplicationCommandData createBlackjackCommandData;
+				createBlackjackCommandData.dmPermission = false;
 				createBlackjackCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createBlackjackCommandData.defaultPermission = true;
 				createBlackjackCommandData.description = "Play a round of blackjack.";
 				createBlackjackCommandData.name = "blackjack";
 				ApplicationCommandOptionData blackJackCommandOptionOne;
 				blackJackCommandOptionOne.name = "betamount";
+				blackJackCommandOptionOne.minValue = 1;
+				blackJackCommandOptionOne.maxValue = 100000000;
 				blackJackCommandOptionOne.required = true;
 				blackJackCommandOptionOne.type = ApplicationCommandOptionType::Integer;
 				blackJackCommandOptionOne.description = "The amount which you would like to wager.";
@@ -161,6 +180,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createBlackjackCommandData).get();
 
 				CreateGlobalApplicationCommandData createButtonsCommandData;
+				createButtonsCommandData.dmPermission = false;
 				createButtonsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createButtonsCommandData.defaultPermission = true;
 				createButtonsCommandData.description = "Test the buttons.";
@@ -169,6 +189,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createButtonsCommandData).get();
 
 				CreateGlobalApplicationCommandData createShopCommandData;
+				createShopCommandData.dmPermission = false;
 				createShopCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createShopCommandData.defaultPermission = true;
 				createShopCommandData.description = "Check out the server's shop!";
@@ -177,6 +198,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createShopCommandData).get();
 
 				CreateGlobalApplicationCommandData createBotInfoCommandData;
+				createBotInfoCommandData.dmPermission = true;
 				createBotInfoCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createBotInfoCommandData.defaultPermission = true;
 				createBotInfoCommandData.description = "Displays info about the current bot.";
@@ -185,6 +207,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createBotInfoCommandData).get();
 
 				CreateGlobalApplicationCommandData createCasinoStatsCommandData;
+				createCasinoStatsCommandData.dmPermission = false;
 				createCasinoStatsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createCasinoStatsCommandData.defaultPermission = true;
 				createCasinoStatsCommandData.description = "View the server's casino stats.";
@@ -193,6 +216,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createCasinoStatsCommandData).get();
 
 				CreateGlobalApplicationCommandData createDisplayGuildsDataCommandData;
+				createDisplayGuildsDataCommandData.dmPermission = true;
 				createDisplayGuildsDataCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createDisplayGuildsDataCommandData.defaultPermission = true;
 				createDisplayGuildsDataCommandData.description = "View the list of servers that this bot is in.";
@@ -201,6 +225,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createDisplayGuildsDataCommandData).get();
 
 				CreateGlobalApplicationCommandData createDuelCommandData;
+				createDuelCommandData.dmPermission = false;
 				createDuelCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createDuelCommandData.defaultPermission = true;
 				createDuelCommandData.description = "Challenge another server member do a duel.";
@@ -215,12 +240,15 @@ namespace DiscordCoreAPI {
 				duelCommandOptionTwo.name = "betamount";
 				duelCommandOptionTwo.required = true;
 				duelCommandOptionTwo.type = ApplicationCommandOptionType::Integer;
+				duelCommandOptionTwo.minValue = 1;
+				duelCommandOptionTwo.maxValue = 1000000000;
 				duelCommandOptionTwo.description = "The amount of the wager you are putting up.";
 				createDuelCommandData.options.push_back(duelCommandOptionTwo);
 				createDuelCommandData.type = ApplicationCommandType::Chat_Input;
 				ApplicationCommands::createGlobalApplicationCommandAsync(createDuelCommandData).get();
 
 				CreateGlobalApplicationCommandData createGamehouseOptionsCommandData;
+				createGamehouseOptionsCommandData.dmPermission=false;
 				createGamehouseOptionsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createGamehouseOptionsCommandData.defaultPermission = true;
 				createGamehouseOptionsCommandData.description = "View the options of this bot.";
@@ -229,6 +257,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createGamehouseOptionsCommandData).get();
 
 				CreateGlobalApplicationCommandData createInventoryCommandData;
+				createInventoryCommandData.dmPermission = false;
 				createInventoryCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createInventoryCommandData.defaultPermission = true;
 				createInventoryCommandData.description = "Observe your inventory of items and roles.";
@@ -243,6 +272,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createInventoryCommandData).get();
 
 				CreateGlobalApplicationCommandData createLeaderboardCommandData;
+				createLeaderboardCommandData.dmPermission = false;
 				createLeaderboardCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createLeaderboardCommandData.defaultPermission = true;
 				createLeaderboardCommandData.description = "View the server's currency leaderboard.";
@@ -251,6 +281,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createLeaderboardCommandData).get();
 
 				CreateGlobalApplicationCommandData createRemoveObjectCommandData;
+				createRemoveObjectCommandData.dmPermission = false;
 				createRemoveObjectCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createRemoveObjectCommandData.defaultPermission = true;
 				createRemoveObjectCommandData.description = "Remove an object or role from a user's inventory.";
@@ -277,6 +308,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createRemoveObjectCommandData).get();
 
 				CreateGlobalApplicationCommandData createRemoveShopItemCommandData;
+				createRemoveShopItemCommandData.dmPermission = false;
 				createRemoveShopItemCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createRemoveShopItemCommandData.defaultPermission = true;
 				createRemoveShopItemCommandData.description = "Remove an item from the server's shop.";
@@ -291,6 +323,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createRemoveShopItemCommandData).get();
 
 				CreateGlobalApplicationCommandData createRemoveShopRoleCommandData;
+				createRemoveShopRoleCommandData.dmPermission = false;
 				createRemoveShopRoleCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createRemoveShopRoleCommandData.defaultPermission = true;
 				createRemoveShopRoleCommandData.description = "Remove a role from the server's shop.";
@@ -305,6 +338,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createRemoveShopRoleCommandData).get();
 
 				CreateGlobalApplicationCommandData createRobCommandData;
+				createRobCommandData.dmPermission = false;
 				createRobCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createRobCommandData.defaultPermission = true;
 				createRobCommandData.description = "Rob a user for currency.";
@@ -319,6 +353,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createRobCommandData).get();
 
 				CreateGlobalApplicationCommandData createRouletteCommandData;
+				createRouletteCommandData.dmPermission = false;
 				createRouletteCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createRouletteCommandData.defaultPermission = true;
 				createRouletteCommandData.description = "Start or bet on a game of roulette.";
@@ -337,6 +372,8 @@ namespace DiscordCoreAPI {
 				rouletteOptionTwoOh.description = "Enter the amount which you would like to bet";
 				rouletteOptionTwoOh.required = true;
 				rouletteOptionTwoOh.type = ApplicationCommandOptionType::Integer;
+				rouletteOptionTwoOh.minValue=1;
+				rouletteOptionTwoOh.maxValue = 100000000;
 				rouletteOptionTwo.options.push_back(rouletteOptionTwoOh);
 				ApplicationCommandOptionData rouletteOptionTwoOne;
 				rouletteOptionTwoOne.name = "type";
@@ -389,6 +426,8 @@ namespace DiscordCoreAPI {
 				rouletteOptionTwoTwo.description = "Bet options for select bet-types.";
 				rouletteOptionTwoOne.required = false;
 				rouletteOptionTwoTwo.type = ApplicationCommandOptionType::Integer;
+				rouletteOptionTwoTwo.minValue = 1;
+				rouletteOptionTwoTwo.maxValue = 100;
 				rouletteOptionTwo.options.push_back(rouletteOptionTwoTwo);
 				createRouletteCommandData.options.push_back(rouletteOptionTwo);
 				ApplicationCommandOptionData rouletteOptionThree;
@@ -400,6 +439,8 @@ namespace DiscordCoreAPI {
 				rouletteOptionThreeOh.description = "Enter the amount which you would like to bet";
 				rouletteOptionThreeOh.required = true;
 				rouletteOptionThreeOh.type = ApplicationCommandOptionType::Integer;
+				rouletteOptionThreeOh.minValue = 1;
+				rouletteOptionThreeOh.maxValue = 1000000000;
 				rouletteOptionThree.options.push_back(rouletteOptionThreeOh);
 				ApplicationCommandOptionData rouletteOptionThreeOne;
 				rouletteOptionThreeOne.name = "type";
@@ -452,12 +493,15 @@ namespace DiscordCoreAPI {
 				rouletteOptionThreeTwo.description = "Bet options for select bet-types.";
 				rouletteOptionThreeTwo.required = false;
 				rouletteOptionThreeTwo.type = ApplicationCommandOptionType::Integer;
+				rouletteOptionThreeTwo.minValue = 1;
+				rouletteOptionThreeTwo.maxValue = 100;
 				rouletteOptionThree.options.push_back(rouletteOptionThreeTwo);
 				createRouletteCommandData.options.push_back(rouletteOptionThree);
 				createRouletteCommandData.type = ApplicationCommandType::Chat_Input;
 				ApplicationCommands::createGlobalApplicationCommandAsync(createRouletteCommandData).get();
 
 				CreateGlobalApplicationCommandData createSetGameChannelCommandData;
+				createSetGameChannelCommandData.dmPermission = false;
 				createSetGameChannelCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createSetGameChannelCommandData.defaultPermission = true;
 				createSetGameChannelCommandData.description = "Sets the channels which you can play games in.";
@@ -486,6 +530,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createSetGameChannelCommandData).get();
 
 				CreateGlobalApplicationCommandData createSetBalanceCommandData;
+				createSetBalanceCommandData.dmPermission = false;
 				createSetBalanceCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createSetBalanceCommandData.defaultPermission = true;
 				createSetBalanceCommandData.description = "Set the currency balance of yourself or another server member.";
@@ -494,6 +539,8 @@ namespace DiscordCoreAPI {
 				createSetBalanceOptionOne.type = ApplicationCommandOptionType::Integer;
 				createSetBalanceOptionOne.name = "amount";
 				createSetBalanceOptionOne.required = true;
+				createSetBalanceOptionOne.minValue = 0;
+				createSetBalanceOptionOne.maxValue = 100000000;
 				createSetBalanceOptionOne.description = "The amount to set the balance to.";
 				createSetBalanceCommandData.options.push_back(createSetBalanceOptionOne);
 				ApplicationCommandOptionData createBalanceOptionOne;
@@ -520,6 +567,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createSetBalanceCommandData).get();
 
 				CreateGlobalApplicationCommandData createSetBorderColorCommandData;
+				createSetBorderColorCommandData.dmPermission = false;
 				createSetBorderColorCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createSetBorderColorCommandData.defaultPermission = true;
 				createSetBorderColorCommandData.description = "Set the defaul color of borders.";
@@ -544,12 +592,15 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createSetBorderColorCommandData).get();
 
 				CreateGlobalApplicationCommandData createSlotsCommandData;
+				createSlotsCommandData.dmPermission = false;
 				createSlotsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createSlotsCommandData.defaultPermission = true;
 				createSlotsCommandData.description = "Play a game of slots.";
 				createSlotsCommandData.name = "slots";
 				ApplicationCommandOptionData createSlotsOptionOne;
 				createSlotsOptionOne.type = ApplicationCommandOptionType::Integer;
+				createSlotsOptionOne.minValue = 1;
+				createSlotsOptionOne.maxValue = 100000000;
 				createSlotsOptionOne.name = "betamount";
 				createSlotsOptionOne.description = "The amount of currency which you will wager.";
 				createSlotsOptionOne.required = true;
@@ -558,12 +609,15 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createSlotsCommandData).get();
 
 				CreateGlobalApplicationCommandData createTransferCommandData;
+				createTransferCommandData.dmPermission = false;
 				createTransferCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createTransferCommandData.defaultPermission = true;
 				createTransferCommandData.description = "Transfer currency from yourself to another server member.";
 				createTransferCommandData.name = "transfer";
 				ApplicationCommandOptionData createTransferOptionOne;
 				createTransferOptionOne.type = ApplicationCommandOptionType::Integer;
+				createTransferOptionOne.minValue = 1;
+				createTransferOptionOne.maxValue = 1000000000;
 				createTransferOptionOne.name = "amount";
 				createTransferOptionOne.description = "The amount of currency which you would like to transfer.";
 				createTransferOptionOne.required = true;
@@ -578,12 +632,15 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createTransferCommandData).get();
 
 				CreateGlobalApplicationCommandData createWithdrawCommandData;
+				createWithdrawCommandData.dmPermission = false;
 				createWithdrawCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createWithdrawCommandData.defaultPermission = true;
 				createWithdrawCommandData.description = "Withdraw currency from your bank account to your wallet.";
 				createWithdrawCommandData.name = "withdraw";
 				ApplicationCommandOptionData createWithdrawOptionOne;
 				createWithdrawOptionOne.type = ApplicationCommandOptionType::Integer;
+				createWithdrawOptionOne.minValue = 1;
+				createWithdrawOptionOne.maxValue = 10000000000;
 				createWithdrawOptionOne.name = "amount";
 				createWithdrawOptionOne.description = "The amount of currency which you would like to withdraw.";
 				createWithdrawOptionOne.required = true;
@@ -592,12 +649,15 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createWithdrawCommandData).get();
 
 				CreateGlobalApplicationCommandData createDepositommandData;
+				createDepositommandData.dmPermission = false;
 				createDepositommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createDepositommandData.defaultPermission = true;
 				createDepositommandData.description = "Deposit currency from your wallet into your bank.";
 				createDepositommandData.name = "deposit";
 				ApplicationCommandOptionData createDepositOptionOne;
 				createDepositOptionOne.type = ApplicationCommandOptionType::Integer;
+				createDepositOptionOne.minValue = 1;
+				createDepositOptionOne.maxValue = 10000000000;
 				createDepositOptionOne.name = "amount";
 				createDepositOptionOne.description = "The amount of currency which you would like to deposit.";
 				createDepositOptionOne.required = true;
@@ -606,6 +666,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createDepositommandData).get();
 
 				CreateGlobalApplicationCommandData createHelpData;
+				createHelpData.dmPermission = true;
 				createHelpData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createHelpData.defaultPermission = true;
 				createHelpData.type = ApplicationCommandType::Chat_Input;
@@ -614,6 +675,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createHelpData).get();
 
 				CreateGlobalApplicationCommandData createTestData;
+				createTestData.dmPermission = true;
 				createTestData.applicationId = argsNew.discordCoreClient->getBotUser().id;
 				createTestData.type = ApplicationCommandType::Chat_Input;
 				createTestData.name = "test";
