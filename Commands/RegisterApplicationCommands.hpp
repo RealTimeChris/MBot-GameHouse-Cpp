@@ -27,16 +27,11 @@ namespace DiscordCoreAPI {
 		}
 
 		virtual void execute(BaseFunctionArguments& argsNew) {
-			try {
-				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
-
-				InputEventData newEvent = argsNew.eventData;
+			try {;
 
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
-					newEvent = InputEvents::respondToEventAsync(dataPackage).get();
-				}
+				InputEventData newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 
 				CreateGlobalApplicationCommandData RegisterApplicationCommandsCommandData;
 				RegisterApplicationCommandsCommandData.applicationId = argsNew.discordCoreClient->getBotUser().id;
@@ -683,18 +678,16 @@ namespace DiscordCoreAPI {
 				createTestData.description = "Test command.";
 				ApplicationCommands::createGlobalApplicationCommandAsync(createTestData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
-				DiscordGuild discordGuild(guild);
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				msgEmbed.setColor(discordGuild.data.borderColor);
+				msgEmbed.setColor("FeFeFe");
 				msgEmbed.setDescription("------\nNicely done, you've registered some commands!\n------");
 				msgEmbed.setTimeStamp(getTimeAndDate());
 				msgEmbed.setTitle("__**Register Application Commands Complete:**__");
-				RespondToInputEventData dataPackage02(argsNew.eventData);
-				dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
-				dataPackage02.addMessageEmbed(msgEmbed);
-				auto event = InputEvents::respondToEventAsync(dataPackage02).get();
+				RespondToInputEventData responseData(newEvent);
+				responseData.setResponseType(InputEventResponseType::Edit_Interaction_Response);
+				responseData.addMessageEmbed(msgEmbed);
+				auto event = InputEvents::respondToEventAsync(responseData).get();
 				return;
 			} catch (...) {
 				reportException("RegisterApplicationCommands::execute()");
