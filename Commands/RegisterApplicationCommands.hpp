@@ -31,11 +31,11 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(newArgs.eventData);
 				RespondToInputEventData dataPackage(newArgs.eventData);
-				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
+				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild{ guild };
-
+				/*
 				CreateGlobalApplicationCommandData RegisterApplicationCommandsCommandData;
 				RegisterApplicationCommandsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
 				RegisterApplicationCommandsCommandData.dmPermission = false;
@@ -680,7 +680,7 @@ namespace DiscordCoreAPI {
 				createTestData.defaultPermission = true;
 				createTestData.description = "Test command.";
 				ApplicationCommands::createGlobalApplicationCommandAsync(createTestData).get();
-
+				*/
 				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 				msgEmbed.setColor("FeFeFe");
