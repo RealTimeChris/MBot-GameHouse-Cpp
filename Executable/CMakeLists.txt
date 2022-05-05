@@ -1,4 +1,5 @@
-﻿generate_product_version(
+﻿include(GenerateProductVersion)
+generate_product_version(
 	PRODUCT_INFO
 	NAME "MBot-GameHouse-Cpp"
 	ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
