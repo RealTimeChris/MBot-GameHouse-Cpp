@@ -26,24 +26,15 @@ namespace DiscordCoreAPI {
 			return std::make_unique<DisplayGuildsData>();
 		}
 
-		virtual void execute(BaseFunctionArguments& argsNew) {
+		virtual void execute(BaseFunctionArguments& newArgs) {
 			try {
-				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
-
-				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
-				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
-				DiscordGuild discordGuild(guild);
-				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
-				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
-				if (!doWeHaveAdminPermission) {
-					return;
-				}
+				Channel channel = Channels::getCachedChannelAsync({ .channelId = newArgs.eventData.getChannelId() }).get();
 
 				uint32_t currentCount = 0;
 				std::vector<Guild> theCache = Guilds::getAllGuildsAsync().get();
-				InputEventData inputEvent = argsNew.eventData;
+				RespondToInputEventData dataPackage(newArgs.eventData);
+				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
+				auto inputEvent = InputEvents::respondToEventAsync(dataPackage).get();
 				for (auto& value: theCache) {
 					std::string msgString = "__Guild Name:__ " + value.name + "\n";
 					msgString += "__Guild ID:__ " + value.id + "\n";
@@ -55,28 +46,17 @@ namespace DiscordCoreAPI {
 					msgString += "__Created At:__ " + value.createdAt;
 
 					EmbedData messageEmbed;
-					messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					messageEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 					messageEmbed.setColor("FEFEFE");
 					messageEmbed.setThumbnail(value.icon);
 					messageEmbed.setTitle("__**Guild Data " + std::to_string(currentCount + 1) + " of " + std::to_string(theCache.size()) + "**__");
 					messageEmbed.setTimeStamp(getTimeAndDate());
 					messageEmbed.setDescription(msgString);
 
-					if (currentCount == 0) {
-						RespondToInputEventData dataPackage(argsNew.eventData);
-						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-						dataPackage.addMessageEmbed(messageEmbed);
-						inputEvent = InputEvents::respondToEventAsync(dataPackage).get();
-						RespondToInputEventData dataPackage02(argsNew.eventData);
-						dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
-						dataPackage02.addMessageEmbed(messageEmbed);
-						inputEvent = InputEvents::respondToEventAsync(dataPackage02).get();
-					} else {
-						RespondToInputEventData dataPackage(argsNew.eventData);
-						dataPackage.setResponseType(InputEventResponseType::Follow_Up_Message);
-						dataPackage.addMessageEmbed(messageEmbed);
-						InputEvents::respondToEventAsync(dataPackage).get();
-					}
+					RespondToInputEventData dataPackage02(inputEvent);
+					dataPackage02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
+					dataPackage02.addMessageEmbed(messageEmbed);
+					inputEvent = InputEvents::respondToEventAsync(dataPackage02).get();
 					currentCount += 1;
 				};
 				return;
