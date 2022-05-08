@@ -68,7 +68,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData event = InputEvents::respondToEventAsync(dataPackage).get();
+					InputEventData event = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 3 || theInt < -100 || theInt > 0) {
@@ -83,7 +83,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
+					InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 4 || !regex_search(argsNew.commandData.optionsArgs.at(3), itemCostRegExp) ||
@@ -98,7 +98,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
+					InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 5 || !regex_search(argsNew.commandData.optionsArgs.at(4), emojiRegExp)) {
@@ -112,7 +112,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
+					InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -138,7 +138,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
+						InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					}
 				}
@@ -169,7 +169,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
+				InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("AddShopItem::execute()");

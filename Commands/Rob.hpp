@@ -68,7 +68,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -83,7 +83,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -165,7 +165,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData dataPackage(argsNew.eventData);
 							dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 							dataPackage.addMessageEmbed(*msgEmbed);
-							auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+							auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 							return;
 						}
 
@@ -195,7 +195,7 @@ namespace DiscordCoreAPI {
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 						dataPackage.addContent("<@!" + targetUserID + ">");
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					} else if (currentSuccessValue == false) {
 						int32_t finedPercentage = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 30.0f);
 						uint32_t finedAmount = ( uint32_t )trunc((( float )discordGuildMember.data.currency.wallet * (( float )finedPercentage / 100.0f)));
@@ -239,7 +239,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					}
 				} else {
 					std::string msgString;
@@ -267,7 +267,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				}
 				return;
 			} catch (...) {

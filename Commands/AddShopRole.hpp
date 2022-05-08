@@ -63,7 +63,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto event = InputEvents::respondToEventAsync(dataPackage).get();
+					auto event = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 3 || !regex_search(argsNew.commandData.optionsArgs.at(2), costRegExp) ||
@@ -78,7 +78,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto event = InputEvents::respondToEventAsync(dataPackage).get();
+					auto event = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -101,7 +101,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(msgEmbed);
-						auto event = InputEvents::respondToEventAsync(dataPackage).get();
+						auto event = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					}
 				}
@@ -161,7 +161,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				InputEvents::respondToEventAsync(dataPackage).get();
+				InputEvents::respondToInputEventAsync(dataPackage).get();
 				return;
 			} catch (...) {
 				reportException("AddShopRole::execute()");

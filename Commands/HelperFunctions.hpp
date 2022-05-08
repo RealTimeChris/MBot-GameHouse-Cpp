@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData replyMessageData{ eventData };
 				replyMessageData.addMessageEmbed(msgEmbed);
 				replyMessageData.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-				InputEvents::respondToEventAsync(replyMessageData).get();
+				InputEvents::respondToInputEventAsync(replyMessageData).get();
 			}
 		}
 		return isItFound;
@@ -75,7 +75,7 @@ namespace DiscordCoreAPI {
 			RespondToInputEventData dataPackage{ eventData };
 			dataPackage.addMessageEmbed(msgEmbed);
 			dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-			InputEvents::respondToEventAsync(dataPackage).get();
+			InputEvents::respondToInputEventAsync(dataPackage).get();
 		}
 		return false;
 	}

@@ -29,11 +29,11 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		messageEmbed3.setTitle("__**Insufficient Funds:**__");
 		DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 		dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Deferred_Response);
-		auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+		auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 		DiscordCoreAPI::RespondToInputEventData dataPackage2(newEvent02);
 		dataPackage2.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 		dataPackageNew.addMessageEmbed(messageEmbed3);
-		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackageNew).get();
+		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackageNew).get();
 		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent03), 20000);
 		return;
 	}
@@ -48,11 +48,11 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		messageEmbed4.setTitle("__**Insufficient Funds:**__");
 		DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 		dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Deferred_Response);
-		auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+		auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 		DiscordCoreAPI::RespondToInputEventData dataPackage02(newEvent02);
 		dataPackage02.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 		dataPackageNew.addMessageEmbed(messageEmbed4);
-		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackageNew).get();
+		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackageNew).get();
 		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent03), 20000);
 		return;
 	}
@@ -280,11 +280,11 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		messageEmbeds[0].setDescription(finalStrings[0]);
 		dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		dataPackageNew.addMessageEmbed(messageEmbeds[0]);
-		newEvent = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackageNew).get();
+		newEvent = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackageNew).get();
 	}
 	dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 	dataPackageNew.addMessageEmbed(messageEmbeds[0]);
-	auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackageNew).get();
+	auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackageNew).get();
 
 	uint32_t currentPageIndex = 0;
 	moveThroughMessagePages(*fromUserIDNew, newEvent, currentPageIndex, messageEmbeds, false, 120000);
@@ -303,7 +303,7 @@ void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::D
 	DiscordCoreAPI::RespondToInputEventData dataPackage(originalEvent);
 	dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Follow_Up_Message);
 	dataPackage.addMessageEmbed(messageEmbed2);
-	DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+	DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 }
 
 namespace DiscordCoreAPI {
@@ -352,7 +352,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.addMessageEmbed(msgEmbed);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -383,7 +383,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -401,7 +401,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				if (betAmount > toUserCurrency) {
@@ -415,7 +415,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent02 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -436,7 +436,7 @@ namespace DiscordCoreAPI {
 				dataPackage2.addContent("<@!" + toUserID + ">");
 				dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
 				dataPackage2.addButton(false, "cross", "Reject", ButtonStyle::Success, "❌");
-				newEvent02 = InputEvents::respondToEventAsync(dataPackage2).get();
+				newEvent02 = InputEvents::respondToInputEventAsync(dataPackage2).get();
 				std::unique_ptr<ButtonCollector> button{ std::make_unique<ButtonCollector>(newEvent02) };
 				std::vector<ButtonResponseData> buttonInteractionData = button->collectButtonData(false, 120000, 1, toUserID).get();
 				RespondToInputEventData dataPackageNew(*buttonInteractionData.at(0).interactionData);
@@ -457,7 +457,7 @@ namespace DiscordCoreAPI {
 					dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 					dataPackageNew.addMessageEmbed(messageEmbed5);
 					dataPackageNew.addContent("<@!" + fromUserID + ">");
-					InputEvents::respondToEventAsync(dataPackageNew).get();
+					InputEvents::respondToInputEventAsync(dataPackageNew).get();
 				}
 				return;
 			} catch (...) {

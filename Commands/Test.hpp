@@ -29,11 +29,11 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.addContent("TESTING");
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-				auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				RespondToInputEventData dataPackage02{ newEvent };
 				dataPackage02.addContent("TESTING!");
 				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
-				auto newEvent02 = InputEvents::respondToEventAsync(dataPackage02).get();
+				auto newEvent02 = InputEvents::respondToInputEventAsync(dataPackage02).get();
 				InputEvents::deleteInputEventResponseAsync(std::move(newEvent02), 5000).get();
 
 

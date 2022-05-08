@@ -34,7 +34,7 @@ namespace DiscordCoreAPI {
 				std::vector<Guild> theCache = Guilds::getAllGuildsAsync().get();
 				RespondToInputEventData dataPackage(newArgs.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
-				auto inputEvent = InputEvents::respondToEventAsync(dataPackage).get();
+				auto inputEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				for (auto& value: theCache) {
 					std::string msgString = "__Guild Name:__ " + value.name + "\n";
 					msgString += "__Guild ID:__ " + value.id + "\n";
@@ -56,7 +56,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage02(inputEvent);
 					dataPackage02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
 					dataPackage02.addMessageEmbed(messageEmbed);
-					inputEvent = InputEvents::respondToEventAsync(dataPackage02).get();
+					inputEvent = InputEvents::respondToInputEventAsync(dataPackage02).get();
 					currentCount += 1;
 				};
 				return;

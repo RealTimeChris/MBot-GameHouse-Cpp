@@ -87,7 +87,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -104,7 +104,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -144,7 +144,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -173,7 +173,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(messageEmbed);
-				auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 
 				return;
 			} catch (...) {

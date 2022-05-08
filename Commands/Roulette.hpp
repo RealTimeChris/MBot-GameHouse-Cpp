@@ -106,7 +106,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 	DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 	dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 	dataPackage.addMessageEmbed(*msgEmbed);
-	DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+	DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 	return;
 }
 
@@ -188,7 +188,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					}
 					whatAreWeDoing = "start";
@@ -204,7 +204,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					}
 					whatAreWeDoing = "bet";
@@ -221,7 +221,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					} else {
 						betAmount = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs[0]);
@@ -263,7 +263,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					}
 
@@ -287,7 +287,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					} else {
 						betType = argsNew.commandData.optionsArgs[1];
@@ -332,7 +332,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -347,7 +347,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -375,7 +375,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -390,7 +390,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -415,7 +415,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -430,7 +430,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -467,7 +467,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -482,7 +482,7 @@ namespace DiscordCoreAPI {
 								DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 								dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 								dataPackage.addMessageEmbed(*msgEmbed);
-								auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+								auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 								return;
 							}
 
@@ -633,7 +633,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					auto newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				} else if (whatAreWeDoing == "start") {
 					discordGuild->data.rouletteGame.currentlySpinning = true;
@@ -653,7 +653,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+						newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					}
 					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
@@ -669,7 +669,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage(newEvent);
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						InputEvents::respondToEventAsync(dataPackage).get();
+						InputEvents::respondToInputEventAsync(dataPackage).get();
 						currentIndex -= 1;
 						if (currentIndex == -1) {
 							DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent));

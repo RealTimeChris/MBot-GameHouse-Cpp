@@ -45,7 +45,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
 					RespondToInputEventData dataPackage(newEvent);
 					dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-					newEvent = InputEvents::respondToEventAsync(dataPackage).get();
+					newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				}
 
 				std::vector<DiscordGuildMember> membersArray;

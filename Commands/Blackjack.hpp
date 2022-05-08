@@ -83,7 +83,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		msgEmbed->addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	}
 
@@ -155,7 +155,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		msgEmbed->addField("__**Game Status: Player Wins**__", winFooterString, false);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 
 		return;
 	} else if (newUserHandScore == newDealerHandScore) {
@@ -176,7 +176,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	} else {
 		int32_t payAmount = -1 * *betAmount;
@@ -210,7 +210,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	}
 }
@@ -238,7 +238,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		msgEmbed->addField("__**Game Status: Failed Wager**__", inPlayFooterString, false);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	}
 
@@ -301,7 +301,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	} else if (newUserHandScore == 21) {
 		uint32_t newDealerHandScore = 0;
@@ -352,7 +352,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			msgEmbed->setDescription(finalEmbed.description);
 			buttonInteraction->addMessageEmbed(*msgEmbed);
 			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-			DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+			DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 			return;
 		} else {
 			int32_t payAmount = *betAmount;
@@ -400,7 +400,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			msgEmbed->setDescription(finalEmbed.description);
 			buttonInteraction->addMessageEmbed(*msgEmbed);
 			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-			DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+			DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 			return;
 		}
 	} else if (newUserHandScore < 21) {
@@ -430,7 +430,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		buttonInteraction->addComponentRow(component);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button = std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent);
 		std::unique_ptr<std::vector<DiscordCoreAPI::ButtonResponseData>> buttonInteractionData =
 			std::make_unique<std::vector<DiscordCoreAPI::ButtonResponseData>>(button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get());
@@ -449,7 +449,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 			inputData.addMessageEmbed(msgEmbed2);
 			dataPackage.addMessageEmbed(msgEmbed2);
-			DiscordCoreAPI::InputEvents::respondToEventAsync(inputData);
+			DiscordCoreAPI::InputEvents::respondToInputEventAsync(inputData);
 			return;
 		} else {
 		}
@@ -495,7 +495,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		}
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		eventData002 = DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction).get();
+		eventData002 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction).get();
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button{ std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent) };
 		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get();
 		DiscordCoreAPI::RespondToInputEventData inputData{ *buttonIntData.at(0).interactionData };
@@ -518,7 +518,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			dataPackage.addMessageEmbed(msgEmbed2);
 			buttonInteraction->addMessageEmbed(msgEmbed2);
 			buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-			DiscordCoreAPI::InputEvents::respondToEventAsync(dataPackage).get();
+			DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackage).get();
 		}
 		return;
 	};
@@ -598,7 +598,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	} else if (newUserHandScore == newDealerHandScore) {
 		auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -618,7 +618,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	} else {
 		int32_t payAmount = -2 * *betAmount;
@@ -653,7 +653,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		msgEmbed->setDescription(finalEmbed.description);
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
-		DiscordCoreAPI::InputEvents::respondToEventAsync(*buttonInteraction);
+		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	}
 }
@@ -710,7 +710,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEventAsync(dataPackage).get();
+					InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -727,7 +727,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEventAsync(dataPackage).get();
+					InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -751,7 +751,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEventAsync(dataPackage).get();
+					InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				std::string finalMsgString;
@@ -807,7 +807,7 @@ namespace DiscordCoreAPI {
 						DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 						dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						InputEvents::respondToEventAsync(dataPackage).get();
+						InputEvents::respondToInputEventAsync(dataPackage).get();
 
 						return;
 					}
@@ -844,7 +844,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEvents::respondToEventAsync(dataPackage).get();
+					InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 				bool canWeDoubleDown = false;
@@ -874,7 +874,7 @@ namespace DiscordCoreAPI {
 					if (canWeDoubleDown) {
 						replyInteractionData.addButton(false, "double", "Double-Down", ButtonStyle::Primary, "⏬");
 					}
-					event001 = InputEvents::respondToEventAsync(replyInteractionData).get();
+					event001 = InputEvents::respondToInputEventAsync(replyInteractionData).get();
 				}
 				std::unique_ptr<DiscordCoreAPI::ButtonCollector> button{ std::make_unique<DiscordCoreAPI::ButtonCollector>(event001) };
 				std::vector<ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, argsNew.eventData.getRequesterId()).get();
@@ -889,7 +889,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ *buttonIntData.at(0).interactionData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed02);
-					event001 = InputEvents::respondToEventAsync(dataPackage).get();
+					event001 = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				} else {
 				}

@@ -127,7 +127,7 @@ namespace DiscordCoreAPI {
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
 					dataPackage.addMessageEmbed(*msgEmbed);
-					InputEventData eventNew = InputEvents::respondToEventAsync(dataPackage).get();
+					InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
 
@@ -156,7 +156,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 						dataPackage.addMessageEmbed(*msgEmbed);
-						InputEvents::respondToEventAsync(dataPackage).get();
+						InputEvents::respondToInputEventAsync(dataPackage).get();
 						x -= 1;
 					}
 				}
@@ -182,14 +182,14 @@ namespace DiscordCoreAPI {
 				std::vector<SelectMenuResponseData> values;
 				RespondToInputEventData dataPackage(event02);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-				event02 = InputEvents::respondToEventAsync(dataPackage).get();
+				event02 = InputEvents::respondToInputEventAsync(dataPackage).get();
 				RespondToInputEventData dataPackage02(event02);
 				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
 				dataPackage02.addMessageEmbed(*msgEmbed);
 				dataPackage02.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
 				dataPackage02.addButton(false, "roles", "Roles", ButtonStyle::Primary, "🔥");
 				dataPackage02.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
-				event02 = InputEvents::respondToEventAsync(dataPackage02).get();
+				event02 = InputEvents::respondToInputEventAsync(dataPackage02).get();
 				while (1) {
 				start:
 					EmbedData currentEmbed;
@@ -213,7 +213,7 @@ namespace DiscordCoreAPI {
 							dataPackage03.addSelectMenu(
 								false, "shop_menu_roles", selectOptionDataRoles, "Choose one or more roles.", ( int32_t )selectOptionDataRoles.size(), 1);
 						}
-						InputEvents::respondToEventAsync(dataPackage03).get();
+						InputEvents::respondToInputEventAsync(dataPackage03).get();
 					} else if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
 						break;
 					}
@@ -229,7 +229,7 @@ namespace DiscordCoreAPI {
 								dataPackage03.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
 								dataPackage03.addButton(false, "roles", "Roles", ButtonStyle::Primary, "🔥");
 								dataPackage03.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
-								InputEvents::respondToEventAsync(dataPackage03).get();
+								InputEvents::respondToInputEventAsync(dataPackage03).get();
 								goto start;
 							}
 						}
@@ -286,7 +286,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(msgEmbed02);
-							InputEventData event01 = InputEvents::respondToEventAsync(dataPackage03).get();
+							InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
 							InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 							continue;
 						}
@@ -306,7 +306,7 @@ namespace DiscordCoreAPI {
 								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 								dataPackage03.addMessageEmbed(*msgEmbed02);
-								InputEventData event01 = InputEvents::respondToEventAsync(dataPackage03).get();
+								InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
 								InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
 								break;
 							}
@@ -335,7 +335,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(*msgEmbed02);
-							InputEventData event01 = InputEvents::respondToEventAsync(dataPackage03).get();
+							InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
 
 							uint32_t maxIdx = 0;
 							uint32_t len = ( uint32_t )discordGuildMember.data.roles.size();
@@ -367,7 +367,7 @@ namespace DiscordCoreAPI {
 								RespondToInputEventData dataPackage03(event02);
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 								dataPackage03.addMessageEmbed(*msgEmbed02);
-								InputEventData event01 = InputEvents::respondToEventAsync(dataPackage03).get();
+								InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
 								InputEvents::deleteInputEventResponseAsync(event01, 20000);
 								break;
 							}
@@ -409,7 +409,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(*msgEmbed02);
-							InputEventData event01 = InputEvents::respondToEventAsync(dataPackage03).get();
+							InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
 						}
 					}
 				}
