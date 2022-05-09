@@ -2,7 +2,7 @@
 generate_product_version(
 	PRODUCT_INFO
 	NAME "MBot-GameHouse-Cpp"
-	ICON "${CMAKE_SOURCE_DIR}/Chris 03.ico"
+	ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
 	ORIGINAL_FILENAME "MBot-GameHouse-Cpp.exe"
 	VERSION_MAJOR "1"
 	VERSION_MINOR "0"
