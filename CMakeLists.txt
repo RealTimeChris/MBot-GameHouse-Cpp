@@ -1,5 +1,5 @@
 # Set this value...
-set(VCPKG_ROOT_DIR "C:/vcpkg00")
+set(VCPKG_ROOT_DIR "C:/Vcpkg00")
 # OR this value...
 set(CMAKE_CONFIG_FILE_DIR "")
 # AND these values.
@@ -24,6 +24,8 @@ cmake_minimum_required(VERSION 3.20)
 project(MBot-GameHouse VERSION 1.00 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake;${CMAKE_SOURCE_DIR}/CMake/Find-Scripts")
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_BUILD_TYPE}")
+cmake_path(GET CMAKE_INSTALL_PREFIX ROOT_PATH ROOT_DRIVE)
+set(CMAKE_INSTALL_PREFIX "${ROOT_DRIVE}Users/$ENV{USERNAME}/source/repos/MBot-GameHouse-Cpp/Output Files/$<CONFIG>")
 
 if (UNIX)
 	set(LIBRARY_SUFFIX ".a")
