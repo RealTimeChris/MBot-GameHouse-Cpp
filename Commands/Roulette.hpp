@@ -683,9 +683,9 @@ namespace DiscordCoreAPI {
 						}
 					};
 
-					ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
-					ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
-					ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
+					DiscordCoreInternal::ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
+					DiscordCoreInternal::ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
+					DiscordCoreInternal::ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
 				}
 				return;
 			} catch (...) {

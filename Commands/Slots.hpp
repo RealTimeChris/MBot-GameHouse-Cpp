@@ -248,9 +248,9 @@ namespace DiscordCoreAPI {
 					newEvent02 = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				};
-				ThreadPool::executeFunctionAfterTimePeriod(theFunction00, 3000, true);
-				ThreadPool::executeFunctionAfterTimePeriod(theFunction01, 3000, true);
-				ThreadPool::executeFunctionAfterTimePeriod(theFunction, 3000, true);
+				DiscordCoreInternal::ThreadPool::executeFunctionAfterTimePeriod(theFunction00, 3000, true);
+				DiscordCoreInternal::ThreadPool::executeFunctionAfterTimePeriod(theFunction01, 3000, true);
+				DiscordCoreInternal::ThreadPool::executeFunctionAfterTimePeriod(theFunction, 3000, true);
 				return;
 			} catch (...) {
 				reportException("Slots::execute()");
