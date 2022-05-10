@@ -1,7 +1,7 @@
 ﻿include(GenerateProductVersion)
 generate_product_version(
 	PRODUCT_INFO
-	NAME "MBot-GameHouse-Cpp"
+	NAME "${PROJECT_NAME}"
 	ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
 	ORIGINAL_FILENAME "MBot-GameHouse-Cpp.exe"
 	VERSION_MAJOR "1"
@@ -11,43 +11,43 @@ generate_product_version(
 )
 
 add_executable(
-	MBot-GameHouse
+	"${PROJECT_NAME}"
 	"../main.cpp"
 	"${PRODUCT_INFO}"
 )
 
 if (DEFINED ENV{EnableASAN})
 	if(MSVC)
-		target_compile_options(MBot-GameHouse PUBLIC "/fsanitize=address" "/Zi" "/Debug")
-		target_link_options(MBot-GameHouse PUBLIC "/incremental:no" "/Debug")	
+		target_compile_options("${PROJECT_NAME}" PUBLIC "/fsanitize=address" "/Zi" "/Debug")
+		target_link_options("${PROJECT_NAME}" PUBLIC "/incremental:no" "/Debug")	
 	else()
-		target_compile_options(MBot-GameHouse PUBLIC "-fsanitize=address")
-		target_link_options(MBot-GameHouse PUBLIC "-fsanitize=address")
+		target_compile_options("${PROJECT_NAME}" PUBLIC "-fsanitize=address")
+		target_link_options("${PROJECT_NAME}" PUBLIC "-fsanitize=address")
 	endif()
 endif()
 
 find_package(DiscordCoreAPI CONFIG REQUIRED)
 
 target_link_libraries(
-	MBot-GameHouse PUBLIC
+	"${PROJECT_NAME}" PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
 )
 
 set_target_properties(
-	MBot-GameHouse PROPERTIES 
-	OUTPUT_NAME "MBot-GameHouse-Cpp"
+	"${PROJECT_NAME}" PROPERTIES 
+	OUTPUT_NAME "${PROJECT_NAME}-Cpp"
 	VS_GLOBAL_VcpkgEnabled true
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
 )
 
 if (WIN32 AND NOT EXISTS "${VCPKG_ROOT}")
 	add_custom_command(
-		TARGET MBot-GameHouse PRE_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "$<IF:$<CONFIG:Debug>,${DEBUG_PDB_FILE_PATH},${RELEASE_PDB_FILE_PATH}>" "${CMAKE_INSTALL_PREFIX}"
+		TARGET "${PROJECT_NAME}" PRE_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy "$<IF:$<CONFIG:Debug>,${DEBUG_PDB_FILE_PATH},${RELEASE_PDB_FILE_PATH}>" "$<TARGET_FILE_DIR:MBot-GameHouse>"
 	)
 	add_custom_command(
-		TARGET MBot-GameHouse PRE_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_RUNTIME_DLLS:MBot-GameHouse>" "${CMAKE_INSTALL_PREFIX}"
+		TARGET "${PROJECT_NAME}" PRE_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_RUNTIME_DLLS:MBot-GameHouse>" "$<TARGET_FILE_DIR:MBot-GameHouse>"
 		COMMAND_EXPAND_LISTS
 	)
 endif()
