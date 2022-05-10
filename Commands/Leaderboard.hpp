@@ -50,8 +50,7 @@ namespace DiscordCoreAPI {
 
 				std::vector<DiscordGuildMember> membersArray;
 				for (auto [key, value]: guild.members) {
-					GuildMember guildMember =
-						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
+					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
 					DiscordGuildMember guildMemberNew(guildMember);
 					membersArray.push_back(guildMemberNew);
 				}
@@ -89,17 +88,15 @@ namespace DiscordCoreAPI {
 					}
 
 					std::string msgString = "";
-					msgString += "__**#" + std::to_string(currentPage * membersPerPage + ((x % membersPerPage) + 1)) + " | Name:**__ " +
-						membersArray[x].data.guildMemberMention + "** | __" + discordUser.data.currencyName + ":__** " +
-						std::to_string(membersArray[x].data.currency.wallet) + "\n";
+					msgString += "__**#" + std::to_string(currentPage * membersPerPage + ((x % membersPerPage) + 1)) + " | Name:**__ " + membersArray[x].data.guildMemberMention +
+						"** | __" + discordUser.data.currencyName + ":__** " + std::to_string(membersArray[x].data.currency.wallet) + "\n";
 
 					pageStrings[currentPage] += msgString;
 					if (x % membersPerPage == membersPerPage - 1 || x == ( uint32_t )membersArray.size() - 1) {
 						pageEmbeds[currentPage].setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						pageEmbeds[currentPage].setDescription(pageStrings[currentPage]);
 						pageEmbeds[currentPage].setTimeStamp(getTimeAndDate());
-						pageEmbeds[currentPage].setTitle(
-							"__**Leaderboard (Wallet) (Page " + std::to_string(currentPage + 1) + " of " + std::to_string(totalPageCount) + ")**__");
+						pageEmbeds[currentPage].setTitle("__**Leaderboard (Wallet) (Page " + std::to_string(currentPage + 1) + " of " + std::to_string(totalPageCount) + ")**__");
 						pageEmbeds[currentPage].setColor(discordGuild.data.borderColor);
 						currentPage += 1;
 					}

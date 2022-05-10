@@ -122,8 +122,8 @@ namespace DiscordCoreAPI {
 						msgEmbed00.setColor("FeFeFe");
 						msgEmbed00.setTimeStamp(getTimeAndDate());
 						msgEmbed00.setDescription(msgString);
-						msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +
-							" of " + std::to_string(selectOptions.size()) + "**__");
+						msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) + " of " +
+							std::to_string(selectOptions.size()) + "**__");
 						RespondToInputEventData responseData03(*buttonData.at(0).interactionData);
 						responseData03.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 						responseData03.addMessageEmbed(msgEmbed00);
@@ -138,8 +138,8 @@ namespace DiscordCoreAPI {
 							msgEmbed00.setColor("FeFeFe");
 							msgEmbed00.setTimeStamp(getTimeAndDate());
 							msgEmbed00.setDescription(messageNew);
-							msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) +
-								" of " + std::to_string(selectOptions.size()) + "**__");
+							msgEmbed00.setTitle("__**" + newArgs.discordCoreClient->getBotUser().userName + " Help: Page " + std::to_string(counter03 + 1) + " of " +
+								std::to_string(selectOptions.size()) + "**__");
 							RespondToInputEventData responseData03(*buttonData.at(0).interactionData);
 							responseData03.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 							responseData03.addMessageEmbed(msgEmbed00);

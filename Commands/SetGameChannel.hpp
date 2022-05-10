@@ -35,8 +35,7 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 
 				if (doWeHaveAdminPermission == false) {
@@ -87,8 +86,7 @@ namespace DiscordCoreAPI {
 							isItPresent = true;
 							discordGuild.data.gameChannelIds.erase(discordGuild.data.gameChannelIds.begin() + x);
 							discordGuild.writeDataToDB();
-							msgString +=
-								"------\n**You've succesfully removed the channel <#" + channelID + "> from the list of enabled gaming channels!**\n------";
+							msgString += "------\n**You've succesfully removed the channel <#" + channelID + "> from the list of enabled gaming channels!**\n------";
 						}
 					}
 

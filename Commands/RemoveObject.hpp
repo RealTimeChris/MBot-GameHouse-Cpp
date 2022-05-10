@@ -157,12 +157,10 @@ namespace DiscordCoreAPI {
 														  .roleId = roleID,
 													  })
 						.get();
-					msgString =
-						"------\n**You've removed the following role from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
+					msgString = "------\n**You've removed the following role from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
 					messageEmbed.setTitle("__**Role Removed:**__");
 				} else if (objectType == "item") {
-					msgString =
-						"------\n**You've removed the following item from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
+					msgString = "------\n**You've removed the following item from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
 					messageEmbed.setTitle("__**Item Removed:**__");
 				}
 

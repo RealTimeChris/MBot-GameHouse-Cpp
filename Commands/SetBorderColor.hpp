@@ -34,18 +34,15 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				bool doWeHaveAdminPermission = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
 				if (!doWeHaveAdminPermission) {
 					return;
 				}
 				std::string borderColor;
 
-				if (std::stoll(argsNew.commandData.optionsArgs[0], 0, 16) < 0 ||
-					std::stoll(argsNew.commandData.optionsArgs[0], 0, 16) > std::stoll("fefefe", 0, 16)) {
-					std::string msgString =
-						"------\n**Please, enter a hex-color value between 0 and FeFeFe! (!setbordercolor = BOTNAME, HEXCOLORVALUE)**\n------";
+				if (std::stoll(argsNew.commandData.optionsArgs[0], 0, 16) < 0 || std::stoll(argsNew.commandData.optionsArgs[0], 0, 16) > std::stoll("fefefe", 0, 16)) {
+					std::string msgString = "------\n**Please, enter a hex-color value between 0 and FeFeFe! (!setbordercolor = BOTNAME, HEXCOLORVALUE)**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
@@ -66,8 +63,8 @@ namespace DiscordCoreAPI {
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription("Nicely done, you've updated the default border color for this bot!\n------\n__**Border Color Values:**__ " +
-						discordGuild.data.borderColor + "\n------");
+					msgEmbed.setDescription(
+						"Nicely done, you've updated the default border color for this bot!\n------\n__**Border Color Values:**__ " + discordGuild.data.borderColor + "\n------");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setTitle("__**Updated Border Color:**__");
 					RespondToInputEventData dataPackage(argsNew.eventData);

@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
-				
+
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
@@ -96,9 +96,8 @@ namespace DiscordCoreAPI {
 				walletAmount = discordGuildMember.data.currency.wallet;
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				msgString = "<@!" + guildMember.user.id + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " +
-					discordUser.data.currencyName + "\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName +
-					"\n------";
+				msgString = "<@!" + guildMember.user.id + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " + discordUser.data.currencyName +
+					"\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName + "\n------";
 
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

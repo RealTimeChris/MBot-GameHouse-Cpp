@@ -63,8 +63,7 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				if (( uint32_t )betAmountOld > discordGuildMember.data.currency.wallet) {
@@ -113,8 +112,8 @@ namespace DiscordCoreAPI {
 				std::string msgString0 = "__**Slot "
 										 "Results:**__\n[:question:][:question:][:question:]\n[:question:][:question:][:question:]\n[:question:][:question:][:"
 										 "question:]\n\n__**Your Wager:**__ " +
-					std::to_string(betAmountOld) + " " + discordUser.data.currencyName + +"\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) +
-					" " + discordUser.data.currencyName;
+					std::to_string(betAmountOld) + " " + discordUser.data.currencyName + +"\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " +
+					discordUser.data.currencyName;
 
 				EmbedData msgEmbed0;
 				msgEmbed0.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -128,10 +127,9 @@ namespace DiscordCoreAPI {
 				dataPackage.addMessageEmbed(msgEmbed0);
 				InputEvents::respondToInputEventAsync(dataPackage).get();
 				std::function<void()> theFunction00 = [=]() mutable -> void {
-					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" +
-						slotReel[reelIndices1[8]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[9]] +
-						"][:question:][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " + discordUser.data.currencyName +
-						"\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
+					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[8]] +
+						"][:question:][:question:]\n[" + slotReel[reelIndices1[9]] + "][:question:][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " +
+						discordUser.data.currencyName + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
@@ -146,9 +144,9 @@ namespace DiscordCoreAPI {
 				};
 				std::function<void()> theFunction01 = [=]() mutable -> void {
 					std::string msgString2 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][" + slotReel[reelIndices2[7]] + "][:question:]\n[" +
-						slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][:question:]\n" + "[" + slotReel[reelIndices1[9]] + "][" +
-						slotReel[reelIndices2[9]] + "][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " +
-						discordUser.data.currencyName + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
+						slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][:question:]\n" + "[" + slotReel[reelIndices1[9]] + "][" + slotReel[reelIndices2[9]] +
+						"][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " + discordUser.data.currencyName + "\n__**Maximum Payout:**__ " +
+						std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
@@ -164,8 +162,7 @@ namespace DiscordCoreAPI {
 				std::function<void()> theFunction = [=]() mutable -> void {
 					std::string gameResultTypeNew;
 					int32_t payoutAmountNew = payoutAmount;
-					GuildMember guildMemberNew =
-						GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = guildMember.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
+					GuildMember guildMemberNew = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = guildMember.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
 					DiscordGuildMember discordGuildMember(guildMemberNew);
 					DiscordGuild discordGuild(guild);
 					if (slotReel[reelIndices1[8]] == slotReel[reelIndices2[8]] && slotReel[reelIndices2[8]] == slotReel[reelIndices3[8]]) {
@@ -199,8 +196,7 @@ namespace DiscordCoreAPI {
 					InputEventData newEvent02 = argsNew.eventData;
 					if (betAmountOld > ( int32_t )discordGuildMember.data.currency.wallet) {
 						std::string msgString3 = "__**Slot Results:**__\n[:x:][:x:][:x:]\n[:x:][:x:][:x:]\n[:x:][:x:][:x:]\n------\n__**Your Wager:**__ " +
-							std::to_string(betAmountOld) + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " +
-							discordUser.data.currencyName +
+							std::to_string(betAmountOld) + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName +
 							"\n__**Game Results:**__\n__**Payout:**__ NSF__** Result Type:**__ Non-Sufficient Funds\n__**Your New Wallet Balance:**__ " +
 							std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
@@ -220,13 +216,12 @@ namespace DiscordCoreAPI {
 					discordGuildMember.getDataFromDB();
 					discordGuildMember.data.currency.wallet += payoutAmountNew;
 					discordGuildMember.writeDataToDB();
-					std::string msgString4 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][" + slotReel[reelIndices2[7]] + "][" +
-						slotReel[reelIndices3[7]] + "]\n[" + slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][" + slotReel[reelIndices3[8]] +
-						"]\n" + "[" + slotReel[reelIndices1[9]] + "][" + slotReel[reelIndices2[9]] + "][" + slotReel[reelIndices3[9]] +
-						"]\n------\n__**Your Wager:**__ " + std::to_string(betAmountOld) + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) +
-						" " + discordUser.data.currencyName + "\n__**Game Results:**__\n__**Payout:**__ " + std::to_string(payoutAmountNew) + " " +
-						discordUser.data.currencyName + " __**Result Type:**__ " + gameResultTypeNew + "\n__**Your New Wallet Balance:**__ " +
-						std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+					std::string msgString4 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][" + slotReel[reelIndices2[7]] + "][" + slotReel[reelIndices3[7]] + "]\n[" +
+						slotReel[reelIndices1[8]] + "][" + slotReel[reelIndices2[8]] + "][" + slotReel[reelIndices3[8]] + "]\n" + "[" + slotReel[reelIndices1[9]] + "][" +
+						slotReel[reelIndices2[9]] + "][" + slotReel[reelIndices3[9]] + "]\n------\n__**Your Wager:**__ " + std::to_string(betAmountOld) +
+						"\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName + "\n__**Game Results:**__\n__**Payout:**__ " +
+						std::to_string(payoutAmountNew) + " " + discordUser.data.currencyName + " __**Result Type:**__ " + gameResultTypeNew +
+						"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 					EmbedData msgEmbed{};
 					if (gameResultTypeNew == "Loss") {

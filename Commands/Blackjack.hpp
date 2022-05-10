@@ -140,9 +140,8 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		discordGuildMember->writeDataToDB();
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
-		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser->data.currencyName +
-			"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName +
-			"\n------";
+		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser->data.currencyName + "\n__**Your New Wallet Balance:**__ " +
+			std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
@@ -161,8 +160,8 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 	} else if (newUserHandScore == newDealerHandScore) {
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
-		std::string tieFooterString = "------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser->data.currencyName + "\n------";
+		std::string tieFooterString =
+			"------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
@@ -195,8 +194,8 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		discordGuild->writeDataToDB();
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
-		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser->data.currencyName + "\n------";
+		std::string bustFooterString =
+			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
@@ -217,9 +216,9 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 
 void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
 	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
-	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand,
-	std::vector<uint32_t>* userAceIndices, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
-	DiscordCoreAPI::EmbedData& finalEmbed, DiscordCoreAPI::ActionRowData& component) {
+	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* userAceIndices,
+	std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand, DiscordCoreAPI::EmbedData& finalEmbed,
+	DiscordCoreAPI::ActionRowData& component) {
 	discordGuildMember->getDataFromDB();
 	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ newEvent.getRequesterId() }).get();
 
@@ -286,8 +285,8 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		}
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
-		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser->data.currencyName + "\n------";
+		std::string bustFooterString =
+			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
@@ -336,8 +335,8 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			}
 			auto botUser = argsNew.discordCoreClient->getBotUser();
 			DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-			std::string tieFooterString = "------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-				discordUser.data.currencyName + "\n------";
+			std::string tieFooterString =
+				"------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 			std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
@@ -383,9 +382,8 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			auto botUser = argsNew.discordCoreClient->getBotUser();
 			std::unique_ptr<DiscordCoreAPI::DiscordUser> discordUser{ std::make_unique<DiscordCoreAPI::DiscordUser>(botUser.userName, botUser.id) };
 			std::string winFooterString;
-			winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser->data.currencyName +
-				"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName +
-				"\n------";
+			winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser->data.currencyName + "\n__**Your New Wallet Balance:**__ " +
+				std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 			std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
@@ -454,11 +452,10 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		} else {
 		}
 		if (buttonInteractionData->at(0).buttonId == "check") {
-			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
-				userAceIndices, dealerAceIndices, userID, dealerHand, finalEmbed, component);
+			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand, userAceIndices, dealerAceIndices,
+				userID, dealerHand, finalEmbed, component);
 		} else if (buttonInteractionData->at(0).buttonId == "cross") {
-			executeCrossResponse(
-				argsNew, discordGuildMember, betAmount, guildMember, discordGuild, &inputData, userHand, dealerAceIndices, userID, dealerHand, finalEmbed);
+			executeCrossResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, &inputData, userHand, dealerAceIndices, userID, dealerHand, finalEmbed);
 		};
 	};
 	return;
@@ -466,9 +463,9 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 
 void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
 	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData& newEvent,
-	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand,
-	std::vector<uint32_t>* userAceIndices, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
-	DiscordCoreAPI::EmbedData& finalEmbed, DiscordCoreAPI::ActionRowData& component) {
+	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* userAceIndices,
+	std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand, DiscordCoreAPI::EmbedData& finalEmbed,
+	DiscordCoreAPI::ActionRowData& component) {
 	uint32_t fineAmount = 2 * *betAmount;
 	if (fineAmount > discordGuildMember->data.currency.wallet || *newCardCount > 2) {
 		std::string failedFooterString;
@@ -500,11 +497,10 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, newEvent.getRequesterId()).get();
 		DiscordCoreAPI::RespondToInputEventData inputData{ *buttonIntData.at(0).interactionData };
 		if (buttonIntData.at(0).buttonId == "check") {
-			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand,
-				userAceIndices, dealerAceIndices, userID, dealerHand, finalEmbed, component);
+			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand, userAceIndices, dealerAceIndices,
+				userID, dealerHand, finalEmbed, component);
 		} else if (buttonIntData.at(0).buttonId == "cross") {
-			executeCrossResponse(
-				argsNew, discordGuildMember, betAmount, guildMember, discordGuild, &inputData, userHand, dealerAceIndices, userID, dealerHand, finalEmbed);
+			executeCrossResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, &inputData, userHand, dealerAceIndices, userID, dealerHand, finalEmbed);
 		} else if (buttonIntData.at(0).buttonId == "exit" || buttonIntData.at(0).buttonId == "empty") {
 			std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
 			DiscordCoreAPI::EmbedData msgEmbed2;
@@ -583,8 +579,8 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName +
-			"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+		std::string winFooterString = "------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName + "\n__**Your New Wallet Balance:**__ " +
+			std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
@@ -603,8 +599,8 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 	} else if (newUserHandScore == newDealerHandScore) {
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-		std::string tieFooterString = "------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser.data.currencyName + "\n------";
+		std::string tieFooterString =
+			"------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
@@ -638,8 +634,8 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 
 		auto botUser = argsNew.discordCoreClient->getBotUser();
 		DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-		std::string bustFooterString = "------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-			discordUser.data.currencyName + "\n------";
+		std::string bustFooterString =
+			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
@@ -695,8 +691,7 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
 				std::unique_ptr<GuildMember> guildMember{ std::make_unique<GuildMember>(
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
-						.get()) };
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<GuildMember> botMember{ std::make_unique<GuildMember>(
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get()) };
 				if (!botMember->permissions.checkForPermission(*botMember, *channel, Permission::Manage_Messages)) {
@@ -788,8 +783,8 @@ namespace DiscordCoreAPI {
 					newDealerHandScore = dealerHand[0].value + dealerHand[1].value;
 					std::string footerMsgString2;
 					if (newDealerHandScore == 21) {
-						footerMsgString2 = "\n------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " +
-							discordUser.data.currencyName + "\n------";
+						footerMsgString2 =
+							"\n------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -798,10 +793,9 @@ namespace DiscordCoreAPI {
 						msgEmbed->setDescription(finalMsgString);
 						msgEmbed->setTitle("__**Blackjack Tie:**__");
 						msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-						msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore),
-							dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
 						msgEmbed->addField(
-							"Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
+							"Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
+						msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 						msgEmbed->addField("__**Game Status: Tie**__", footerMsgString2, false);
 
 						DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
@@ -828,8 +822,7 @@ namespace DiscordCoreAPI {
 					discordGuild->writeDataToDB();
 
 					footerMsgString2 = "\n------\n__**Payout Amount:**__ " + std::to_string(payAmount) + " " + discordUser.data.currencyName +
-						"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName +
-						"\n------";
+						"\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -862,8 +855,7 @@ namespace DiscordCoreAPI {
 				msgEmbed->setTitle("__**Blackjack:**__");
 				msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
 				msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type, true);
-				msgEmbed->addField(
-					"Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
+				msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 				msgEmbed->addField("__**Game Status: In Play**__", footerMsgString, false);
 				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
 					RespondToInputEventData replyInteractionData(argsNew.eventData);
@@ -901,14 +893,14 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ *buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
-					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction,
-						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
+					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction, &newCardCount,
+						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
-					executeCrossResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), &buttonInteraction, &userHand,
-						&dealerAceIndices, &userID, &dealerHand, *msgEmbed);
+					executeCrossResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), &buttonInteraction, &userHand, &dealerAceIndices,
+						&userID, &dealerHand, *msgEmbed);
 				} else if (buttonIntData.at(0).buttonId == "double") {
-					executeDoubleResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction,
-						&newCardCount, &userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
+					executeDoubleResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction, &newCardCount,
+						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
 				};
 
 				return;

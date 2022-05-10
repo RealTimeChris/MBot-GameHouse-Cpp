@@ -125,10 +125,9 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				std::string msgString;
-				msgString += "<@!" + fromUserID + "> succesfully transferred " + std::to_string(amount) + " " + discordUser.data.currencyName + " to <@!" +
-					toUserID + ">.";
-				msgString += "\n__Your new wallet balances are:__ \n<@!" + fromUserID + ">: " + std::to_string(discordFromGuildMember.data.currency.wallet) +
-					" " + discordUser.data.currencyName;
+				msgString += "<@!" + fromUserID + "> succesfully transferred " + std::to_string(amount) + " " + discordUser.data.currencyName + " to <@!" + toUserID + ">.";
+				msgString += "\n__Your new wallet balances are:__ \n<@!" + fromUserID + ">: " + std::to_string(discordFromGuildMember.data.currency.wallet) + " " +
+					discordUser.data.currencyName;
 				msgString += "\n<@!" + toUserID + ">: " + std::to_string(discordToGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

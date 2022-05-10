@@ -1,7 +1,7 @@
 ﻿include(GenerateProductVersion)
 generate_product_version(
 	PRODUCT_INFO
-	NAME "${PROJECT_NAME}"
+	NAME "${PROJECT_NAME}-Cpp"
 	ICON "${CMAKE_SOURCE_DIR}/Chris 02.ico"
 	ORIGINAL_FILENAME "${PROJECT_NAME}-Cpp.exe"
 	VERSION_MAJOR "1"

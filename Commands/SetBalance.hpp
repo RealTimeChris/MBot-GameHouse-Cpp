@@ -36,8 +36,7 @@ namespace DiscordCoreAPI {
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
@@ -72,8 +71,7 @@ namespace DiscordCoreAPI {
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 2 ||
-					(argsNew.commandData.optionsArgs.at(1) != "bank" && argsNew.commandData.optionsArgs.at(1) != "wallet")) {
+				if (argsNew.commandData.optionsArgs.size() < 2 || (argsNew.commandData.optionsArgs.at(1) != "bank" && argsNew.commandData.optionsArgs.at(1) != "wallet")) {
 					std::string msgString = "------\n**Please enter a valid balance type! Bank or Wallet! (!setbalance = NEWBALANCE, BALANCETYPE, "
 											"@USERMENTION, or just !setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed;
@@ -116,8 +114,7 @@ namespace DiscordCoreAPI {
 				uint32_t targetUserBalance = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs.at(0));
 				std::string balanceType = argsNew.commandData.optionsArgs.at(1);
 
-				GuildMember targetMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
+				GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 
 				if (targetMember.user.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user could not be found!**\n------";
@@ -145,16 +142,14 @@ namespace DiscordCoreAPI {
 
 					uint32_t newBalance = discordGuildMember.data.currency.bank;
 
-					msgString = "__You've set the user <@!" + targetUserID + "> 's bank balance to:__ " + std::to_string(newBalance) + " " +
-						discordUser.data.currencyName;
+					msgString = "__You've set the user <@!" + targetUserID + "> 's bank balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
 				} else if (balanceType == "wallet") {
 					discordGuildMember.data.currency.wallet = targetUserBalance;
 					discordGuildMember.writeDataToDB();
 
 					uint32_t newBalance = discordGuildMember.data.currency.wallet;
 
-					msgString = "__You've set the user <@!" + targetUserID + ">'s wallet balance to:__ " + std::to_string(newBalance) + " " +
-						discordUser.data.currencyName;
+					msgString = "__You've set the user <@!" + targetUserID + ">'s wallet balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
 				}
 
 				EmbedData messageEmbed;

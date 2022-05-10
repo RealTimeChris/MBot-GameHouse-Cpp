@@ -29,7 +29,7 @@ namespace DiscordCoreAPI {
 		virtual void execute(BaseFunctionArguments& argsNew) {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
-				
+
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
@@ -56,8 +56,7 @@ namespace DiscordCoreAPI {
 					userID = userIDOne;
 				}
 
-				GuildMember currentGuildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
+				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
 
 				if (currentGuildMember.user.userName == "") {
 					std::string msgString = "-------\n**Sorry, but that user could not be found!**\n------";
@@ -131,10 +130,9 @@ namespace DiscordCoreAPI {
 						itemsMsgString.push_back("");
 					}
 					std::string itemsMsgStringTemp = "";
-					itemsMsgStringTemp = "**| __Item:__** " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName +
-						" **| __Value:__** " + std::to_string(discordGuildMember.data.items[x].itemCost) + " **| __Self-Mod:__** " +
-						std::to_string(discordGuildMember.data.items[x].selfMod) + " **| __Opp-Mod:__** " +
-						std::to_string(discordGuildMember.data.items[x].oppMod) + "\n";
+					itemsMsgStringTemp = "**| __Item:__** " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName + " **| __Value:__** " +
+						std::to_string(discordGuildMember.data.items[x].itemCost) + " **| __Self-Mod:__** " + std::to_string(discordGuildMember.data.items[x].selfMod) +
+						" **| __Opp-Mod:__** " + std::to_string(discordGuildMember.data.items[x].oppMod) + "\n";
 					if (itemsMsgStringTemp.length() + itemsMsgString[currentPage].length() >= 2048) {
 						currentPage += 1;
 						itemsMsgString.push_back("");

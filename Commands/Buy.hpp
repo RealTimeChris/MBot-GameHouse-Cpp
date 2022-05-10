@@ -46,8 +46,7 @@ namespace DiscordCoreAPI {
 				std::string objectName = argsNew.commandData.optionsArgs.at(0);
 				uint32_t objectShopIndex = 0;
 				std::string objectType;
-				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData.getGuildId() }).get();
+				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
 				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData.getGuildId() }).get();
 
@@ -176,9 +175,8 @@ namespace DiscordCoreAPI {
 					Roles::addGuildMemberRoleAsync({ .guildId = argsNew.eventData.getGuildId(), .userId = currentUser.id, .roleId = roleID });
 					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
-					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" +
-						newRole.roleId + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
-						discordUser.data.currencyName + "\n------";
+					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId +
+						"> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setTitle("__**New Role Purchased:**__");
 					msgEmbed.setTimeStamp(getTimeAndDate());
@@ -235,9 +233,8 @@ namespace DiscordCoreAPI {
 					uint32_t newBalance = discordGuildMember.data.currency.wallet;
 					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
-					std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " +
-						itemEmoji + itemName + "\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
-						discordUser.data.currencyName + "\n------";
+					std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName +
+						"\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setTitle("__**New Item Purchased:**__");
 

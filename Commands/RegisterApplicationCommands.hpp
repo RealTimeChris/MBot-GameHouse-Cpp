@@ -27,7 +27,8 @@ namespace DiscordCoreAPI {
 		}
 
 		virtual void execute(BaseFunctionArguments& newArgs) {
-			try {;
+			try {
+				;
 
 				InputEvents::deleteInputEventResponseAsync(newArgs.eventData);
 				RespondToInputEventData dataPackage(newArgs.eventData);

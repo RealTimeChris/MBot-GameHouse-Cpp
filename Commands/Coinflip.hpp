@@ -42,11 +42,9 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() })
-						.get();
-				GuildMember botMember = GuildMembers::getCachedGuildMemberAsync(
-					{ .guildMemberId = argsNew.discordCoreClient->getBotUser().id, .guildId = argsNew.eventData.getGuildId() })
-											.get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() }).get();
+				GuildMember botMember =
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.discordCoreClient->getBotUser().id, .guildId = argsNew.eventData.getGuildId() }).get();
 				InputEventData inputData{};
 				if (!botMember.permissions.checkForPermission(botMember, *channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
@@ -68,8 +66,7 @@ namespace DiscordCoreAPI {
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				if (argsNew.commandData.optionsArgs.size() == 0 || !std::regex_search(argsNew.commandData.optionsArgs.at(0), betAmountRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 1) {
-					std::string msgString =
-						"------\n**Please enter a valid amount to bet! 1 " + discordUser.data.currencyName + " or more! (!coinflip = BETAMOUNT)**\n------";
+					std::string msgString = "------\n**Please enter a valid amount to bet! 1 " + discordUser.data.currencyName + " or more! (!coinflip = BETAMOUNT)**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed->setColor(discordGuild->data.borderColor);
@@ -105,8 +102,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::string newBetString = "Welcome, <@!" + guildMember.user.id + "> , you have placed a bet of **" + std::to_string(betAmount) + " " +
-					discordUser.data.currencyName + "**.\n";
+				std::string newBetString =
+					"Welcome, <@!" + guildMember.user.id + "> , you have placed a bet of **" + std::to_string(betAmount) + " " + discordUser.data.currencyName + "**.\n";
 				newBetString += "React with :exploding_head: to choose heads, or with :snake: to choose tails!";
 
 				std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
@@ -176,8 +173,8 @@ namespace DiscordCoreAPI {
 						discordGuild->writeDataToDB();
 					}
 					newBalance = discordGuildMember.data.currency.wallet;
-					std::string completionString = "------\nNICELY DONE FAGGOT! YOU WON!\nYour new wallet balance is: " + std::to_string(newBalance) + " " +
-						discordUser.data.currencyName + ".\n------";
+					std::string completionString =
+						"------\nNICELY DONE FAGGOT! YOU WON!\nYour new wallet balance is: " + std::to_string(newBalance) + " " + discordUser.data.currencyName + ".\n------";
 					msgEmbed4.setColor("00FF00");
 					msgEmbed4.setDescription(completionString);
 					msgEmbed4.setTimeStamp(getTimeAndDate());
@@ -187,16 +184,15 @@ namespace DiscordCoreAPI {
 					dataPackage02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 					dataPackage02.addMessageEmbed(msgEmbed4);
 					InputEvents::respondToInputEventAsync(dataPackage02).get();
-				} else if (buttonInteractionData.at(0).buttonId == "Heads" && number <= 0.50 ||
-					buttonInteractionData.at(0).buttonId == "Tails" && number >= 0.50) {
+				} else if (buttonInteractionData.at(0).buttonId == "Heads" && number <= 0.50 || buttonInteractionData.at(0).buttonId == "Tails" && number >= 0.50) {
 					discordGuildMember.data.currency.wallet -= betAmount;
 					discordGuildMember.writeDataToDB();
 					discordGuild->data.casinoStats.totalCoinFlipPayout -= betAmount;
 					discordGuild->data.casinoStats.totalPayout -= betAmount;
 					discordGuild->writeDataToDB();
 					newBalance = discordGuildMember.data.currency.wallet;
-					std::string completionString = "------\nOWNED FUCK FACE! YOU LOST!\nYour new wallet balance is: " + std::to_string(newBalance) + " " +
-						discordUser.data.currencyName + ".\n------";
+					std::string completionString =
+						"------\nOWNED FUCK FACE! YOU LOST!\nYour new wallet balance is: " + std::to_string(newBalance) + " " + discordUser.data.currencyName + ".\n------";
 					msgEmbed4.setColor("FF0000");
 					msgEmbed4.setDescription(completionString);
 					msgEmbed4.setTimeStamp(getTimeAndDate());

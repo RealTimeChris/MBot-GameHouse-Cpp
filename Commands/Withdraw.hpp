@@ -91,9 +91,9 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				std::string msgString = "Congratulations! You've withdrawn " + std::to_string(withdrawAmount) + " " + discordUser.data.currencyName +
-					" from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" + "__Bank:__ " +
-					std::to_string(discordGuildMember.data.currency.bank) + " " + discordUser.data.currencyName + "\n" + "__Wallet:__ " +
-					std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
+					" from your bank account to your wallet!\n------\n__**Your new balances are:**__\n" + "__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) +
+					" " + discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName +
+					"\n------";
 
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
