@@ -1,7 +1,7 @@
 # Set this value...
 set(VCPKG_ROOT_DIR "C:/Vcpkg")
 # OR this value...
-set(CMAKE_CONFIG_FILE_DIR "C:/Users/Chris/CMake/DiscordCoreAPI/share/discordcoreapi")
+set(CMAKE_CONFIG_FILE_DIR "")
 # AND these values.
 set(CURL_INCLUDE_DIR "")
 set(CURL_RELEASE_ROOT "")
