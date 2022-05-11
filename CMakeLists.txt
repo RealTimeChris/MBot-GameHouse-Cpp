@@ -21,7 +21,7 @@ set(SODIUM_RELEASE_ROOT "")
 set(SODIUM_DEBUG_ROOT "")
 
 cmake_minimum_required(VERSION 3.20)
-set(PROJECT_NAME "DiscordCoreAPI-Bot")
+set(PROJECT_NAME "MBot-GameHouse")
 set(PRODUCT_VERSION "1.0.0.9")
 set(DESCRIPTION "A Discord bot, written in C++, using custom asynchronous coroutines.")
 project(
