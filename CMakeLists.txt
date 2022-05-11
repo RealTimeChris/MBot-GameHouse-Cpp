@@ -21,7 +21,7 @@ set(SODIUM_RELEASE_ROOT "")
 set(SODIUM_DEBUG_ROOT "")
 
 cmake_minimum_required(VERSION 3.20)
-set(PROJECT_NAME "MBot-GameHouse")
+set(PROJECT_NAME "DiscordCoreAPI-Bot")
 set(PRODUCT_VERSION "1.0.0.9")
 set(DESCRIPTION "A Discord bot, written in C++, using custom asynchronous coroutines.")
 project(
@@ -33,14 +33,6 @@ project(
 )
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake;${CMAKE_SOURCE_DIR}/CMake/Find-Scripts") 
 set(CMAKE_CONFIGURATION_TYPES "${CMAKE_BUILD_TYPE}")
-
-if (UNIX)
-	set(LIBRARY_SUFFIX ".a")
-	set(LIBRARY_PREFIX "lib")
-else()
-	set(LIBRARY_SUFFIX ".lib")
-	set(LIBRARY_PREFIX "")
-endif()	
 
 if(NOT EXISTS "${VCPKG_ROOT_DIR}" AND EXISTS "${CMAKE_CONFIG_FILE_DIR}")
 	set(DiscordCoreAPI_DIR "${CMAKE_CONFIG_FILE_DIR}")
