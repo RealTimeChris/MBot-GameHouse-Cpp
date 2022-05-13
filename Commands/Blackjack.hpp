@@ -909,6 +909,6 @@ namespace DiscordCoreAPI {
 			}
 		};
 
-		virtual ~Blackjack(){};
+		~Blackjack(){};
 	};
 };

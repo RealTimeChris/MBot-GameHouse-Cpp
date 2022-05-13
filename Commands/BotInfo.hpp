@@ -55,6 +55,6 @@ namespace DiscordCoreAPI {
 				reportException("BotInfo::execute()");
 			}
 		}
-		virtual ~BotInfo(){};
+		~BotInfo(){};
 	};
 }

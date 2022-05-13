@@ -97,6 +97,6 @@ namespace DiscordCoreAPI {
 				reportException("RemoveShopItem::execute()");
 			}
 		}
-		virtual ~RemoveShopItem(){};
+		~RemoveShopItem(){};
 	};
 }

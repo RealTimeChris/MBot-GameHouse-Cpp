@@ -219,6 +219,6 @@ namespace DiscordCoreAPI {
 				reportException("Inventory::execute()");
 			}
 		}
-		virtual ~Inventory(){};
+		~Inventory(){};
 	};
 }

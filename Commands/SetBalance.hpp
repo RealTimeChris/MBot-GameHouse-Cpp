@@ -169,6 +169,6 @@ namespace DiscordCoreAPI {
 				reportException("SetBalance::execute");
 			}
 		}
-		virtual ~SetBalance(){};
+		~SetBalance(){};
 	};
 }

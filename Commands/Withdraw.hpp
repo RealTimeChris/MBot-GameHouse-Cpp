@@ -110,6 +110,6 @@ namespace DiscordCoreAPI {
 				reportException("Withdraw::execute()");
 			}
 		}
-		virtual ~Withdraw(){};
+		~Withdraw(){};
 	};
 }

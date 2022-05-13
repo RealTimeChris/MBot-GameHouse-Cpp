@@ -685,6 +685,6 @@ namespace DiscordCoreAPI {
 				reportException("RouletteGame::execute()");
 			}
 		}
-		virtual ~RouletteGame(){};
+		~RouletteGame(){};
 	};
 }

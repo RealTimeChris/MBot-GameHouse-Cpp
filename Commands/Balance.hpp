@@ -114,7 +114,7 @@ namespace DiscordCoreAPI {
 			}
 		}
 
-		virtual ~Balance(){};
+		~Balance(){};
 	};
 
 }

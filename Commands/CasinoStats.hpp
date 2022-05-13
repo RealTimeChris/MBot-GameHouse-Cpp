@@ -113,6 +113,6 @@ namespace DiscordCoreAPI {
 			}
 		};
 
-		virtual ~CasinoStatsFunction(){};
+		~CasinoStatsFunction(){};
 	};
 }

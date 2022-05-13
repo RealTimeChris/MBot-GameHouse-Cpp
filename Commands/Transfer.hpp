@@ -145,6 +145,6 @@ namespace DiscordCoreAPI {
 				reportException("Transfer::execute()");
 			}
 		}
-		virtual ~Transfer(){};
+		~Transfer(){};
 	};
 }

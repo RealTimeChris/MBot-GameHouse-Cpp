@@ -208,6 +208,6 @@ namespace DiscordCoreAPI {
 				reportException("Coinflip::execute()");
 			}
 		}
-		virtual ~Coinflip(){};
+		~Coinflip(){};
 	};
 };

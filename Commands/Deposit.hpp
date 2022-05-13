@@ -138,6 +138,6 @@ namespace DiscordCoreAPI {
 				reportException("Deposit::execute()");
 			}
 		}
-		virtual ~Deposit(){};
+		~Deposit(){};
 	};
 }

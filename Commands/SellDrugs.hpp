@@ -113,6 +113,6 @@ namespace DiscordCoreAPI {
 				reportException("SellDrugs::execute()");
 			}
 		}
-		virtual ~SellDrugs(){};
+		~SellDrugs(){};
 	};
 }

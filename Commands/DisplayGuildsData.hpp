@@ -64,6 +64,6 @@ namespace DiscordCoreAPI {
 				reportException("DisplayGuildsData::execute()");
 			}
 		};
-		virtual ~DisplayGuildsData(){};
+		~DisplayGuildsData(){};
 	};
 }

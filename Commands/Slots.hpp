@@ -251,6 +251,6 @@ namespace DiscordCoreAPI {
 				reportException("Slots::execute()");
 			}
 		}
-		virtual ~Slots(){};
+		~Slots(){};
 	};
 }

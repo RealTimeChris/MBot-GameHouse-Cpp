@@ -106,6 +106,6 @@ namespace DiscordCoreAPI {
 				reportException("RemoveShopRole::execute()");
 			}
 		}
-		virtual ~RemoveShopRole(){};
+		~RemoveShopRole(){};
 	};
 }

@@ -205,6 +205,6 @@ namespace DiscordCoreAPI {
 				reportException("Help::execute()");
 			}
 		}
-		virtual ~Help(){};
+		~Help(){};
 	};
 }

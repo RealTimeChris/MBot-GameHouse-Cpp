@@ -262,6 +262,6 @@ namespace DiscordCoreAPI {
 				reportException("Rob::execute()");
 			}
 		}
-		virtual ~Rob(){};
+		~Rob(){};
 	};
 }

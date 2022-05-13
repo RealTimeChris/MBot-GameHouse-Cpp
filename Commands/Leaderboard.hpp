@@ -111,6 +111,6 @@ namespace DiscordCoreAPI {
 				reportException("Leaderboard::execute()");
 			}
 		}
-		virtual ~Leaderboard(){};
+		~Leaderboard(){};
 	};
 }

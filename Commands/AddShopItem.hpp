@@ -175,7 +175,7 @@ namespace DiscordCoreAPI {
 			}
 		}
 
-		virtual ~AddShopItem(){};
+		~AddShopItem(){};
 	};
 
 }

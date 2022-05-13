@@ -458,6 +458,6 @@ namespace DiscordCoreAPI {
 				reportException("Duel::execute()");
 			}
 		}
-		virtual ~Duel(){};
+		~Duel(){};
 	};
 }

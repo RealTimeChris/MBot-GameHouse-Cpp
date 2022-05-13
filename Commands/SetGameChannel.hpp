@@ -178,6 +178,6 @@ namespace DiscordCoreAPI {
 				reportException("SetGameChannel::execute()");
 			}
 		}
-		virtual ~SetGameChannel(){};
+		~SetGameChannel(){};
 	};
 }

@@ -77,6 +77,6 @@ namespace DiscordCoreAPI {
 				reportException("SetBorderColor::execute()");
 			}
 		};
-		virtual ~SetBorderColor(){};
+		~SetBorderColor(){};
 	};
 };

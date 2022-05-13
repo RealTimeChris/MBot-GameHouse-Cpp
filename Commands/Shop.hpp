@@ -418,6 +418,6 @@ namespace DiscordCoreAPI {
 				reportException("Shop::execute()");
 			}
 		}
-		virtual ~Shop(){};
+		~Shop(){};
 	};
 }

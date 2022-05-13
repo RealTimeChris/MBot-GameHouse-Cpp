@@ -166,6 +166,6 @@ namespace DiscordCoreAPI {
 				reportException("AddShopRole::execute()");
 			}
 		}
-		virtual ~AddShopRole(){};
+		~AddShopRole(){};
 	};
 }

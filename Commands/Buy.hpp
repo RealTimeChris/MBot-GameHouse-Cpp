@@ -269,6 +269,6 @@ namespace DiscordCoreAPI {
 			}
 		}
 
-		virtual ~Buy(){};
+		~Buy(){};
 	};
 };

@@ -42,6 +42,6 @@ namespace DiscordCoreAPI {
 				reportException("Test::execute()");
 			}
 		}
-		virtual ~Test(){};
+		~Test(){};
 	};
 }

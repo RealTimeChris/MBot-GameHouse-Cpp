@@ -178,6 +178,6 @@ namespace DiscordCoreAPI {
 				reportException("RemoveObject::execute()");
 			}
 		}
-		virtual ~RemoveObject(){};
+		~RemoveObject(){};
 	};
 }
