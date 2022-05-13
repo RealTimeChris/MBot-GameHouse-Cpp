@@ -28,7 +28,6 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& newArgs) {
 			try {
-				;
 
 				InputEvents::deleteInputEventResponseAsync(newArgs.eventData);
 				RespondToInputEventData dataPackage(newArgs.eventData);
@@ -36,20 +35,20 @@ namespace DiscordCoreAPI {
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild{ guild };
-				/*
-				CreateGlobalApplicationCommandData RegisterApplicationCommandsCommandData;
-				RegisterApplicationCommandsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				RegisterApplicationCommandsCommandData.dmPermission = false;
-				RegisterApplicationCommandsCommandData.defaultPermission = true;
-				RegisterApplicationCommandsCommandData.description = "Register the programmatically designated slash commands.";
-				RegisterApplicationCommandsCommandData.name = "registerapplicationcommands";
-				RegisterApplicationCommandsCommandData.type = ApplicationCommandType::Chat_Input;
-				ApplicationCommands::createGlobalApplicationCommandAsync(RegisterApplicationCommandsCommandData).get();
+				
+				CreateGlobalApplicationCommandData registerApplicationCommandsCommandData{};
+				registerApplicationCommandsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
+				registerApplicationCommandsCommandData.dmPermission = false;
+				registerApplicationCommandsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
+				registerApplicationCommandsCommandData.description = "Register the programmatically designated slash commands.";
+				registerApplicationCommandsCommandData.name = "registerapplicationcommands";
+				registerApplicationCommandsCommandData.type = ApplicationCommandType::Chat_Input;
+				ApplicationCommands::createGlobalApplicationCommandAsync(registerApplicationCommandsCommandData).get();
 
 				CreateGlobalApplicationCommandData createSellDrugsCommandData;
 				createSellDrugsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
 				createSellDrugsCommandData.dmPermission = false;
-				createSellDrugsCommandData.defaultPermission = true;
+				createSellDrugsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createSellDrugsCommandData.description = "Sell drugs in exchange for some currency!";
 				createSellDrugsCommandData.name = "selldrugs";
 				createSellDrugsCommandData.type = ApplicationCommandType::Chat_Input;
@@ -58,7 +57,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createBalanceCommandData;
 				createBalanceCommandData.dmPermission = false;
 				createBalanceCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createBalanceCommandData.defaultPermission = true;
+				createBalanceCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createBalanceCommandData.description = "Check your or another person's currency balances.";
 				createBalanceCommandData.name = "balance";
 				ApplicationCommandOptionData applicationCommandOptionOne;
@@ -73,7 +72,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createAddShopItemCommandData;
 				createAddShopItemCommandData.dmPermission = false;
 				createAddShopItemCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createAddShopItemCommandData.defaultPermission = true;
+				createAddShopItemCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createAddShopItemCommandData.description = "Add an item to the shop's inventory.";
 				createAddShopItemCommandData.name = "addshopitem";
 				ApplicationCommandOptionData addShopItemCommandOptionOne;
@@ -118,7 +117,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createAddShopRoleCommandData;
 				createAddShopRoleCommandData.dmPermission = false;
 				createAddShopRoleCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createAddShopRoleCommandData.defaultPermission = true;
+				createAddShopRoleCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createAddShopRoleCommandData.description = "Add a role to the shop's inventory.";
 				createAddShopRoleCommandData.name = "addshoprole";
 				ApplicationCommandOptionData addShopRoleCommandOptionOne;
@@ -147,7 +146,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createCoinflipRoleCommandData;
 				createCoinflipRoleCommandData.dmPermission = false;
 				createCoinflipRoleCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createCoinflipRoleCommandData.defaultPermission = true;
+				createCoinflipRoleCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createCoinflipRoleCommandData.description = "Play heads or tails.";
 				createCoinflipRoleCommandData.name = "coinflip";
 				ApplicationCommandOptionData coinflipCommandOptionOne;
@@ -164,7 +163,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createBlackjackCommandData;
 				createBlackjackCommandData.dmPermission = false;
 				createBlackjackCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createBlackjackCommandData.defaultPermission = true;
+				createBlackjackCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createBlackjackCommandData.description = "Play a round of blackjack.";
 				createBlackjackCommandData.name = "blackjack";
 				ApplicationCommandOptionData blackJackCommandOptionOne;
@@ -181,7 +180,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createButtonsCommandData;
 				createButtonsCommandData.dmPermission = false;
 				createButtonsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createButtonsCommandData.defaultPermission = true;
+				createButtonsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createButtonsCommandData.description = "Test the buttons.";
 				createButtonsCommandData.name = "buttons";
 				createButtonsCommandData.type = ApplicationCommandType::Chat_Input;
@@ -190,7 +189,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createShopCommandData;
 				createShopCommandData.dmPermission = false;
 				createShopCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createShopCommandData.defaultPermission = true;
+				createShopCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createShopCommandData.description = "Check out the server's shop!";
 				createShopCommandData.name = "shop";
 				createShopCommandData.type = ApplicationCommandType::Chat_Input;
@@ -199,7 +198,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createBotInfoCommandData;
 				createBotInfoCommandData.dmPermission = true;
 				createBotInfoCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createBotInfoCommandData.defaultPermission = true;
+				createBotInfoCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createBotInfoCommandData.description = "Displays info about the current bot.";
 				createBotInfoCommandData.name = "botinfo";
 				createBotInfoCommandData.type = ApplicationCommandType::Chat_Input;
@@ -208,7 +207,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createCasinoStatsCommandData;
 				createCasinoStatsCommandData.dmPermission = false;
 				createCasinoStatsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createCasinoStatsCommandData.defaultPermission = true;
+				createCasinoStatsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createCasinoStatsCommandData.description = "View the server's casino stats.";
 				createCasinoStatsCommandData.name = "casinostats";
 				createCasinoStatsCommandData.type = ApplicationCommandType::Chat_Input;
@@ -217,7 +216,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createDisplayGuildsDataCommandData;
 				createDisplayGuildsDataCommandData.dmPermission = true;
 				createDisplayGuildsDataCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createDisplayGuildsDataCommandData.defaultPermission = true;
+				createDisplayGuildsDataCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createDisplayGuildsDataCommandData.description = "View the list of servers that this bot is in.";
 				createDisplayGuildsDataCommandData.name = "displayguildsdata";
 				createDisplayGuildsDataCommandData.type = ApplicationCommandType::Chat_Input;
@@ -226,7 +225,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createDuelCommandData;
 				createDuelCommandData.dmPermission = false;
 				createDuelCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createDuelCommandData.defaultPermission = true;
+				createDuelCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createDuelCommandData.description = "Challenge another server member do a duel.";
 				createDuelCommandData.name = "duel";
 				ApplicationCommandOptionData duelCommandOptionOne;
@@ -249,7 +248,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createGamehouseOptionsCommandData;
 				createGamehouseOptionsCommandData.dmPermission=false;
 				createGamehouseOptionsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createGamehouseOptionsCommandData.defaultPermission = true;
+				createGamehouseOptionsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createGamehouseOptionsCommandData.description = "View the options of this bot.";
 				createGamehouseOptionsCommandData.name = "gamehouseoptions";
 				createGamehouseOptionsCommandData.type = ApplicationCommandType::Chat_Input;
@@ -258,7 +257,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createInventoryCommandData;
 				createInventoryCommandData.dmPermission = false;
 				createInventoryCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createInventoryCommandData.defaultPermission = true;
+				createInventoryCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createInventoryCommandData.description = "Observe your inventory of items and roles.";
 				createInventoryCommandData.name = "inventory";
 				ApplicationCommandOptionData inventoryCommandOptionOne;
@@ -273,7 +272,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createLeaderboardCommandData;
 				createLeaderboardCommandData.dmPermission = false;
 				createLeaderboardCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createLeaderboardCommandData.defaultPermission = true;
+				createLeaderboardCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createLeaderboardCommandData.description = "View the server's currency leaderboard.";
 				createLeaderboardCommandData.name = "leaderboard";
 				createLeaderboardCommandData.type = ApplicationCommandType::Chat_Input;
@@ -282,7 +281,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createRemoveObjectCommandData;
 				createRemoveObjectCommandData.dmPermission = false;
 				createRemoveObjectCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createRemoveObjectCommandData.defaultPermission = true;
+				createRemoveObjectCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createRemoveObjectCommandData.description = "Remove an object or role from a user's inventory.";
 				createRemoveObjectCommandData.name = "removeobject";
 				ApplicationCommandOptionData testCommandOptionOne;
@@ -309,7 +308,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createRemoveShopItemCommandData;
 				createRemoveShopItemCommandData.dmPermission = false;
 				createRemoveShopItemCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createRemoveShopItemCommandData.defaultPermission = true;
+				createRemoveShopItemCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createRemoveShopItemCommandData.description = "Remove an item from the server's shop.";
 				createRemoveShopItemCommandData.name = "removeshopitem";
 				ApplicationCommandOptionData removeShopItemOptionOne;
@@ -324,7 +323,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createRemoveShopRoleCommandData;
 				createRemoveShopRoleCommandData.dmPermission = false;
 				createRemoveShopRoleCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createRemoveShopRoleCommandData.defaultPermission = true;
+				createRemoveShopRoleCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createRemoveShopRoleCommandData.description = "Remove a role from the server's shop.";
 				createRemoveShopRoleCommandData.name = "removeshoprole";
 				ApplicationCommandOptionData removeShopRoleOptionOne;
@@ -339,7 +338,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createRobCommandData;
 				createRobCommandData.dmPermission = false;
 				createRobCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createRobCommandData.defaultPermission = true;
+				createRobCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createRobCommandData.description = "Rob a user for currency.";
 				createRobCommandData.name = "rob";
 				ApplicationCommandOptionData robOptionOne;
@@ -354,7 +353,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createRouletteCommandData;
 				createRouletteCommandData.dmPermission = false;
 				createRouletteCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createRouletteCommandData.defaultPermission = true;
+				createRouletteCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createRouletteCommandData.description = "Start or bet on a game of roulette.";
 				createRouletteCommandData.name = "roulette";
 				ApplicationCommandOptionData rouletteOptionOne;
@@ -381,43 +380,43 @@ namespace DiscordCoreAPI {
 				rouletteOptionTwoOne.description = "Choose the type of bet you would like to make.";
 				ApplicationCommandOptionChoiceData choice01;
 				choice01.name = "0";
-				choice01.valueString = "0";
+				choice01.value = "0";
 				rouletteOptionTwoOne.choices.push_back(choice01);
 				ApplicationCommandOptionChoiceData choice02;
 				choice02.name = "00";
-				choice02.valueString = "00";
+				choice02.value = "00";
 				rouletteOptionTwoOne.choices.push_back(choice02);
 				ApplicationCommandOptionChoiceData choice03;
 				choice03.name = "straight";
-				choice03.valueString = "straight";
+				choice03.value = "straight";
 				rouletteOptionTwoOne.choices.push_back(choice03);
 				ApplicationCommandOptionChoiceData choice04;
 				choice04.name = "row";
-				choice04.valueString = "row";
+				choice04.value = "row";
 				rouletteOptionTwoOne.choices.push_back(choice04);
 				ApplicationCommandOptionChoiceData choice05;
 				choice05.name = "split";
-				choice05.valueString = "split";
+				choice05.value = "split";
 				rouletteOptionTwoOne.choices.push_back(choice05);
 				ApplicationCommandOptionChoiceData choice06;
 				choice06.name = "street";
-				choice06.valueString = "street";
+				choice06.value = "street";
 				rouletteOptionTwoOne.choices.push_back(choice06);
 				ApplicationCommandOptionChoiceData choice07;
 				choice07.name = "basket";
-				choice07.valueString = "basket";
+				choice07.value = "basket";
 				rouletteOptionTwoOne.choices.push_back(choice07);
 				ApplicationCommandOptionChoiceData choice08;
 				choice07.name = "sixline";
-				choice07.valueString = "sixline";
+				choice07.value = "sixline";
 				rouletteOptionTwoOne.choices.push_back(choice08);
 				ApplicationCommandOptionChoiceData choice09;
 				choice09.name = "1stcolumn";
-				choice09.valueString = "1stcolumn";
+				choice09.value = "1stcolumn";
 				rouletteOptionTwoOne.choices.push_back(choice09);
 				ApplicationCommandOptionChoiceData choice10;
 				choice10.name = "2ndcolumn";
-				choice10.valueString = "2ndcolumn";
+				choice10.value = "2ndcolumn";
 				rouletteOptionTwoOne.choices.push_back(choice10);
 				rouletteOptionTwo.options.push_back(rouletteOptionTwoOne);
 				ApplicationCommandOptionData rouletteOptionTwoTwo;
@@ -448,43 +447,43 @@ namespace DiscordCoreAPI {
 				rouletteOptionThreeOne.description = "Choose the type of bet you would like to make.";
 				ApplicationCommandOptionChoiceData choice11;
 				choice11.name = "3rdcolumn";
-				choice11.valueString = "3rdcolumn";
+				choice11.value = "3rdcolumn";
 				rouletteOptionThreeOne.choices.push_back(choice11);
 				ApplicationCommandOptionChoiceData choice12;
 				choice12.name = "1stdozen";
-				choice12.valueString = "1stdozen";
+				choice12.value = "1stdozen";
 				rouletteOptionThreeOne.choices.push_back(choice12);
 				ApplicationCommandOptionChoiceData choice13;
 				choice13.name = "2nddozen";
-				choice13.valueString = "2nddozen";
+				choice13.value = "2nddozen";
 				rouletteOptionThreeOne.choices.push_back(choice13);
 				ApplicationCommandOptionChoiceData choice14;
 				choice14.name = "3rddozen";
-				choice14.valueString = "3rddozen";
+				choice14.value = "3rddozen";
 				rouletteOptionThreeOne.choices.push_back(choice14);
 				ApplicationCommandOptionChoiceData choice15;
 				choice15.name = "odd";
-				choice15.valueString = "odd";
+				choice15.value = "odd";
 				rouletteOptionThreeOne.choices.push_back(choice15);
 				ApplicationCommandOptionChoiceData choice16;
 				choice16.name = "even";
-				choice16.valueString = "even";
+				choice16.value = "even";
 				rouletteOptionThreeOne.choices.push_back(choice16);
 				ApplicationCommandOptionChoiceData choice17;
 				choice17.name = "red";
-				choice17.valueString = "red";
+				choice17.value = "red";
 				rouletteOptionThreeOne.choices.push_back(choice17);
 				ApplicationCommandOptionChoiceData choice18;
 				choice18.name = "black";
-				choice18.valueString = "black";
+				choice18.value = "black";
 				rouletteOptionThreeOne.choices.push_back(choice18);
 				ApplicationCommandOptionChoiceData choice19;
 				choice19.name = "1to18";
-				choice19.valueString = "1to18";
+				choice19.value = "1to18";
 				rouletteOptionThreeOne.choices.push_back(choice19);
 				ApplicationCommandOptionChoiceData choice20;
 				choice20.name = "19to36";
-				choice20.valueString = "19to36";
+				choice20.value = "19to36";
 				rouletteOptionThreeOne.choices.push_back(choice20);
 				rouletteOptionThree.options.push_back(rouletteOptionThreeOne);
 				ApplicationCommandOptionData rouletteOptionThreeTwo;
@@ -502,7 +501,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createSetGameChannelCommandData;
 				createSetGameChannelCommandData.dmPermission = false;
 				createSetGameChannelCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createSetGameChannelCommandData.defaultPermission = true;
+				createSetGameChannelCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createSetGameChannelCommandData.description = "Sets the channels which you can play games in.";
 				createSetGameChannelCommandData.name = "setgamechannel";
 				ApplicationCommandOptionData createSetGameChannelOptionOne;
@@ -531,7 +530,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createSetBalanceCommandData;
 				createSetBalanceCommandData.dmPermission = false;
 				createSetBalanceCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createSetBalanceCommandData.defaultPermission = true;
+				createSetBalanceCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createSetBalanceCommandData.description = "Set the currency balance of yourself or another server member.";
 				createSetBalanceCommandData.name = "setbalance";
 				ApplicationCommandOptionData createSetBalanceOptionOne;
@@ -549,10 +548,10 @@ namespace DiscordCoreAPI {
 				createBalanceOptionOne.required = true;
 				ApplicationCommandOptionChoiceData setBalancechoiceOne;
 				setBalancechoiceOne.name = "wallet";
-				setBalancechoiceOne.valueString = "wallet";
+				setBalancechoiceOne.value = "wallet";
 				ApplicationCommandOptionChoiceData setBalancechoiceTwo;
 				setBalancechoiceTwo.name = "bank";
-				setBalancechoiceTwo.valueString = "bank";
+				setBalancechoiceTwo.value = "bank";
 				createBalanceOptionOne.choices.push_back(setBalancechoiceOne);
 				createBalanceOptionOne.choices.push_back(setBalancechoiceTwo);
 				createSetBalanceCommandData.options.push_back(createBalanceOptionOne);
@@ -568,7 +567,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createSetBorderColorCommandData;
 				createSetBorderColorCommandData.dmPermission = false;
 				createSetBorderColorCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createSetBorderColorCommandData.defaultPermission = true;
+				createSetBorderColorCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createSetBorderColorCommandData.description = "Set the defaul color of borders.";
 				createSetBorderColorCommandData.name = "setbordercolor";
 				ApplicationCommandOptionData createSetBorderColoreOptionOne;
@@ -578,7 +577,7 @@ namespace DiscordCoreAPI {
 				createSetBorderColoreOptionOne.required = true;
 				ApplicationCommandOptionChoiceData setBorderColorchoiceOne;
 				setBorderColorchoiceOne.name = "gamehouse";
-				setBorderColorchoiceOne.valueString = "gamehouse";
+				setBorderColorchoiceOne.value = "gamehouse";
 				createSetBorderColoreOptionOne.choices.push_back(setBorderColorchoiceOne);
 				createSetBorderColorCommandData.options.push_back(createSetBorderColoreOptionOne);
 				ApplicationCommandOptionData createSetBorderColorOptionTwo;
@@ -593,7 +592,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createSlotsCommandData;
 				createSlotsCommandData.dmPermission = false;
 				createSlotsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createSlotsCommandData.defaultPermission = true;
+				createSlotsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createSlotsCommandData.description = "Play a game of slots.";
 				createSlotsCommandData.name = "slots";
 				ApplicationCommandOptionData createSlotsOptionOne;
@@ -610,7 +609,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createTransferCommandData;
 				createTransferCommandData.dmPermission = false;
 				createTransferCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createTransferCommandData.defaultPermission = true;
+				createTransferCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createTransferCommandData.description = "Transfer currency from yourself to another server member.";
 				createTransferCommandData.name = "transfer";
 				ApplicationCommandOptionData createTransferOptionOne;
@@ -633,7 +632,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createWithdrawCommandData;
 				createWithdrawCommandData.dmPermission = false;
 				createWithdrawCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createWithdrawCommandData.defaultPermission = true;
+				createWithdrawCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createWithdrawCommandData.description = "Withdraw currency from your bank account to your wallet.";
 				createWithdrawCommandData.name = "withdraw";
 				ApplicationCommandOptionData createWithdrawOptionOne;
@@ -650,7 +649,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createDepositommandData;
 				createDepositommandData.dmPermission = false;
 				createDepositommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createDepositommandData.defaultPermission = true;
+				createDepositommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createDepositommandData.description = "Deposit currency from your wallet into your bank.";
 				createDepositommandData.name = "deposit";
 				ApplicationCommandOptionData createDepositOptionOne;
@@ -667,7 +666,7 @@ namespace DiscordCoreAPI {
 				CreateGlobalApplicationCommandData createHelpData;
 				createHelpData.dmPermission = true;
 				createHelpData.applicationId = newArgs.discordCoreClient->getBotUser().id;
-				createHelpData.defaultPermission = true;
+				createHelpData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createHelpData.type = ApplicationCommandType::Chat_Input;
 				createHelpData.description = "Get help with this bot's commands.";
 				createHelpData.name = "help";
@@ -678,10 +677,10 @@ namespace DiscordCoreAPI {
 				createTestData.applicationId = newArgs.discordCoreClient->getBotUser().id;
 				createTestData.type = ApplicationCommandType::Chat_Input;
 				createTestData.name = "test";
-				createTestData.defaultPermission = true;
+				createTestData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createTestData.description = "Test command.";
 				ApplicationCommands::createGlobalApplicationCommandAsync(createTestData).get();
-				*/
+				
 				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 				msgEmbed.setColor("FeFeFe");
