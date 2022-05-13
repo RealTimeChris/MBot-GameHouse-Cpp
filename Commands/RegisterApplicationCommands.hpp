@@ -28,14 +28,13 @@ namespace DiscordCoreAPI {
 
 		virtual void execute(BaseFunctionArguments& newArgs) {
 			try {
-
 				InputEvents::deleteInputEventResponseAsync(newArgs.eventData);
 				RespondToInputEventData dataPackage(newArgs.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild{ guild };
-				
+
 				CreateGlobalApplicationCommandData registerApplicationCommandsCommandData{};
 				registerApplicationCommandsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
 				registerApplicationCommandsCommandData.dmPermission = false;
@@ -246,7 +245,7 @@ namespace DiscordCoreAPI {
 				ApplicationCommands::createGlobalApplicationCommandAsync(createDuelCommandData);
 
 				CreateGlobalApplicationCommandData createGamehouseOptionsCommandData;
-				createGamehouseOptionsCommandData.dmPermission=false;
+				createGamehouseOptionsCommandData.dmPermission = false;
 				createGamehouseOptionsCommandData.applicationId = newArgs.discordCoreClient->getBotUser().id;
 				createGamehouseOptionsCommandData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createGamehouseOptionsCommandData.description = "View the options of this bot.";
@@ -370,7 +369,7 @@ namespace DiscordCoreAPI {
 				rouletteOptionTwoOh.description = "Enter the amount which you would like to bet";
 				rouletteOptionTwoOh.required = true;
 				rouletteOptionTwoOh.type = ApplicationCommandOptionType::Integer;
-				rouletteOptionTwoOh.minValue=1;
+				rouletteOptionTwoOh.minValue = 1;
 				rouletteOptionTwoOh.maxValue = 100000000;
 				rouletteOptionTwo.options.push_back(rouletteOptionTwoOh);
 				ApplicationCommandOptionData rouletteOptionTwoOne;
@@ -680,7 +679,7 @@ namespace DiscordCoreAPI {
 				createTestData.defaultMemberPermissions = std::to_string(static_cast<int64_t>(Permission::Use_Application_Commands));
 				createTestData.description = "Test command.";
 				ApplicationCommands::createGlobalApplicationCommandAsync(createTestData);
-				
+
 				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 				msgEmbed.setColor("FeFeFe");
