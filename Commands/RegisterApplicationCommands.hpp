@@ -26,7 +26,7 @@ namespace DiscordCoreAPI {
 			return std::make_unique<RegisterApplicationCommands>();
 		}
 
-		virtual void execute(BaseFunctionArguments& newArgs) {
+		void execute(BaseFunctionArguments& newArgs) {
 			try {
 				InputEvents::deleteInputEventResponseAsync(newArgs.eventData);
 				RespondToInputEventData dataPackage(newArgs.eventData);

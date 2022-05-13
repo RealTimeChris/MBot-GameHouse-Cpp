@@ -25,7 +25,7 @@ namespace DiscordCoreAPI {
 			return std::make_unique<BotInfo>();
 		}
 
-		virtual void execute(BaseFunctionArguments& argsNew) {
+		void execute(BaseFunctionArguments& argsNew) {
 			try {
 				auto guilds = Guilds::getAllGuildsAsync().get();
 				int32_t userCount{ 0 };

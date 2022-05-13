@@ -26,7 +26,7 @@ namespace DiscordCoreAPI {
 			return std::make_unique<Help>();
 		}
 
-		virtual void execute(BaseFunctionArguments& newArgs) {
+		void execute(BaseFunctionArguments& newArgs) {
 			try {
 				bool isItFirst{ true };
 				InputEventData newEvent01(newArgs.eventData);

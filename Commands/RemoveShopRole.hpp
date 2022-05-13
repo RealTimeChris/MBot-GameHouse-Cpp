@@ -25,7 +25,7 @@ namespace DiscordCoreAPI {
 			return std::make_unique<RemoveShopRole>();
 		}
 
-		virtual void execute(BaseFunctionArguments& argsNew) {
+		void execute(BaseFunctionArguments& argsNew) {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 

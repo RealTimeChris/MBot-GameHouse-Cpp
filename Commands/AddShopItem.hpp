@@ -26,7 +26,7 @@ namespace DiscordCoreAPI {
 			return std::make_unique<AddShopItem>();
 		}
 
-		virtual void execute(BaseFunctionArguments& argsNew) {
+		void execute(BaseFunctionArguments& argsNew) {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
