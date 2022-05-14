@@ -91,7 +91,7 @@ namespace DiscordCoreAPI {
 				uint32_t msPerMinute = msPerSecond * secondsPerMinute;
 				uint32_t minutesPerHour = 60;
 				uint32_t msPerHour = msPerMinute * minutesPerHour;
-				uint32_t timeBetweenRobberies = ( uint32_t )(discordUser.data.hoursOfRobberyCooldown * ( float )msPerHour);
+				uint32_t timeBetweenRobberies = (uint32_t)(discordUser.data.hoursOfRobberyCooldown * ( float )msPerHour);
 				uint32_t currentTime = ( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 				uint32_t currentTimeDifference = currentTime - discordGuildMember.data.lastTimeRobbed;
 

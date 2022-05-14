@@ -197,7 +197,6 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		std::string bustFooterString =
 			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
-		DiscordCoreAPI::EmbedData msgEmbed{};
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
@@ -255,7 +254,6 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 	}
 
 	if (newUserHandScore > 21) {
-
 		int32_t payAmount = (int32_t)(( float )*betAmount * -1.0);
 		discordGuildMember->getDataFromDB();
 		discordGuildMember->data.currency.wallet += payAmount;
@@ -795,8 +793,8 @@ namespace DiscordCoreAPI {
 						msgEmbed->setDescription(finalMsgString);
 						msgEmbed->setTitle("__**Blackjack Tie:**__");
 						msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-						msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore),
-							dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
+						msgEmbed->addField(
+							"Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
 						msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 						msgEmbed->addField("__**Game Status: Tie**__", footerMsgString2, false);
 
