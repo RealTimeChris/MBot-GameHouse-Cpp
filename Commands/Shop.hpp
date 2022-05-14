@@ -177,17 +177,17 @@ namespace DiscordCoreAPI {
 				msgEmbedRoles.setColor(discordGuild.data.borderColor);
 				msgEmbedRoles.setTimeStamp(getTimeAndDate());
 				msgEmbedRoles.setTitle("__**Welcome to the Shop:**__");
-				std::unique_ptr<std::vector<SelectMenuResponseData>> values{ std::make_unique<std::vector<SelectMenuResponseData>>() };
+				std::vector<SelectMenuResponseData> values;
 				RespondToInputEventData dataPackage(event02);
 				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 				event02 = InputEvents::respondToInputEventAsync(dataPackage).get();
-				std::unique_ptr<RespondToInputEventData> dataPackage02{ std::make_unique<RespondToInputEventData>(event02) };
-				dataPackage02->setResponseType(InputEventResponseType::Follow_Up_Message);
-				dataPackage02->addMessageEmbed(*msgEmbed);
-				dataPackage02->addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
-				dataPackage02->addButton(false, "roles", "Roles", ButtonStyle::Primary, "🔥");
-				dataPackage02->addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
-				event02 = InputEvents::respondToInputEventAsync(*dataPackage02).get();
+				RespondToInputEventData dataPackage02(event02);
+				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
+				dataPackage02.addMessageEmbed(*msgEmbed);
+				dataPackage02.addButton(false, "items", "Items", ButtonStyle::Primary, "☑");
+				dataPackage02.addButton(false, "roles", "Roles", ButtonStyle::Primary, "🔥");
+				dataPackage02.addButton(false, "exit", "Exit", ButtonStyle::Danger, "❌");
+				event02 = InputEvents::respondToInputEventAsync(dataPackage02).get();
 				while (1) {
 				start:
 					EmbedData currentEmbed;
@@ -215,10 +215,10 @@ namespace DiscordCoreAPI {
 					}
 
 					std::unique_ptr<SelectMenuCollector> selectMenu{ std::make_unique<SelectMenuCollector>(event02) };
-					*values = selectMenu->collectSelectMenuData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
-					for (auto& value: *values) {
+					values = selectMenu->collectSelectMenuData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
+					for (auto& value: values) {
 						for (auto& value2: value.values) {
-							if (value2 == "go_back" || values->size() == 0) {
+							if (value2 == "go_back" || values.size() == 0) {
 								RespondToInputEventData dataPackage03(*value.interactionData);
 								dataPackage03.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
 								dataPackage03.addMessageEmbed(*msgEmbed);
@@ -232,7 +232,7 @@ namespace DiscordCoreAPI {
 					}
 					break;
 				}
-				for (auto& value: *values) {
+				for (auto& value: values) {
 					for (auto& value02: value.values) {
 						DiscordGuildMember discordGuildMember(guildMember);
 						std::string objectName = value02;
@@ -404,7 +404,7 @@ namespace DiscordCoreAPI {
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(*msgEmbed02);
-							InputEvents::respondToInputEventAsync(dataPackage03).get();
+							InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
 						}
 					}
 				}
