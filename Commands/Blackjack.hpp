@@ -198,7 +198,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		DiscordCoreAPI::EmbedData msgEmbed{};
-		
+
 		msgEmbed.setAuthor(guildMember.user.userName, guildMember.user.avatar);
 		msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed.setTitle("__**Blackjack Loss:**__");
@@ -255,7 +255,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 	}
 
 	if (newUserHandScore > 21) {
-		int32_t payAmount = (int32_t)(( float )betAmount * -1.0);
+		int32_t payAmount = ( int32_t )(( float )betAmount * -1.0);
 		discordGuildMember.getDataFromDB();
 		discordGuildMember.data.currency.wallet += payAmount;
 		discordGuildMember.writeDataToDB();
@@ -387,7 +387,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 				std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 			DiscordCoreAPI::EmbedData msgEmbed{};
-			
+
 			msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 			msgEmbed.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 			msgEmbed.setTitle("__**Blackjack Win:**__");
@@ -795,8 +795,8 @@ namespace DiscordCoreAPI {
 						msgEmbed->setDescription(finalMsgString);
 						msgEmbed->setTitle("__**Blackjack Tie:**__");
 						msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-						msgEmbed->addField(
-							"Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
+						msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore),
+							dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
 						msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 						msgEmbed->addField("__**Game Status: Tie**__", footerMsgString2, false);
 
@@ -895,14 +895,14 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ *buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
-					executeCheckResponse(argsNew, *discordGuildMember, betAmount, *guildMember, *discordGuild, event001, buttonInteraction, newCardCount,
-						userHand, userAceIndices, dealerAceIndices, userID, dealerHand, *msgEmbed, components.at(0));
+					executeCheckResponse(argsNew, *discordGuildMember, betAmount, *guildMember, *discordGuild, event001, buttonInteraction, newCardCount, userHand, userAceIndices,
+						dealerAceIndices, userID, dealerHand, *msgEmbed, components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
-					executeCrossResponse(argsNew, *discordGuildMember, betAmount, *guildMember, *discordGuild, buttonInteraction, userHand, dealerAceIndices,
-						userID, dealerHand, *msgEmbed);
+					executeCrossResponse(argsNew, *discordGuildMember, betAmount, *guildMember, *discordGuild, buttonInteraction, userHand, dealerAceIndices, userID, dealerHand,
+						*msgEmbed);
 				} else if (buttonIntData.at(0).buttonId == "double") {
-					executeDoubleResponse(argsNew, *discordGuildMember, betAmount, *guildMember, *discordGuild, event001, buttonInteraction, newCardCount,
-						userHand, userAceIndices, dealerAceIndices, userID, dealerHand, *msgEmbed, components.at(0));
+					executeDoubleResponse(argsNew, *discordGuildMember, betAmount, *guildMember, *discordGuild, event001, buttonInteraction, newCardCount, userHand, userAceIndices,
+						dealerAceIndices, userID, dealerHand, *msgEmbed, components.at(0));
 				};
 
 				return;
