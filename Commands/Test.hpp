@@ -26,15 +26,17 @@ namespace DiscordCoreAPI {
 
 		void execute(BaseFunctionArguments& argsNew) {
 			try {
-				RespondToInputEventData dataPackage{ argsNew.eventData };
-				dataPackage.addContent("TESTING");
-				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
-				RespondToInputEventData dataPackage02{ newEvent };
-				dataPackage02.addContent("TESTING!");
-				dataPackage02.setResponseType(InputEventResponseType::Follow_Up_Message);
-				auto newEvent02 = InputEvents::respondToInputEventAsync(dataPackage02).get();
-				InputEvents::deleteInputEventResponseAsync(std::move(newEvent02), 5000).get();
+				GetGuildAuditLogsData dataPackage{};
+				dataPackage.actionType = AuditLogEvent::Member_Disconnect;
+				dataPackage.guildId = argsNew.eventData.getGuildId();
+				dataPackage.limit = 10;
+				dataPackage.userId = "";
+				auto resultLots = Guilds::getGuildAuditLogsAsync(dataPackage).get();
+				RespondToInputEventData dataPackage02{ argsNew.eventData };
+				dataPackage02.addContent(
+					"The Date: " + resultLots.auditLogEntries[0].getCreatedAtTimestamp(TimeFormat::LongDate) + "\n<@" + resultLots.auditLogEntries[0].userId + ">");
+				dataPackage02.setResponseType(InputEventResponseType::Interaction_Response);
+				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage02).get();
 
 
 				return;
