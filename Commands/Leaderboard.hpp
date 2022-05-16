@@ -49,8 +49,8 @@ namespace DiscordCoreAPI {
 				}
 
 				std::vector<DiscordGuildMember> membersArray;
-				for (auto [key, value]: guild.members) {
-					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
+				for (auto value: guild.members) {
+					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value, .guildId = argsNew.eventData.getGuildId() }).get();
 					DiscordGuildMember guildMemberNew(guildMember);
 					membersArray.push_back(guildMemberNew);
 				}

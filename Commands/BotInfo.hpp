@@ -42,7 +42,7 @@ namespace DiscordCoreAPI {
 				messageEmbed.addField("__Bot Name:__", argsNew.discordCoreClient->getBotUser().userName + "#" + argsNew.discordCoreClient->getBotUser().discriminator, true);
 				messageEmbed.addField("__Bot ID:__", argsNew.discordCoreClient->getBotUser().id, true);
 				messageEmbed.addField("__Guild Count:__", std::to_string(guilds.size()), true);
-				messageEmbed.addField("__Created At:__", argsNew.discordCoreClient->getBotUser().createdAt, true);
+				messageEmbed.addField("__Created At:__", argsNew.discordCoreClient->getBotUser().getCreatedAtTimestamp(TimeFormat::LongDateTime), true);
 				messageEmbed.addField("__Serving Users:__", std::to_string(userCount), true);
 				messageEmbed.addField("__Running On:__", "[DiscordCoreAPI Bot Library](https://discordcoreapi.com)", true);
 				messageEmbed.addField("__Created By:__", "RealTime Chris#3627", true);
