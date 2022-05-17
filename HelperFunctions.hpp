@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../DatabaseEntities.hpp"
+#include "DatabaseEntities.hpp"
 
 namespace DiscordCoreAPI {
 

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "HelperFunctions.hpp"
+#include "../HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
 	class BotInfo : public BaseFunction {

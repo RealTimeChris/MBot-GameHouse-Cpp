@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "HelperFunctions.hpp"
+#include "../HelperFunctions.hpp"
 
 void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI::DiscordGuildMember* discordFromGuildMember,
 	DiscordCoreAPI::DiscordGuildMember* discordToGuildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent, int32_t* betAmount,
