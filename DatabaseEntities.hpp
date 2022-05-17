@@ -333,13 +333,13 @@ namespace DiscordCoreAPI {
 						break;
 					}
 				}
+				return newData;
 			} catch (...) {
-				reportException("DatabaseManagerAgent::run() Error: ");
+				reportException("DatabaseManagerAgent::run()");
 				return newData;
 			}
-			return newData;
 		}
-
+		
 	  protected:
 		static mongocxx::instance instance;
 		static std::mutex workloadMutex;
