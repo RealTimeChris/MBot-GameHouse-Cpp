@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "../HelperFunctions.hpp"
+#include "HelperFunctions.hpp"
 
 std::string getNumberString(std::string inputString, std::vector<std::string> redNumbers, std::vector<std::string> blackNumbers) {
 	std::string returnString;
