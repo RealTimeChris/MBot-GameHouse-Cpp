@@ -20,7 +20,7 @@ namespace DiscordCoreAPI {
 					isItFound = true;
 					break;
 				} else {
-					msgString += "<#" + value + ">\n";
+					msgString += "<#" + std::to_string(value) + ">\n";
 				}
 			}
 			msgString += "------";

@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -58,8 +58,8 @@ namespace DiscordCoreAPI {
 
 				std::cmatch matchResults{};
 				regex_search(argsNew.commandData.optionsArgs[1].c_str(), matchResults, userMentionRegExp);
-				std::string toUserID = matchResults.str();
-				std::string fromUserID = argsNew.eventData.getAuthorId();
+				uint64_t toUserID = stoull(matchResults.str());
+				uint64_t fromUserID = argsNew.eventData.getAuthorId();
 				uint32_t amount = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs[0]);
 				GuildMember toUserMember = GuildMembers::getCachedGuildMemberAsync({
 																					   .guildMemberId = toUserID,
@@ -125,10 +125,10 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				std::string msgString;
-				msgString += "<@!" + fromUserID + "> succesfully transferred " + std::to_string(amount) + " " + discordUser.data.currencyName + " to <@!" + toUserID + ">.";
-				msgString += "\n__Your new wallet balances are:__ \n<@!" + fromUserID + ">: " + std::to_string(discordFromGuildMember.data.currency.wallet) + " " +
+				msgString += "<@!" + std::to_string(fromUserID) + "> succesfully transferred " + std::to_string(amount) + " " + discordUser.data.currencyName + " to <@!" + std::to_string(toUserID) + ">.";
+				msgString += "\n__Your new wallet balances are:__ \n<@!" + std::to_string(fromUserID) + ">: " + std::to_string(discordFromGuildMember.data.currency.wallet) + " " +
 					discordUser.data.currencyName;
-				msgString += "\n<@!" + toUserID + ">: " + std::to_string(discordToGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
+				msgString += "\n<@!" + std::to_string(toUserID) + ">: " + std::to_string(discordToGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
@@ -138,7 +138,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addMessageEmbed(msgEmbed);
-				dataPackage.addContent("<@!" + toUserID + ">");
+				dataPackage.addContent("<@!" + std::to_string(toUserID) + ">");
 				InputEvents::respondToInputEventAsync(dataPackage).get();
 				return;
 			} catch (...) {

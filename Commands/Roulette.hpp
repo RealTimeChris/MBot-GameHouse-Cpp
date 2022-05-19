@@ -36,7 +36,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 	std::string msgStringFinal;
 	std::string finalRollString = getNumberString(finalRoll, redNumbers, blackNumbers);
 	msgStringFinal += "------\n__**Final Roll:**__ " + finalRollString + "\n------\n";
-	DiscordCoreAPI::Guild guild = DiscordCoreAPI::Guilds::getCachedGuildAsync({ .guildId = newEvent.getGuildId() }).get();
+	DiscordCoreAPI::Guild guild = DiscordCoreAPI::Guilds::getGuildAsync({ .guildId = newEvent.getGuildId() }).get();
 	std::unique_ptr<DiscordCoreAPI::DiscordGuild> discordGuild(std::make_unique<DiscordCoreAPI::DiscordGuild>(guild));
 	for (uint32_t x = 0; x < discordGuild->data.rouletteGame.rouletteBets.size(); x += 1) {
 		bool isItAWinner = false;
@@ -44,7 +44,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 			{ .guildMemberId = discordGuild->data.rouletteGame.rouletteBets.at(x).userId, .guildId = newEvent.getGuildId() })
 													  .get();
 		DiscordCoreAPI::DiscordGuildMember discordGuildMember(guildMember);
-		msgStringFinal += "__**<@!" + guildMember.user.id + ">**__: ";
+		msgStringFinal += "__**<@!" + std::to_string(guildMember.user.id) + ">**__: ";
 		int32_t betAmount = discordGuild->data.rouletteGame.rouletteBets.at(x).betAmount;
 		int32_t payoutAmount = discordGuild->data.rouletteGame.rouletteBets.at(x).payoutAmount;
 		std::vector<std::string> winningNumbers = discordGuild->data.rouletteGame.rouletteBets.at(x).winningNumbers;
@@ -162,7 +162,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
+				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);
@@ -598,11 +598,11 @@ namespace DiscordCoreAPI {
 						}
 					}
 					RouletteBet newRouletteBet{
-						winningNumbers,
-						payoutAmount,
-						betAmount,
+						winningNumbers, 
 						betOptions,
+						payoutAmount, 
 						betType,
+						betAmount,						
 						argsNew.eventData.getAuthorId(),
 					};
 

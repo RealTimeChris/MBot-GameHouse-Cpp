@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 				std::regex userIDRegExp("\\d{18}");
 
 
-				std::string userID = argsNew.eventData.getAuthorId();
+				uint64_t userID = argsNew.eventData.getAuthorId();
 
 				GuildMember guildMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
@@ -51,7 +51,7 @@ namespace DiscordCoreAPI {
 
 				std::cmatch matchResults;
 				regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, userIDRegExp);
-				std::string targetUserID = matchResults.str();
+				uint64_t targetUserID = stoull(matchResults.str());
 				GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember targetGuildMember(targetMember);
 
@@ -105,7 +105,7 @@ namespace DiscordCoreAPI {
 					for (uint32_t x = 0; x < discordGuildMember.data.items.size(); x += 1) {
 						if (discordGuildMember.data.items[x].selfMod > 0) {
 							userGainAmount += discordGuildMember.data.items[x].selfMod;
-							userGainString += "+" + std::to_string(discordGuildMember.data.items[x].selfMod) + " of base roll from <@!" + discordGuildMember.data.guildMemberId +
+							userGainString += "+" + std::to_string(discordGuildMember.data.items[x].selfMod) + " of base roll from <@!" + std::to_string(discordGuildMember.data.guildMemberId) +
 								"> 's " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName + "\n";
 						}
 					}
@@ -113,7 +113,7 @@ namespace DiscordCoreAPI {
 					for (uint32_t x = 0; x < targetGuildMember.data.items.size(); x += 1) {
 						if (targetGuildMember.data.items[x].oppMod < 0) {
 							userLossAmount += targetGuildMember.data.items[x].oppMod;
-							userLossString += std::to_string(targetGuildMember.data.items[x].oppMod) + " of base roll from <@!" + targetGuildMember.data.guildMemberId + "> 's " +
+							userLossString += std::to_string(targetGuildMember.data.items[x].oppMod) + " of base roll from <@!" + std::to_string(targetGuildMember.data.guildMemberId) + "> 's " +
 								targetGuildMember.data.items[x].emoji + targetGuildMember.data.items[x].itemName + "\n";
 						}
 					}
@@ -133,7 +133,7 @@ namespace DiscordCoreAPI {
 					std::string msgString;
 
 					if (currentSuccessValue == true) {
-						msgString = "Nicely done! You robbed that motherfucker, <@!" + targetUserID + ">, good!\n\n__Base probability of success: __ " +
+						msgString = "Nicely done! You robbed that motherfucker, <@!" + std::to_string(targetUserID) + ">, good!\n\n__Base probability of success: __ " +
 							std::to_string(baseProbabilityOfSuccess) + "% \n";
 
 						if (userGainAmount > 0 || userLossAmount < 0) {
@@ -167,10 +167,10 @@ namespace DiscordCoreAPI {
 						uint32_t targetUserNewBalance = targetGuildMember.data.currency.wallet;
 						uint32_t userNewBalance = discordGuildMember.data.currency.wallet;
 
-						msgString = msgString + "------\n**You've robbed <@!" + targetUserID + "> for " + std::to_string(currencyRobPercentage) + "% of their wallet, which is " +
-							std::to_string(currencyRobAmount) + " " + discordUser.data.currencyName + ".\n" + "**\n__Your new wallet balances are:__\n<@!" + userID +
-							">: " + std::to_string(userNewBalance) + " " + discordUser.data.currencyName + "\n<@!" + targetUserID + ">: " + std::to_string(targetUserNewBalance) +
-							" " + discordUser.data.currencyName;
+						msgString = msgString + "------\n**You've robbed <@!" + std::to_string(targetUserID) + "> for " + std::to_string(currencyRobPercentage) +
+							"% of their wallet, which is " + std::to_string(currencyRobAmount) + " " + discordUser.data.currencyName + ".\n" +
+							"**\n__Your new wallet balances are:__\n<@!" + std::to_string(userID) + ">: " + std::to_string(userNewBalance) + " " + discordUser.data.currencyName +
+							"\n<@!" + std::to_string(targetUserID) + ">: " + std::to_string(targetUserNewBalance) + " " + discordUser.data.currencyName;
 
 						discordGuildMember.data.lastTimeRobbed =
 							( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -183,7 +183,7 @@ namespace DiscordCoreAPI {
 						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-						dataPackage.addContent("<@!" + targetUserID + ">");
+						dataPackage.addContent("<@!" + std::to_string(targetUserID) + ">");
 						dataPackage.addMessageEmbed(*msgEmbed);
 						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					} else if (currentSuccessValue == false) {
@@ -199,7 +199,7 @@ namespace DiscordCoreAPI {
 						targetGuildMember.writeDataToDB();
 						uint32_t targetUserNewBalance = targetGuildMember.data.currency.wallet;
 
-						msgString = "Oof! You've been caught while attempting to rob <@!" + targetUserID + ">!\n\n__Base probability of success:__ " +
+						msgString = "Oof! You've been caught while attempting to rob <@!" + std::to_string(targetUserID) + ">!\n\n__Base probability of success:__ " +
 							std::to_string(baseProbabilityOfSuccess) + "% \n";
 
 						if (userGainAmount > 0 || userLossAmount < 0) {
@@ -208,11 +208,12 @@ namespace DiscordCoreAPI {
 						}
 
 						msgString += "------\n**You've been fined " + std::to_string(finedPercentage) + "% of your wallet balance, which is " + std::to_string(finedAmount) + " " +
-							discordUser.data.currencyName + "!\n<@!" + targetUserID + "> has been reimbursed " + std::to_string(repaidAmount) + " " +
+							discordUser.data.currencyName + "!\n<@!" + std::to_string(targetUserID) + "> has been reimbursed " + std::to_string(repaidAmount) + " " +
 							discordUser.data.currencyName + " (" + std::to_string(repaidPercentage) + "%).**";
 
-						msgString += "\n\n__Your new wallet balances are:__\n<@!" + userID + ">: " + std::to_string(userNewBalance) + " " + discordUser.data.currencyName +
-							"\n<@!" + targetUserID + ">: " + std::to_string(targetUserNewBalance) + " " + discordUser.data.currencyName;
+						msgString += "\n\n__Your new wallet balances are:__\n<@!" + std::to_string(userID) + ">: " + std::to_string(userNewBalance) + " " +
+							discordUser.data.currencyName + "\n<@!" + std::to_string(targetUserID) + ">: " + std::to_string(targetUserNewBalance) + " " +
+							discordUser.data.currencyName;
 
 						discordGuildMember.data.lastTimeRobbed =
 							( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();

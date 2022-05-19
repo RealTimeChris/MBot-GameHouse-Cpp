@@ -31,19 +31,19 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = newArgs.eventData.getChannelId() }).get();
 
 				uint32_t currentCount = 0;
-				std::vector<Guild> theCache = Guilds::getAllGuildsAsync().get();
+				std::vector<GuildData> theCache = Guilds::getAllGuildsAsync().get();
 				RespondToInputEventData dataPackage(newArgs.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto inputEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				for (auto& value: theCache) {
 					std::string msgString = "__Guild Name:__ " + value.name + "\n";
-					msgString += "__Guild ID:__ " + value.id + "\n";
+					msgString += "__Guild ID:__ " + std::to_string(value.id) + "\n";
 					msgString += "__Member Count:__ " + std::to_string(value.memberCount) + "\n";
 
 					msgString += "__Joined At:__ " + value.joinedAt.getDateTimeStamp(TimeFormat::LongDateTime) + "\n";
-					User owner = Users::getUserAsync({ value.ownerId }).get();
+					User owner = Users::getUserAsync({ stoull(value.ownerId) }).get();
 					msgString += "__Guild Owner:__ <@!" + value.ownerId + "> " + owner.userName + "#" + owner.discriminator + "\n";
-					msgString += "__Created At:__ " + value.createdAt;
+					msgString += "__Created At:__ " + value.getCreatedAtTimestamp(TimeFormat::LongDateTime);
 
 					EmbedData messageEmbed;
 					messageEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());

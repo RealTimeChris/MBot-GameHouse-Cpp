@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({

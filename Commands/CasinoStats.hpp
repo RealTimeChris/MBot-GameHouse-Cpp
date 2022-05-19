@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowedHere = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -48,28 +48,28 @@ namespace DiscordCoreAPI {
 				std::vector<EmbedFieldData> fields;
 				EmbedFieldData field1;
 				field1.name = "__**Largest Coinflip Payout:**__";
-				field1.value = "__User:__ <@!" + discordGuild.data.casinoStats.largestCoinFlipPayout.userId + "> " + discordGuild.data.casinoStats.largestCoinFlipPayout.userName +
+				field1.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestCoinFlipPayout.userId) + "> " + discordGuild.data.casinoStats.largestCoinFlipPayout.userName +
 					"\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestCoinFlipPayout.amount) + " " + discordUser.data.currencyName + "\n__Date:__ " +
 					discordGuild.data.casinoStats.largestCoinFlipPayout.timeStamp;
 				field1.Inline = true;
 				fields.push_back(field1);
 				EmbedFieldData field2;
 				field2.name = "__**Largest Roulette Payout:**__";
-				field2.value = "__User:__ <@!" + discordGuild.data.casinoStats.largestRoulettePayout.userId + "> " + discordGuild.data.casinoStats.largestRoulettePayout.userName +
+				field2.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestRoulettePayout.userId) + "> " + discordGuild.data.casinoStats.largestRoulettePayout.userName +
 					"\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestRoulettePayout.amount) + " " + discordUser.data.currencyName + "\n__Date:__ " +
 					discordGuild.data.casinoStats.largestRoulettePayout.timeStamp;
 				field2.Inline = true;
 				fields.push_back(field2);
 				EmbedFieldData field3;
 				field3.name = "__**Largest Blackjack Payout:**__";
-				field3.value = "__User:__ <@!" + discordGuild.data.casinoStats.largestBlackjackPayout.userId + "> " +
+				field3.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestBlackjackPayout.userId) + "> " +
 					discordGuild.data.casinoStats.largestBlackjackPayout.userName + "\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestBlackjackPayout.amount) +
 					" " + discordUser.data.currencyName + "\n__Date:__ " + discordGuild.data.casinoStats.largestBlackjackPayout.timeStamp;
 				field3.Inline = true;
 				fields.push_back(field3);
 				EmbedFieldData field4;
 				field4.name = "__**Largest Slots Payout:**__";
-				field4.value = "__User:__ <@!" + discordGuild.data.casinoStats.largestSlotsPayout.userId + "> " + discordGuild.data.casinoStats.largestSlotsPayout.userName +
+				field4.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestSlotsPayout.userId) + "> " + discordGuild.data.casinoStats.largestSlotsPayout.userName +
 					"\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestSlotsPayout.amount) + " " + discordUser.data.currencyName + "\n__Date:__ " +
 					discordGuild.data.casinoStats.largestSlotsPayout.timeStamp;
 				field4.Inline = true;

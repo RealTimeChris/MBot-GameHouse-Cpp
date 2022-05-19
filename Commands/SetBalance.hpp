@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember =
@@ -53,7 +53,7 @@ namespace DiscordCoreAPI {
 				std::regex balanceRegExp("\\d{1,18}");
 				std::regex userMentionRegExp("<@!\\d{18}>");
 				std::regex userIDRegExp("\\d{18}");
-				std::string targetUserID;
+				uint64_t targetUserID;
 
 				if (argsNew.commandData.optionsArgs.size() == 0 || !regex_search(argsNew.commandData.optionsArgs.at(0), balanceRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 0) {
@@ -108,7 +108,7 @@ namespace DiscordCoreAPI {
 					std::cmatch matchResults;
 					regex_search(argsNew.commandData.optionsArgs.at(2).c_str(), matchResults, userIDRegExp);
 					std::string targetUserIDOne = matchResults.str();
-					targetUserID = targetUserIDOne;
+					targetUserID = stoull(targetUserIDOne);
 				}
 
 				uint32_t targetUserBalance = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs.at(0));
@@ -142,14 +142,16 @@ namespace DiscordCoreAPI {
 
 					uint32_t newBalance = discordGuildMember.data.currency.bank;
 
-					msgString = "__You've set the user <@!" + targetUserID + "> 's bank balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
+					msgString =
+						"__You've set the user <@!" + std::to_string(targetUserID) + "> 's bank balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
 				} else if (balanceType == "wallet") {
 					discordGuildMember.data.currency.wallet = targetUserBalance;
 					discordGuildMember.writeDataToDB();
 
 					uint32_t newBalance = discordGuildMember.data.currency.wallet;
 
-					msgString = "__You've set the user <@!" + targetUserID + ">'s wallet balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
+					msgString =
+						"__You've set the user <@!" + std::to_string(targetUserID) + ">'s wallet balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
 				}
 
 				EmbedData messageEmbed;
@@ -161,7 +163,7 @@ namespace DiscordCoreAPI {
 				messageEmbed.setTitle("__**Set New Balance:**__");
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-				dataPackage.addContent("<@!" + targetUserID + ">");
+				dataPackage.addContent("<@!" + std::to_string(targetUserID) + ">");
 				dataPackage.addMessageEmbed(messageEmbed);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				return;

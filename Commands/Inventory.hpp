@@ -33,7 +33,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -42,7 +42,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::string userID;
+				uint64_t userID;
 
 				std::regex userIDRegExp(".{2,3}\\d{18}>");
 				std::regex idRegExp("\\d{18}");
@@ -53,7 +53,7 @@ namespace DiscordCoreAPI {
 					std::cmatch userIDMatch;
 					regex_search(argZero.c_str(), userIDMatch, idRegExp);
 					std::string userIDOne = userIDMatch.str();
-					userID = userIDOne;
+					userID = stoull(userIDOne);
 				}
 
 				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
@@ -148,7 +148,7 @@ namespace DiscordCoreAPI {
 						rolesMsgStrings.push_back("");
 					}
 					std::string rolesMsgStringTemp = "";
-					rolesMsgStringTemp = "**| __Role:__** <@&" + discordGuildMember.data.roles.at(x).roleId + "> **| __Value:__** " +
+					rolesMsgStringTemp = "**| __Role:__** <@&" + std::to_string(discordGuildMember.data.roles.at(x).roleId) + "> **| __Value:__** " +
 						std::to_string(discordGuildMember.data.roles.at(x).roleCost) + "\n";
 					if (rolesMsgStringTemp.length() + rolesMsgStrings[currentPage2].length() > 2048) {
 						currentPage2 += 1;
@@ -193,7 +193,7 @@ namespace DiscordCoreAPI {
 
 				if (rolesMsgEmbeds.size() == 0 && itemsMessageEmbeds.size() == 0) {
 					std::string msgString = "";
-					msgString = "Sorry, but the specified user, (<@!" + userID + ">) has no inventory!";
+					msgString = "Sorry, but the specified user, (<@!" + std::to_string(userID) + ">) has no inventory!";
 					EmbedData messageEmbed;
 					messageEmbed.setDescription(msgString);
 					messageEmbed.setTimeStamp(getTimeAndDate());
@@ -213,7 +213,7 @@ namespace DiscordCoreAPI {
 				event02 = InputEvents::respondToInputEventAsync(dataPackage).get();
 
 
-				moveThroughMessagePages(userID, event02, currentPageIndex, finalMsgEmbedsArray, true, 120000);
+				moveThroughMessagePages(std::to_string(userID), event02, currentPageIndex, finalMsgEmbedsArray, true, 120000);
 				return;
 			} catch (...) {
 				reportException("Inventory::execute()");

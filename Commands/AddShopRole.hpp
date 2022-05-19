@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData);
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember = GuildMembers::getGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
@@ -135,7 +135,7 @@ namespace DiscordCoreAPI {
 				createRoleData.name = roleName;
 				createRoleData.permissions = rolePermsString;
 				Role role = Roles::createGuildRoleAsync(createRoleData).get();
-				if (role.id == "") {
+				if (role.id == 0) {
 					throw std::exception("Role not initialized!");
 				}
 				InventoryRole currentRole;
@@ -150,7 +150,7 @@ namespace DiscordCoreAPI {
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as "
 							"follows:\n------\n__**Role:**__ <@&" +
-					currentRole.roleId + "> __**Cost**__ : " + std::to_string(roleCost) + " " + discordUser.data.currencyName + "\n------";
+					std::to_string(currentRole.roleId) + "> __**Cost**__ : " + std::to_string(roleCost) + " " + discordUser.data.currencyName + "\n------";
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);

@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
+				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);
@@ -103,7 +103,7 @@ namespace DiscordCoreAPI {
 				}
 
 				std::string newBetString =
-					"Welcome, <@!" + guildMember.user.id + "> , you have placed a bet of **" + std::to_string(betAmount) + " " + discordUser.data.currencyName + "**.\n";
+					"Welcome, <@!" + std::to_string(guildMember.user.id) + "> , you have placed a bet of **" + std::to_string(betAmount) + " " + discordUser.data.currencyName + "**.\n";
 				newBetString += "React with :exploding_head: to choose heads, or with :snake: to choose tails!";
 
 				std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };

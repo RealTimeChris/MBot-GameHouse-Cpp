@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(newArgs.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild{ guild };
 
 				CreateGlobalApplicationCommandData registerApplicationCommandsCommandData{};

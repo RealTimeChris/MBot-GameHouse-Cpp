@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData);
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
@@ -50,15 +50,15 @@ namespace DiscordCoreAPI {
 
 				std::regex idRegExp("\\d{18}");
 				std::cmatch matchResults;
-				std::string roleID;
+				uint64_t roleID;
 				std::string objectName;
 				if (regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, idRegExp)) {
-					roleID = matchResults.str();
+					roleID = stoull(matchResults.str());
 				} else {
 					objectName = argsNew.commandData.optionsArgs.at(0);
 				}
 
-				std::string userID;
+				uint64_t userID;
 				std::regex userMentionRegExp("<@!\\d{18}>");
 				if (argsNew.commandData.optionsArgs.size() == 1) {
 					userID = argsNew.eventData.getAuthorId();
@@ -67,7 +67,7 @@ namespace DiscordCoreAPI {
 					std::cmatch matchResultsNew;
 					regex_search(argOne.c_str(), matchResultsNew, idRegExp);
 					std::string userIDOne = matchResultsNew.str();
-					userID = userIDOne;
+					userID = stoull(userIDOne);
 				}
 
 				GuildMember targetMember = GuildMembers::getGuildMemberAsync({
@@ -157,10 +157,10 @@ namespace DiscordCoreAPI {
 														  .roleId = roleID,
 													  })
 						.get();
-					msgString = "------\n**You've removed the following role from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
+					msgString = "------\n**You've removed the following role from <@!" + std::to_string(userID) + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
 					messageEmbed.setTitle("__**Role Removed:**__");
 				} else if (objectType == "item") {
-					msgString = "------\n**You've removed the following item from <@!" + userID + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
+					msgString = "------\n**You've removed the following item from <@!" + std::to_string(userID) + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
 					messageEmbed.setTitle("__**Item Removed:**__");
 				}
 

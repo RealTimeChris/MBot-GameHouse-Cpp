@@ -34,7 +34,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::string userID = "";
+				uint64_t userID = 0;
 				uint32_t bankAmount = 0;
 				uint32_t walletAmount = 0;
 
@@ -69,12 +69,12 @@ namespace DiscordCoreAPI {
 					}
 					std::cmatch matchResults;
 					regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, idRegExp);
-					userID = matchResults.str();
+					userID = stoull(matchResults.str());
 				}
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
 
-				if (guildMember.user.id == "") {
+				if (guildMember.user.id == 0) {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -96,8 +96,8 @@ namespace DiscordCoreAPI {
 				walletAmount = discordGuildMember.data.currency.wallet;
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				msgString = "<@!" + guildMember.user.id + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " + discordUser.data.currencyName +
-					"\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName + "\n------";
+				msgString = "<@!" + std::to_string(guildMember.user.id) + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " +
+					discordUser.data.currencyName + "\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName + "\n------";
 
 				EmbedData msgEmbed;
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

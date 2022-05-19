@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -170,13 +170,14 @@ namespace DiscordCoreAPI {
 
 					uint32_t newBalance = discordGuildMember.data.currency.wallet;
 
-					std::string roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
+					uint64_t roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
 
 					Roles::addGuildMemberRoleAsync({ .guildId = argsNew.eventData.getGuildId(), .userId = currentUser.id, .roleId = roleID });
 					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordUser discordUser(botUser.userName, botUser.id);
-					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" + newRole.roleId +
-						"> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
+					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" +
+						std::to_string(newRole.roleId) + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
+						discordUser.data.currencyName + "\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setTitle("__**New Role Purchased:**__");
 					msgEmbed.setTimeStamp(getTimeAndDate());

@@ -30,11 +30,11 @@ namespace DiscordCoreAPI {
 				dataPackage.actionType = AuditLogEvent::Member_Disconnect;
 				dataPackage.guildId = argsNew.eventData.getGuildId();
 				dataPackage.limit = 10;
-				dataPackage.userId = "";
+				dataPackage.userId = 0;
 				auto resultLots = Guilds::getGuildAuditLogsAsync(dataPackage).get();
 				RespondToInputEventData dataPackage02{ argsNew.eventData };
 				dataPackage02.addContent(
-					"The Date: " + resultLots.auditLogEntries[0].getCreatedAtTimestamp(TimeFormat::LongDate) + "\n<@" + resultLots.auditLogEntries[0].userId + ">");
+					"The Date: " + resultLots.auditLogEntries[0].getCreatedAtTimestamp(TimeFormat::LongDate) + "\n<@" + std::to_string(resultLots.auditLogEntries[0].userId) + ">");
 				dataPackage02.setResponseType(InputEventResponseType::Interaction_Response);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage02).get();
 

@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				GuildMember guildMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 				}
 
 				if (argsNew.commandData.subCommandName == "add") {
-					std::string channelID = channel.id;
+					uint64_t channelID = channel.id;
 					for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
 						if (channelID == discordGuild.data.gameChannelIds[x]) {
 							std::string msgString = "------\n**That channel is already on the list of enabled channels!**\n------";
@@ -67,7 +67,7 @@ namespace DiscordCoreAPI {
 					messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					messageEmbed.setColor(discordGuild.data.borderColor);
 					messageEmbed.setTimeStamp(getTimeAndDate());
-					messageEmbed.setDescription("------\n**You've succesfully added <#" + channelID + "> to your list of accepted gaming channels!**\n------");
+					messageEmbed.setDescription("------\n**You've succesfully added <#" + std::to_string(channelID) + "> to your list of accepted gaming channels!**\n------");
 					messageEmbed.setTitle("__**Game Channel Added:**__");
 					RespondToInputEventData dataPackage(argsNew.eventData);
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
@@ -76,7 +76,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 				if (argsNew.commandData.subCommandName == "remove") {
-					std::string channelID;
+					uint64_t channelID;
 					channelID = channel.id;
 
 					std::string msgString;
@@ -86,7 +86,8 @@ namespace DiscordCoreAPI {
 							isItPresent = true;
 							discordGuild.data.gameChannelIds.erase(discordGuild.data.gameChannelIds.begin() + x);
 							discordGuild.writeDataToDB();
-							msgString += "------\n**You've succesfully removed the channel <#" + channelID + "> from the list of enabled gaming channels!**\n------";
+							msgString +=
+								"------\n**You've succesfully removed the channel <#" + std::to_string(channelID) + "> from the list of enabled gaming channels!**\n------";
 						}
 					}
 
@@ -124,14 +125,14 @@ namespace DiscordCoreAPI {
 						msgString = "__You've removed the following channels from your list of enabled gaming channels:__\n------\n";
 
 						for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
-							std::string currentID = discordGuild.data.gameChannelIds[x];
+							uint64_t currentID = discordGuild.data.gameChannelIds[x];
 
-							msgString += "__**Channel #" + std::to_string(x) + "**__<#" + currentID + "> \n";
+							msgString += "__**Channel #" + std::to_string(x) + "**__<#" + std::to_string(currentID) + "> \n";
 						}
 
 						msgString += "------\n__**The gaming commands will now work in ANY CHANNEL!**__";
 
-						discordGuild.data.gameChannelIds = std::vector<std::string>();
+						discordGuild.data.gameChannelIds = std::vector<uint64_t>();
 						discordGuild.writeDataToDB();
 					} else {
 						msgString += "------\n**Sorry, but there are no channels to remove!**\n------";
@@ -153,9 +154,9 @@ namespace DiscordCoreAPI {
 					std::string msgString = "__You have the following channels enabled for gaming, on this server:__\n------\n";
 
 					for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
-						std::string currentID = discordGuild.data.gameChannelIds[x];
+						uint64_t currentID = discordGuild.data.gameChannelIds[x];
 
-						msgString += "__**Channel #" + std::to_string(x) + ":**__ <#" + currentID + "> \n";
+						msgString += "__**Channel #" + std::to_string(x) + ":**__ <#" + std::to_string(currentID) + "> \n";
 					}
 
 					msgString += "------\n";

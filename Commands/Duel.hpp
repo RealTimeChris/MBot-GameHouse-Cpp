@@ -326,7 +326,7 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
@@ -358,8 +358,8 @@ namespace DiscordCoreAPI {
 				int32_t betAmount = ( int32_t )std::stoll(matchResults.str());
 				std::cmatch matchResults02;
 				std::regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults02, idRegExp);
-				std::string toUserID = matchResults02.str();
-				std::string fromUserID = argsNew.eventData.getAuthorId();
+				uint64_t toUserID = stoull(matchResults02.str());
+				uint64_t fromUserID = argsNew.eventData.getAuthorId();
 
 				GuildMember fromGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = fromUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember discordFromGuildMember(fromGuildMember);
@@ -415,8 +415,8 @@ namespace DiscordCoreAPI {
 				}
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
-				std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + fromUserID + ">\nFor a wager of: " + std::to_string(betAmount) +
-					" " + discordUser.data.currencyName + "\nReact with :white_check_mark: to accept or :x: to reject!";
+				std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + std::to_string(fromUserID) +
+					">\nFor a wager of: " + std::to_string(betAmount) + " " + discordUser.data.currencyName + "\nReact with :white_check_mark: to accept or :x: to reject!";
 				EmbedData messageEmbed;
 				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				messageEmbed.setDescription(msgEmbedString);
@@ -427,7 +427,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage2(argsNew.eventData);
 				dataPackage2.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage2.addMessageEmbed(messageEmbed);
-				dataPackage2.addContent("<@!" + toUserID + ">");
+				dataPackage2.addContent("<@!" + std::to_string(toUserID) + ">");
 				dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
 				dataPackage2.addButton(false, "cross", "Reject", ButtonStyle::Success, "❌");
 				newEvent02 = InputEvents::respondToInputEventAsync(dataPackage2).get();
@@ -435,12 +435,14 @@ namespace DiscordCoreAPI {
 				std::vector<ButtonResponseData> buttonInteractionData = button->collectButtonData(false, 120000, 1, toUserID).get();
 				RespondToInputEventData dataPackageNew(*buttonInteractionData.at(0).interactionData);
 				if (buttonInteractionData.at(0).buttonId == "empty") {
-					executeExit(fromUserID, toUserID, discordGuild, newEvent02);
+					executeExit(std::to_string(fromUserID), std::to_string(toUserID), discordGuild, newEvent02);
 				} else if (buttonInteractionData.at(0).buttonId == "check") {
-					executeCheck(
-						argsNew, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02, &betAmount, dataPackageNew, &msgEmbedString, &fromUserID, &toUserID);
+					std::string theNewUserId{ std::to_string(toUserID) };
+					std::string theNewUserFromId{ std::to_string(fromUserID) };
+					executeCheck(argsNew, &discordFromGuildMember, &discordToGuildMember, &discordGuild, newEvent02, &betAmount, dataPackageNew, &msgEmbedString, &theNewUserFromId,
+						&theNewUserId);
 				} else if (buttonInteractionData.at(0).buttonId == "cross") {
-					std::string rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer!";
+					std::string rejectedString = "Sorry, <@!" + std::to_string(fromUserID) + ">, but <@!" + std::to_string(toUserID) + "> has rejected your duel offer!";
 					EmbedData messageEmbed5;
 					messageEmbed5 = EmbedData();
 					messageEmbed5.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -450,7 +452,7 @@ namespace DiscordCoreAPI {
 					messageEmbed5.setDescription(rejectedString);
 					dataPackageNew.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 					dataPackageNew.addMessageEmbed(messageEmbed5);
-					dataPackageNew.addContent("<@!" + fromUserID + ">");
+					dataPackageNew.addContent("<@!" + std::to_string(fromUserID) + ">");
 					InputEvents::respondToInputEventAsync(dataPackageNew).get();
 				}
 				return;

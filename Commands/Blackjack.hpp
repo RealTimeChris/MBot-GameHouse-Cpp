@@ -66,8 +66,8 @@ void checkAndSetAceValues(std::vector<DiscordCoreAPI::Card>* playerHand, std::ve
 }
 
 void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
-	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::RespondToInputEventData* buttonInteraction,
-	std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
+	DiscordCoreAPI::GuildMemberData* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::RespondToInputEventData* buttonInteraction,
+	std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* dealerAceIndices,uint64_t* userID, std::vector<DiscordCoreAPI::Card>* dealerHand,
 	DiscordCoreAPI::EmbedData& finalEmbed) {
 	discordGuildMember->getDataFromDB();
 	uint32_t fineAmount = 0;
@@ -86,7 +86,6 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		return;
 	}
-
 	uint32_t newUserHandScore = 0;
 	for (auto x = 0; x < userHand->size(); x += 1) {
 		newUserHandScore += userHand->at(x).value;
@@ -105,7 +104,6 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 
 		checkAndSetAceValues(dealerHand, dealerAceIndices);
 	}
-
 	newDealerHandScore = 0;
 	for (auto x = 0; x < dealerHand->size(); x += 1) {
 		newDealerHandScore += dealerHand->at(x).value;
@@ -155,7 +153,6 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		buttonInteraction->addMessageEmbed(*msgEmbed);
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
-
 		return;
 	} else if (newUserHandScore == newDealerHandScore) {
 		auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -215,9 +212,9 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 }
 
 void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
-	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
+	DiscordCoreAPI::GuildMemberData* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData newEvent,
 	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* userAceIndices,
-	std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand, DiscordCoreAPI::EmbedData& finalEmbed,
+	std::vector<uint32_t>* dealerAceIndices, uint64_t* userID, std::vector<DiscordCoreAPI::Card>* dealerHand, DiscordCoreAPI::EmbedData& finalEmbed,
 	DiscordCoreAPI::ActionRowData& component) {
 	discordGuildMember->getDataFromDB();
 	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ newEvent.getRequesterId() }).get();
@@ -462,9 +459,9 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 };
 
 void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, DiscordCoreAPI::DiscordGuildMember* discordGuildMember, uint32_t* betAmount,
-	DiscordCoreAPI::GuildMember* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData& newEvent,
+	DiscordCoreAPI::GuildMemberData* guildMember, DiscordCoreAPI::DiscordGuild* discordGuild, DiscordCoreAPI::InputEventData& newEvent,
 	DiscordCoreAPI::RespondToInputEventData* buttonInteraction, uint32_t* newCardCount, std::vector<DiscordCoreAPI::Card>* userHand, std::vector<uint32_t>* userAceIndices,
-	std::vector<uint32_t>* dealerAceIndices, std::string* userID, std::vector<DiscordCoreAPI::Card>* dealerHand, DiscordCoreAPI::EmbedData& finalEmbed,
+	std::vector<uint32_t>* dealerAceIndices, uint64_t* userID, std::vector<DiscordCoreAPI::Card>* dealerHand, DiscordCoreAPI::EmbedData& finalEmbed,
 	DiscordCoreAPI::ActionRowData& component) {
 	uint32_t fineAmount = 2 * *betAmount;
 	if (fineAmount > discordGuildMember->data.currency.wallet || *newCardCount > 2) {
@@ -679,7 +676,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
+				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);
@@ -690,11 +687,11 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
-				std::unique_ptr<GuildMember> guildMember{ std::make_unique<GuildMember>(
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() }).get()) };
-				std::unique_ptr<GuildMember> botMember{ std::make_unique<GuildMember>(
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get()) };
-				if (!botMember->permissions.checkForPermission(*botMember, *channel, Permission::Manage_Messages)) {
+				GuildMember guildMember{
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() }).get()
+				};
+				GuildMember botMember{ GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get() };
+				if (!botMember.permissions.checkForPermission(botMember, *channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -732,8 +729,8 @@ namespace DiscordCoreAPI {
 
 				std::srand(( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 
-				std::string userID = guildMember->user.id;
-				std::unique_ptr<DiscordCoreAPI::DiscordGuildMember> discordGuildMember{ std::make_unique<DiscordCoreAPI::DiscordGuildMember>(*guildMember) };
+				uint64_t userID = guildMember.user.id;
+				std::unique_ptr<DiscordCoreAPI::DiscordGuildMember> discordGuildMember{ std::make_unique<DiscordCoreAPI::DiscordGuildMember>(guildMember) };
 
 				if (betAmount > discordGuildMember->data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you have insufficient funds for placing that wager!**\n------";
@@ -815,7 +812,7 @@ namespace DiscordCoreAPI {
 						discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 						discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = getTimeAndDate();
 						discordGuild->data.casinoStats.largestBlackjackPayout.userId = userID;
-						discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+						discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember.user.userName;
 					}
 					discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 					discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -893,13 +890,13 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::RespondToInputEventData buttonInteraction{ *buttonIntData.at(0).interactionData };
 				uint32_t newCardCount = 0;
 				if (buttonIntData.at(0).buttonId == "check") {
-					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction, &newCardCount,
+					executeCheckResponse(argsNew, discordGuildMember.get(), &betAmount, &guildMember, discordGuild.get(), event001, &buttonInteraction, &newCardCount,
 						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
 				} else if (buttonIntData.at(0).buttonId == "cross") {
-					executeCrossResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), &buttonInteraction, &userHand, &dealerAceIndices,
+					executeCrossResponse(argsNew, discordGuildMember.get(), &betAmount, &guildMember, discordGuild.get(), &buttonInteraction, &userHand, &dealerAceIndices,
 						&userID, &dealerHand, *msgEmbed);
 				} else if (buttonIntData.at(0).buttonId == "double") {
-					executeDoubleResponse(argsNew, discordGuildMember.get(), &betAmount, guildMember.get(), discordGuild.get(), event001, &buttonInteraction, &newCardCount,
+					executeDoubleResponse(argsNew, discordGuildMember.get(), &betAmount, &guildMember, discordGuild.get(), event001, &buttonInteraction, &newCardCount,
 						&userHand, &userAceIndices, &dealerAceIndices, &userID, &dealerHand, *msgEmbed, components.at(0));
 				};
 

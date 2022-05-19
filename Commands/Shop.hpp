@@ -101,7 +101,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember =
@@ -315,12 +315,12 @@ namespace DiscordCoreAPI {
 
 							uint32_t newBalance = discordGuildMember.data.currency.wallet;
 
-							std::string roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
+							uint64_t roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
 
 							Roles::addGuildMemberRoleAsync({ .guildId = argsNew.eventData.getGuildId(), .userId = guildMember.user.id, .roleId = roleID });
 
 							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" +
-								newRole.roleId + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
+								std::to_string(newRole.roleId) + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
 								discordUser.data.currencyName + "\n------";
 							std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 							msgEmbed02->setTitle("__**New Role Purchased:**__");

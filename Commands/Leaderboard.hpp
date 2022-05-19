@@ -32,7 +32,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -47,7 +47,6 @@ namespace DiscordCoreAPI {
 					dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
 					newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				}
-
 				std::vector<DiscordGuildMember> membersArray;
 				for (auto value: guild.members) {
 					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value, .guildId = argsNew.eventData.getGuildId() }).get();
@@ -103,8 +102,8 @@ namespace DiscordCoreAPI {
 				}
 
 				uint32_t currentPageIndex = 0;
-				std::string userID = argsNew.eventData.getAuthorId();
-				moveThroughMessagePages(userID, newEvent, currentPageIndex, pageEmbeds, true, 120000);
+				uint64_t userID = argsNew.eventData.getAuthorId();
+				moveThroughMessagePages(std::to_string(userID), newEvent, currentPageIndex, pageEmbeds, true, 120000);
 				discordGuild.writeDataToDB();
 				return;
 			} catch (...) {

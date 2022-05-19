@@ -31,7 +31,7 @@ namespace DiscordCoreAPI {
 
 				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({
@@ -51,10 +51,10 @@ namespace DiscordCoreAPI {
 
 				std::string roleName = argsNew.commandData.optionsArgs.at(0);
 
-				std::string roleID;
+				uint64_t roleID;
 				std::cmatch matchResults;
 				regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, roleIdRegExp);
-				roleID = matchResults.str();
+				roleID = stoull(matchResults.str());
 				std::string realRoleName;
 
 				bool isRoleFound = false;
