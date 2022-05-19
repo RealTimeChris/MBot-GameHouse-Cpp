@@ -30,9 +30,6 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
-
-				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
-
 				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
@@ -57,21 +54,6 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
-
-				if (currentGuildMember.userName == "") {
-					std::string msgString = "-------\n**Sorry, but that user could not be found!**\n------";
-					EmbedData msgEmbed;
-					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-					msgEmbed.setColor(discordGuild.data.borderColor);
-					msgEmbed.setDescription(msgString);
-					msgEmbed.setTimeStamp(getTimeAndDate());
-					msgEmbed.setTitle("__**User Issue:**__");
-					RespondToInputEventData dataPackage(argsNew.eventData);
-					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(msgEmbed);
-					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
-					return;
-				}
 
 				DiscordGuildMember discordGuildMember(currentGuildMember);
 

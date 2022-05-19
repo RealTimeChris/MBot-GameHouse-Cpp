@@ -49,9 +49,9 @@ namespace DiscordCoreAPI {
 				uint32_t msPerHour = 60 * msPerMinute;
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				User currentUser = Users::getUserAsync({ .userId = argsNew.eventData.getRequesterId() }).get();
+				User currentUser = Users::getUserAsync({ .userId = argsNew.eventData.getAuthorId() }).get();
 				uint32_t lastTimeWorked = discordGuildMember.data.lastTimeWorked;
 
 				uint32_t timeDifference = ( uint32_t )currentTime - lastTimeWorked;

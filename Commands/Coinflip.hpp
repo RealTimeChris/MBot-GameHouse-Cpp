@@ -42,10 +42,10 @@ namespace DiscordCoreAPI {
 				}
 
 				GuildMember guildMember =
-					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getRequesterId(), .guildId = argsNew.eventData.getGuildId() }).get();
+					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				GuildMember botMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.discordCoreClient->getBotUser().id, .guildId = argsNew.eventData.getGuildId() }).get();
-				InputEventData inputData{};
+				
 				if (!botMember.permissions.checkForPermission(botMember, *channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
@@ -118,7 +118,7 @@ namespace DiscordCoreAPI {
 				dataPackage.addButton(false, "Heads", "Heads", ButtonStyle::Success, "🤯");
 				dataPackage.addButton(false, "Tails", "Tails", ButtonStyle::Success, "🐍");
 				dataPackage.addMessageEmbed(*msgEmbed);
-				inputData = InputEvents::respondToInputEventAsync(dataPackage).get();
+				InputEventData inputData = InputEvents::respondToInputEventAsync(dataPackage).get();
 				std::unique_ptr<ButtonCollector> button2{ std::make_unique<ButtonCollector>(inputData) };
 				std::vector<ButtonResponseData> buttonInteractionData = button2->collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
 				if (buttonInteractionData.at(0).buttonId == "") {

@@ -42,11 +42,9 @@ namespace DiscordCoreAPI {
 				}
 
 				InputEventData newEvent = argsNew.eventData;
-				if (argsNew.eventData.eventType == InteractionType::Application_Command) {
-					RespondToInputEventData dataPackage(newEvent);
-					dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
-					newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
-				}
+				RespondToInputEventData dataPackage(newEvent);
+				dataPackage.setResponseType(InputEventResponseType::Deferred_Response);
+				newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				std::vector<DiscordGuildMember> membersArray;
 				for (auto value: guild.members) {
 					GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = value, .guildId = argsNew.eventData.getGuildId() }).get();

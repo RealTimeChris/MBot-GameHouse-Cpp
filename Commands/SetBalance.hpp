@@ -87,7 +87,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 				if (argsNew.commandData.optionsArgs.size() < 3) {
-					targetUserID = argsNew.eventData.getRequesterId();
+					targetUserID = argsNew.eventData.getAuthorId();
 				} else if (argsNew.commandData.optionsArgs.size() == 3 && !regex_search(argsNew.commandData.optionsArgs.at(2), userMentionRegExp) &&
 					!regex_search(argsNew.commandData.optionsArgs.at(2), userIDRegExp)) {
 					std::string msgString = "------\n**Please enter a valid target user mention, or leave it blank to select yourself as the target! "

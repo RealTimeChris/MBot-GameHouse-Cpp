@@ -41,7 +41,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				User currentUser = Users::getUserAsync({ argsNew.eventData.getRequesterId() }).get();
+				User currentUser = Users::getUserAsync({ argsNew.eventData.getAuthorId() }).get();
 
 				std::string objectName = argsNew.commandData.optionsArgs.at(0);
 				uint32_t objectShopIndex = 0;

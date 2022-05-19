@@ -113,7 +113,7 @@ namespace DiscordCoreAPI {
 						InputEvents::respondToInputEventAsync(responseData).get();
 					}
 					std::unique_ptr<ButtonCollector> button{ std::make_unique<ButtonCollector>(newEvent01) };
-					auto buttonData = button->collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
+					auto buttonData = button->collectButtonData(false, 120000, 1, newArgs.eventData.getAuthorId()).get();
 					int32_t counter03{ 0 };
 					std::vector<RespondToInputEventData> editInteractionResponseData00;
 					for (auto& value: selectOptionsNew) {
@@ -158,7 +158,7 @@ namespace DiscordCoreAPI {
 						break;
 					}
 					std::unique_ptr<SelectMenuCollector> selectMenu{ std::make_unique<SelectMenuCollector>(newEvent01) };
-					auto selectMenuReturnData = selectMenu->collectSelectMenuData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
+					auto selectMenuReturnData = selectMenu->collectSelectMenuData(false, 120000, 1, newArgs.eventData.getAuthorId()).get();
 					EmbedData newEmbed{};
 					for (auto& [key, value]: newArgs.discordCoreClient->commandController.getFunctions()) {
 						for (auto& valueNew: key) {
@@ -187,7 +187,7 @@ namespace DiscordCoreAPI {
 					responseData02.addButton(false, "back", "Back", ButtonStyle::Success, "🔙");
 					responseData02.addButton(false, "exit", "Exit", ButtonStyle::Success, "❌");
 					newEvent = InputEvents::respondToInputEventAsync(responseData02).get();
-					auto buttonReturnData02 = ButtonCollector{ newEvent01 }.collectButtonData(false, 120000, 1, newArgs.eventData.getRequesterId()).get();
+					auto buttonReturnData02 = ButtonCollector{ newEvent01 }.collectButtonData(false, 120000, 1, newArgs.eventData.getAuthorId()).get();
 					if (buttonReturnData02.at(0).buttonId == "back") {
 						responseData = RespondToInputEventData{ *buttonReturnData02.at(0).interactionData };
 						continue;

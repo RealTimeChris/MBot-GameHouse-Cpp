@@ -14,7 +14,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 	int32_t fromUserCurrency = discordFromGuildMember->data.currency.wallet;
 	discordToGuildMember->getDataFromDB();
 	int32_t toUserCurrency = discordToGuildMember->data.currency.wallet;
-	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ .userId = newEvent.getRequesterId() }).get();
+	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ .userId = newEvent.getAuthorId() }).get();
 
 	if (*betAmount > fromUserCurrency) {
 		std::string msgString;
@@ -290,7 +290,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::DiscordGuild discordGuild, DiscordCoreAPI::InputEventData originalEvent) {
 	std::string rejectedString;
 	rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer! (Timed Out!)";
-	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ originalEvent.getRequesterId() }).get();
+	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ originalEvent.getAuthorId() }).get();
 	DiscordCoreAPI::EmbedData messageEmbed2;
 	messageEmbed2.setAuthor(currentUser.userName, currentUser.avatar);
 	messageEmbed2.setColor(discordGuild.data.borderColor);

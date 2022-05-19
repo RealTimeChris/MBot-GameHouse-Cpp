@@ -50,7 +50,7 @@ namespace DiscordCoreAPI {
 				std::regex mentionRegExp("<@!\\d{18,}>");
 				std::regex idRegExp("\\d{18,}");
 				if (argsNew.commandData.optionsArgs.size() == 0) {
-					userID = argsNew.eventData.getRequesterId();
+					userID = argsNew.eventData.getAuthorId();
 				} else if (argsNew.commandData.optionsArgs.at(0) != "") {
 					if (!regex_search(argsNew.commandData.optionsArgs.at(0), mentionRegExp, std::regex_constants::match_flag_type::format_first_only) &&
 						!regex_search(argsNew.commandData.optionsArgs.at(0), idRegExp, std::regex_constants::match_flag_type::format_first_only)) {
