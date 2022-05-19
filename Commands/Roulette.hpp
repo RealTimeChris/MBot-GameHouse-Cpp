@@ -44,7 +44,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 			{ .guildMemberId = discordGuild->data.rouletteGame.rouletteBets.at(x).userId, .guildId = newEvent.getGuildId() })
 													  .get();
 		DiscordCoreAPI::DiscordGuildMember discordGuildMember(guildMember);
-		msgStringFinal += "__**<@!" + std::to_string(guildMember.user.id) + ">**__: ";
+		msgStringFinal += "__**<@!" + std::to_string(guildMember.id) + ">**__: ";
 		int32_t betAmount = discordGuild->data.rouletteGame.rouletteBets.at(x).betAmount;
 		int32_t payoutAmount = discordGuild->data.rouletteGame.rouletteBets.at(x).payoutAmount;
 		std::vector<std::string> winningNumbers = discordGuild->data.rouletteGame.rouletteBets.at(x).winningNumbers;

@@ -103,7 +103,7 @@ namespace DiscordCoreAPI {
 				}
 
 				std::string newBetString =
-					"Welcome, <@!" + std::to_string(guildMember.user.id) + "> , you have placed a bet of **" + std::to_string(betAmount) + " " + discordUser.data.currencyName + "**.\n";
+					"Welcome, <@!" + std::to_string(guildMember.id) + "> , you have placed a bet of **" + std::to_string(betAmount) + " " + discordUser.data.currencyName + "**.\n";
 				newBetString += "React with :exploding_head: to choose heads, or with :snake: to choose tails!";
 
 				std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };

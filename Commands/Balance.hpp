@@ -74,7 +74,7 @@ namespace DiscordCoreAPI {
 
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
 
-				if (guildMember.user.id == 0) {
+				if (guildMember.id == 0) {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -96,7 +96,7 @@ namespace DiscordCoreAPI {
 				walletAmount = discordGuildMember.data.currency.wallet;
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				msgString = "<@!" + std::to_string(guildMember.user.id) + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " +
+				msgString = "<@!" + std::to_string(guildMember.id) + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " +
 					discordUser.data.currencyName + "\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName + "\n------";
 
 				EmbedData msgEmbed;

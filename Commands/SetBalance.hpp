@@ -116,7 +116,7 @@ namespace DiscordCoreAPI {
 
 				GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 
-				if (targetMember.user.userName == "") {
+				if (targetMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

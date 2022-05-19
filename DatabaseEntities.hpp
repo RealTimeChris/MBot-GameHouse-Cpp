@@ -725,18 +725,18 @@ namespace DiscordCoreAPI {
 		DiscordGuildMemberData data{};
 
 		DiscordGuildMember(GuildMember guildMemberData) {
-			this->data.guildMemberId = guildMemberData.user.id;
+			this->data.guildMemberId = guildMemberData.id;
 			this->data.guildId = guildMemberData.guildId;
 			this->data.globalId = std::to_string(this->data.guildId) + " + " + std::to_string(this->data.guildMemberId);
 			this->getDataFromDB();
 			if (guildMemberData.nick == "") {
-				this->data.displayName = guildMemberData.user.userName;
+				this->data.displayName = guildMemberData.userName;
 				this->data.guildMemberMention = "<@" + std::to_string(this->data.guildMemberId) + ">";
 			} else {
 				this->data.displayName = guildMemberData.nick;
 				this->data.guildMemberMention = "<@!" + std::to_string(this->data.guildMemberId) + ">";
 			}
-			this->data.userName = guildMemberData.user.userName;
+			this->data.userName = guildMemberData.userName;
 			this->writeDataToDB();
 		}
 

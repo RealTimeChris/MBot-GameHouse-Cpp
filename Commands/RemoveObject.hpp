@@ -76,7 +76,7 @@ namespace DiscordCoreAPI {
 																			 })
 											   .get();
 
-				if (targetMember.user.userName == "") {
+				if (targetMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -153,7 +153,7 @@ namespace DiscordCoreAPI {
 				if (objectType == "role") {
 					Roles::removeGuildMemberRoleAsync({
 														  .guildId = argsNew.eventData.getGuildId(),
-														  .userId = targetMember.user.id,
+														  .userId = targetMember.id,
 														  .roleId = roleID,
 													  })
 						.get();

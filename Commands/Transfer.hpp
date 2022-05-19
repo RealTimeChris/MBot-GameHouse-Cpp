@@ -82,7 +82,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 				DiscordGuildMember discordToGuildMember(toUserMember);
-				if (toUserMember.user.userName == "" || discordToGuildMember.data.userName == "") {
+				if (toUserMember.userName == "" || discordToGuildMember.data.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

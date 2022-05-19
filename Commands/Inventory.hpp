@@ -58,7 +58,7 @@ namespace DiscordCoreAPI {
 
 				GuildMember currentGuildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = userID, .guildId = argsNew.eventData.getGuildId() }).get();
 
-				if (currentGuildMember.user.userName == "") {
+				if (currentGuildMember.userName == "") {
 					std::string msgString = "-------\n**Sorry, but that user could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -75,7 +75,7 @@ namespace DiscordCoreAPI {
 
 				DiscordGuildMember discordGuildMember(currentGuildMember);
 
-				if (currentGuildMember.user.userName == "") {
+				if (currentGuildMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user data could not be found!**\n------";
 					EmbedData msgEmbed;
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -90,7 +90,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::string userName = currentGuildMember.user.userName;
+				std::string userName = currentGuildMember.userName;
 
 				std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				InputEventData event02 = argsNew.eventData;

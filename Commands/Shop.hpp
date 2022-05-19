@@ -274,7 +274,7 @@ namespace DiscordCoreAPI {
 						if (isFoundInInventory == true) {
 							std::string msgString = "------\n**Sorry, but you already have one of those " + objectType + "s.** \n------";
 							EmbedData msgEmbed02;
-							msgEmbed02.setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed02.setAuthor(guildMember.userName, guildMember.userAvatar);
 							msgEmbed02.setColor(discordGuild.data.borderColor);
 							msgEmbed02.setDescription(msgString);
 							msgEmbed02.setTimeStamp(getTimeAndDate());
@@ -294,7 +294,7 @@ namespace DiscordCoreAPI {
 							if (roleCost > userBalance) {
 								std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-								msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+								msgEmbed02->setAuthor(guildMember.userName, guildMember.userAvatar);
 								msgEmbed02->setColor(discordGuild.data.borderColor);
 								msgEmbed02->setDescription(msgString);
 								msgEmbed02->setTimeStamp(getTimeAndDate());
@@ -317,7 +317,7 @@ namespace DiscordCoreAPI {
 
 							uint64_t roleID = discordGuild.data.guildShop.roles.at(objectShopIndex).roleId;
 
-							Roles::addGuildMemberRoleAsync({ .guildId = argsNew.eventData.getGuildId(), .userId = guildMember.user.id, .roleId = roleID });
+							Roles::addGuildMemberRoleAsync({ .guildId = argsNew.eventData.getGuildId(), .userId = guildMember.id, .roleId = roleID });
 
 							std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" +
 								std::to_string(newRole.roleId) + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
@@ -326,7 +326,7 @@ namespace DiscordCoreAPI {
 							msgEmbed02->setTitle("__**New Role Purchased:**__");
 							msgEmbed02->setTimeStamp(getTimeAndDate());
 							msgEmbed02->setDescription(msgString);
-							msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed02->setAuthor(guildMember.userName, guildMember.userAvatar);
 							msgEmbed02->setColor(discordGuild.data.borderColor);
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
@@ -357,7 +357,7 @@ namespace DiscordCoreAPI {
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed02{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed02->setTimeStamp(getTimeAndDate());
 								msgEmbed02->setDescription(msgString);
-								msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+								msgEmbed02->setAuthor(guildMember.userName, guildMember.userAvatar);
 								msgEmbed02->setColor(discordGuild.data.borderColor);
 								msgEmbed02->setTitle("__**Insufficient Funds:**__");
 								RespondToInputEventData dataPackage03(event02);
@@ -399,7 +399,7 @@ namespace DiscordCoreAPI {
 							discordGuildMember.writeDataToDB();
 							msgEmbed02->setTimeStamp(getTimeAndDate());
 							msgEmbed02->setDescription(msgString);
-							msgEmbed02->setAuthor(guildMember.user.userName, guildMember.user.avatar);
+							msgEmbed02->setAuthor(guildMember.userName, guildMember.userAvatar);
 							msgEmbed02->setColor(discordGuild.data.borderColor);
 							RespondToInputEventData dataPackage03(event02);
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);

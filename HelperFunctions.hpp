@@ -41,7 +41,7 @@ namespace DiscordCoreAPI {
 	bool checkForBotCommanderStatus(GuildMember guildMember, DiscordUser& discordUser) {
 		bool areWeACommander;
 		for (auto& value: discordUser.data.botCommanders) {
-			if (guildMember.user.id == value) {
+			if (guildMember.id == value) {
 				areWeACommander = true;
 				return areWeACommander;
 				break;
@@ -67,7 +67,7 @@ namespace DiscordCoreAPI {
 		if (displayResponse) {
 			std::string msgString = "------\n**Sorry, but you don't have the permissions required for that!**\n------";
 			EmbedData msgEmbed{};
-			msgEmbed.setAuthor(guildMember.user.userName, guildMember.user.avatar);
+			msgEmbed.setAuthor(guildMember.userName, guildMember.userAvatar);
 			msgEmbed.setColor(discordGuild.data.borderColor);
 			msgEmbed.setDescription(msgString);
 			msgEmbed.setTimeStamp(getTimeAndDate());

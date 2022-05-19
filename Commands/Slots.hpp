@@ -162,7 +162,7 @@ namespace DiscordCoreAPI {
 				std::function<void()> theFunction = [=]() mutable -> void {
 					std::string gameResultTypeNew;
 					int32_t payoutAmountNew = payoutAmount;
-					GuildMember guildMemberNew = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = guildMember.user.id, .guildId = argsNew.eventData.getGuildId() }).get();
+					GuildMember guildMemberNew = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = guildMember.id, .guildId = argsNew.eventData.getGuildId() }).get();
 					DiscordGuildMember discordGuildMember(guildMemberNew);
 					DiscordGuild discordGuild(guild);
 					if (slotReel[reelIndices1[8]] == slotReel[reelIndices2[8]] && slotReel[reelIndices2[8]] == slotReel[reelIndices3[8]]) {
@@ -189,8 +189,8 @@ namespace DiscordCoreAPI {
 					if (payoutAmountNew > discordGuild.data.casinoStats.largestSlotsPayout.amount) {
 						discordGuild.data.casinoStats.largestSlotsPayout.amount = payoutAmountNew;
 						discordGuild.data.casinoStats.largestSlotsPayout.timeStamp = getTimeAndDate();
-						discordGuild.data.casinoStats.largestSlotsPayout.userId = guildMember.user.id;
-						discordGuild.data.casinoStats.largestSlotsPayout.userName = guildMember.user.userName;
+						discordGuild.data.casinoStats.largestSlotsPayout.userId = guildMember.id;
+						discordGuild.data.casinoStats.largestSlotsPayout.userName = guildMember.userName;
 					}
 					discordGuild.writeDataToDB();
 					InputEventData newEvent02 = argsNew.eventData;

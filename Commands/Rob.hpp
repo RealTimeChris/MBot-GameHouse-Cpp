@@ -55,7 +55,7 @@ namespace DiscordCoreAPI {
 				GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember targetGuildMember(targetMember);
 
-				if (targetMember.user.userName == "") {
+				if (targetMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

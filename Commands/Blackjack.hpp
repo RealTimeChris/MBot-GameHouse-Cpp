@@ -75,7 +75,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 	if (fineAmount > discordGuildMember->data.currency.wallet) {
 		std::string inPlayFooterString = "------\n__***Sorry, but you have insufficient funds for placing that wager now!***__\n------";
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setColor("FF0000");
 		msgEmbed->setTitle("__**Blackjack Fail:**__");
@@ -127,7 +127,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 			discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = DiscordCoreAPI::getTimeAndDate();
 			discordGuild->data.casinoStats.largestBlackjackPayout.userId = *userID;
-			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->userName;
 		}
 		discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 		discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -142,7 +142,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Win:**__");
 		msgEmbed->setColor("00FF00");
@@ -161,7 +161,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			"------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Tie:**__");
 		msgEmbed->setColor("0000FF");
@@ -184,7 +184,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 			discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = DiscordCoreAPI::getTimeAndDate();
 			discordGuild->data.casinoStats.largestBlackjackPayout.userId = *userID;
-			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->userName;
 		}
 		discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 		discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -195,7 +195,7 @@ void executeCrossResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Loss:**__");
 		msgEmbed->setColor("FF0000");
@@ -260,7 +260,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 			discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = DiscordCoreAPI::getTimeAndDate();
 			discordGuild->data.casinoStats.largestBlackjackPayout.userId = *userID;
-			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->userName;
 		}
 		discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 		discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -360,7 +360,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 				discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 				discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = DiscordCoreAPI::getTimeAndDate();
 				discordGuild->data.casinoStats.largestBlackjackPayout.userId = *userID;
-				discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+				discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->userName;
 			}
 			discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 			discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -474,7 +474,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		}
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setColor("00FF00");
 		msgEmbed->setTitle("__**Blackjack:**__");
@@ -504,7 +504,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			msgEmbed2.setColor("FF0000");
 			msgEmbed2.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 			msgEmbed2.setTitle("__**Blackjack Game:**__");
-			msgEmbed2.setAuthor(guildMember->user.userName, guildMember->user.avatar);
+			msgEmbed2.setAuthor(guildMember->userName, guildMember->userAvatar);
 			msgEmbed2.setDescription(timeOutString);
 			DiscordCoreAPI::RespondToInputEventData dataPackage{ newEvent };
 			dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
@@ -568,7 +568,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 			discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = DiscordCoreAPI::getTimeAndDate();
 			discordGuild->data.casinoStats.largestBlackjackPayout.userId = *userID;
-			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->userName;
 		}
 		discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 		discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -580,7 +580,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Win:**__");
 		msgEmbed->setColor("00FF00");
@@ -600,7 +600,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			"------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Tie:**__");
 		msgEmbed->setColor("0000FF");
@@ -623,7 +623,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 			discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = DiscordCoreAPI::getTimeAndDate();
 			discordGuild->data.casinoStats.largestBlackjackPayout.userId = *userID;
-			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->user.userName;
+			discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember->userName;
 		}
 		discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 		discordGuild->data.casinoStats.totalPayout += payAmount;
@@ -635,7 +635,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(guildMember->user.userName, guildMember->user.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Loss:**__");
 		msgEmbed->setColor("FF0000");
@@ -729,7 +729,7 @@ namespace DiscordCoreAPI {
 
 				std::srand(( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 
-				uint64_t userID = guildMember.user.id;
+				uint64_t userID = guildMember.id;
 				std::unique_ptr<DiscordCoreAPI::DiscordGuildMember> discordGuildMember{ std::make_unique<DiscordCoreAPI::DiscordGuildMember>(guildMember) };
 
 				if (betAmount > discordGuildMember->data.currency.wallet) {
@@ -812,7 +812,7 @@ namespace DiscordCoreAPI {
 						discordGuild->data.casinoStats.largestBlackjackPayout.amount = payAmount;
 						discordGuild->data.casinoStats.largestBlackjackPayout.timeStamp = getTimeAndDate();
 						discordGuild->data.casinoStats.largestBlackjackPayout.userId = userID;
-						discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember.user.userName;
+						discordGuild->data.casinoStats.largestBlackjackPayout.userName = guildMember.userName;
 					}
 					discordGuild->data.casinoStats.totalBlackjackPayout += payAmount;
 					discordGuild->data.casinoStats.totalPayout += payAmount;
