@@ -19,7 +19,7 @@ void onGuildCreateion(DiscordCoreAPI::OnGuildCreationData dataPackage) {
 
 void onBoot01(DiscordCoreAPI::DiscordCoreClient* args) {
 	std::vector<DiscordCoreAPI::ActivityData> activities;
-	DiscordCoreAPI::ActivityData activity;
+	DiscordCoreAPI::Act ivityData activity;
 	activity.name = "/help for my commands!";
 	activity.type = DiscordCoreAPI::ActivityType::Game;
 	activities.push_back(activity);
