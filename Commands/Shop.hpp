@@ -283,7 +283,7 @@ namespace DiscordCoreAPI {
 							dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 							dataPackage03.addMessageEmbed(msgEmbed02);
 							InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
-							InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
+							InputEvents::deleteInputEventResponseAsync(event01, 20000);
 							continue;
 						}
 
@@ -303,7 +303,7 @@ namespace DiscordCoreAPI {
 								dataPackage03.setResponseType(InputEventResponseType::Follow_Up_Message);
 								dataPackage03.addMessageEmbed(*msgEmbed02);
 								InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage03).get();
-								InputEvents::deleteInputEventResponseAsync(std::move(event01), 20000);
+								InputEvents::deleteInputEventResponseAsync(event01, 20000);
 								break;
 							}
 							auto botUser = argsNew.discordCoreClient->getBotUser();
@@ -409,7 +409,7 @@ namespace DiscordCoreAPI {
 					}
 				}
 
-				InputEvents::deleteInputEventResponseAsync(std::move(event02));
+				InputEvents::deleteInputEventResponseAsync(event02);
 
 				discordGuild.writeDataToDB();
 

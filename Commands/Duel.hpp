@@ -33,7 +33,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		dataPackage2.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 		dataPackageNew.addMessageEmbed(messageEmbed3);
 		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackageNew).get();
-		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent03), 20000);
+		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(newEvent03, 20000);
 		return;
 	}
 	if (*betAmount > toUserCurrency) {
@@ -52,7 +52,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		dataPackage02.setResponseType(DiscordCoreAPI::InputEventResponseType::Follow_Up_Message);
 		dataPackageNew.addMessageEmbed(messageEmbed4);
 		auto newEvent03 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(dataPackageNew).get();
-		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent03), 20000);
+		DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(newEvent03, 20000);
 		return;
 	}
 

@@ -99,7 +99,7 @@ namespace DiscordCoreAPI {
 						RespondToInputEventData dataPackage(argsNew.eventData);
 						dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 						event02 = InputEvents::respondToInputEventAsync(dataPackage).get();
-						InputEvents::deleteInputEventResponseAsync(std::move(event02), 20000);
+						InputEvents::deleteInputEventResponseAsync(event02, 20000);
 						x -= 1;
 					}
 				}

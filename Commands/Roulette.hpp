@@ -665,7 +665,7 @@ namespace DiscordCoreAPI {
 						InputEvents::respondToInputEventAsync(dataPackage).get();
 						currentIndex -= 1;
 						if (currentIndex == -1) {
-							DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(std::move(newEvent));
+							DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(newEvent);
 							std::stringstream stream;
 							std::mt19937_64 randomEngine{ static_cast<uint64_t>(
 								std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
