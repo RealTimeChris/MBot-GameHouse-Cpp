@@ -428,7 +428,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction);
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button = std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent);
 		std::unique_ptr<std::vector<DiscordCoreAPI::ButtonResponseData>> buttonInteractionData =
-			std::make_unique<std::vector<DiscordCoreAPI::ButtonResponseData>>(button->collectButtonData(false, 120000, 1, newEvent.getAuthorId()).get());
+			std::make_unique<std::vector<DiscordCoreAPI::ButtonResponseData>>(button->collectButtonData(false, 120000, 1, guildMember->id).get());
 		DiscordCoreAPI::RespondToInputEventData inputData{ *buttonInteractionData->at(0).interactionData };
 		if (buttonInteractionData->at(0).buttonId == "") {
 			std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
@@ -491,7 +491,7 @@ void executeDoubleResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Disco
 		buttonInteraction->setResponseType(DiscordCoreAPI::InputEventResponseType::Edit_Interaction_Response);
 		eventData002 = DiscordCoreAPI::InputEvents::respondToInputEventAsync(*buttonInteraction).get();
 		std::unique_ptr<DiscordCoreAPI::ButtonCollector> button{ std::make_unique<DiscordCoreAPI::ButtonCollector>(newEvent) };
-		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, newEvent.getAuthorId()).get();
+		std::vector<DiscordCoreAPI::ButtonResponseData> buttonIntData = button->collectButtonData(false, 120000, 1, guildMember->id).get();
 		DiscordCoreAPI::RespondToInputEventData inputData{ *buttonIntData.at(0).interactionData };
 		if (buttonIntData.at(0).buttonId == "check") {
 			executeCheckResponse(argsNew, discordGuildMember, betAmount, guildMember, discordGuild, newEvent, &inputData, newCardCount, userHand, userAceIndices, dealerAceIndices,
