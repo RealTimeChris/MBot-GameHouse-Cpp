@@ -160,8 +160,6 @@ namespace DiscordCoreAPI {
 			try {
 				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
 
-				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
-
 				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 

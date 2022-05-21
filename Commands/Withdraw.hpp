@@ -32,8 +32,6 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
-				InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
-
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
 
 				if (!areWeAllowed) {
