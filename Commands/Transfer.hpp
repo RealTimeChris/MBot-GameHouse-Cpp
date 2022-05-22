@@ -124,7 +124,8 @@ namespace DiscordCoreAPI {
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				std::string msgString;
-				msgString += "<@!" + std::to_string(fromUserID) + "> succesfully transferred " + std::to_string(amount) + " " + discordUser.data.currencyName + " to <@!" + std::to_string(toUserID) + ">.";
+				msgString += "<@!" + std::to_string(fromUserID) + "> succesfully transferred " + std::to_string(amount) + " " + discordUser.data.currencyName + " to <@!" +
+					std::to_string(toUserID) + ">.";
 				msgString += "\n__Your new wallet balances are:__ \n<@!" + std::to_string(fromUserID) + ">: " + std::to_string(discordFromGuildMember.data.currency.wallet) + " " +
 					discordUser.data.currencyName;
 				msgString += "\n<@!" + std::to_string(toUserID) + ">: " + std::to_string(discordToGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;

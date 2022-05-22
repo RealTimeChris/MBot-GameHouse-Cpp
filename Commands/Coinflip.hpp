@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				GuildMember botMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.discordCoreClient->getBotUser().id, .guildId = argsNew.eventData.getGuildId() }).get();
-				
+
 				if (!botMember.permissions.checkForPermission(botMember, *channel, Permission::Manage_Messages)) {
 					std::string msgString = "------\n**I need the Manage Messages permission in this channel, for this game!**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };

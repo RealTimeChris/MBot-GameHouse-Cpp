@@ -90,7 +90,7 @@ namespace DiscordCoreAPI {
 				uint32_t msPerMinute = msPerSecond * secondsPerMinute;
 				uint32_t minutesPerHour = 60;
 				uint32_t msPerHour = msPerMinute * minutesPerHour;
-				uint32_t timeBetweenRobberies = (uint32_t)(discordUser.data.hoursOfRobberyCooldown * ( float )msPerHour);
+				uint32_t timeBetweenRobberies = ( uint32_t )(discordUser.data.hoursOfRobberyCooldown * ( float )msPerHour);
 				uint32_t currentTime = ( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 				uint32_t currentTimeDifference = currentTime - discordGuildMember.data.lastTimeRobbed;
 
@@ -104,16 +104,18 @@ namespace DiscordCoreAPI {
 					for (uint32_t x = 0; x < discordGuildMember.data.items.size(); x += 1) {
 						if (discordGuildMember.data.items[x].selfMod > 0) {
 							userGainAmount += discordGuildMember.data.items[x].selfMod;
-							userGainString += "+" + std::to_string(discordGuildMember.data.items[x].selfMod) + " of base roll from <@!" + std::to_string(discordGuildMember.data.guildMemberId) +
-								"> 's " + discordGuildMember.data.items[x].emoji + discordGuildMember.data.items[x].itemName + "\n";
+							userGainString += "+" + std::to_string(discordGuildMember.data.items[x].selfMod) + " of base roll from <@!" +
+								std::to_string(discordGuildMember.data.guildMemberId) + "> 's " + discordGuildMember.data.items[x].emoji +
+								discordGuildMember.data.items[x].itemName + "\n";
 						}
 					}
 
 					for (uint32_t x = 0; x < targetGuildMember.data.items.size(); x += 1) {
 						if (targetGuildMember.data.items[x].oppMod < 0) {
 							userLossAmount += targetGuildMember.data.items[x].oppMod;
-							userLossString += std::to_string(targetGuildMember.data.items[x].oppMod) + " of base roll from <@!" + std::to_string(targetGuildMember.data.guildMemberId) + "> 's " +
-								targetGuildMember.data.items[x].emoji + targetGuildMember.data.items[x].itemName + "\n";
+							userLossString += std::to_string(targetGuildMember.data.items[x].oppMod) + " of base roll from <@!" +
+								std::to_string(targetGuildMember.data.guildMemberId) + "> 's " + targetGuildMember.data.items[x].emoji + targetGuildMember.data.items[x].itemName +
+								"\n";
 						}
 					}
 

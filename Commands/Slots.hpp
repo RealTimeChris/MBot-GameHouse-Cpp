@@ -82,9 +82,8 @@ namespace DiscordCoreAPI {
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				int32_t payoutAmount{};
 				std::string gameResultType{};
-				std::vector<std::string> slotReel = {
-					":crossed_swords:", ":apple:", ":ring:", ":gun:", ":swan:", ":rocket:", ":coin:", ":star:", ":jack_o_lantern:", ":christmas_tree:"
-				};
+				std::vector<std::string> slotReel = { ":crossed_swords:", ":apple:", ":ring:", ":gun:", ":swan:", ":rocket:", ":coin:", ":star:", ":jack_o_lantern:",
+					":christmas_tree:" };
 
 				std::mt19937_64 randomEngine{ static_cast<uint64_t>(
 					std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };

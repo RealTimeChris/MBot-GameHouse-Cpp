@@ -46,16 +46,16 @@ namespace DiscordCoreAPI {
 				std::vector<EmbedFieldData> fields;
 				EmbedFieldData field1;
 				field1.name = "__**Largest Coinflip Payout:**__";
-				field1.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestCoinFlipPayout.userId) + "> " + discordGuild.data.casinoStats.largestCoinFlipPayout.userName +
-					"\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestCoinFlipPayout.amount) + " " + discordUser.data.currencyName + "\n__Date:__ " +
-					discordGuild.data.casinoStats.largestCoinFlipPayout.timeStamp;
+				field1.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestCoinFlipPayout.userId) + "> " +
+					discordGuild.data.casinoStats.largestCoinFlipPayout.userName + "\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestCoinFlipPayout.amount) +
+					" " + discordUser.data.currencyName + "\n__Date:__ " + discordGuild.data.casinoStats.largestCoinFlipPayout.timeStamp;
 				field1.Inline = true;
 				fields.push_back(field1);
 				EmbedFieldData field2;
 				field2.name = "__**Largest Roulette Payout:**__";
-				field2.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestRoulettePayout.userId) + "> " + discordGuild.data.casinoStats.largestRoulettePayout.userName +
-					"\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestRoulettePayout.amount) + " " + discordUser.data.currencyName + "\n__Date:__ " +
-					discordGuild.data.casinoStats.largestRoulettePayout.timeStamp;
+				field2.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestRoulettePayout.userId) + "> " +
+					discordGuild.data.casinoStats.largestRoulettePayout.userName + "\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestRoulettePayout.amount) +
+					" " + discordUser.data.currencyName + "\n__Date:__ " + discordGuild.data.casinoStats.largestRoulettePayout.timeStamp;
 				field2.Inline = true;
 				fields.push_back(field2);
 				EmbedFieldData field3;
@@ -67,9 +67,9 @@ namespace DiscordCoreAPI {
 				fields.push_back(field3);
 				EmbedFieldData field4;
 				field4.name = "__**Largest Slots Payout:**__";
-				field4.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestSlotsPayout.userId) + "> " + discordGuild.data.casinoStats.largestSlotsPayout.userName +
-					"\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestSlotsPayout.amount) + " " + discordUser.data.currencyName + "\n__Date:__ " +
-					discordGuild.data.casinoStats.largestSlotsPayout.timeStamp;
+				field4.value = "__User:__ <@!" + std::to_string(discordGuild.data.casinoStats.largestSlotsPayout.userId) + "> " +
+					discordGuild.data.casinoStats.largestSlotsPayout.userName + "\n__Amount:__ " + std::to_string(discordGuild.data.casinoStats.largestSlotsPayout.amount) + " " +
+					discordUser.data.currencyName + "\n__Date:__ " + discordGuild.data.casinoStats.largestSlotsPayout.timeStamp;
 				field4.Inline = true;
 				fields.push_back(field4);
 				EmbedFieldData field5;

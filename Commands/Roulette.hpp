@@ -596,11 +596,11 @@ namespace DiscordCoreAPI {
 						}
 					}
 					RouletteBet newRouletteBet{
-						winningNumbers, 
+						winningNumbers,
 						betOptions,
-						payoutAmount, 
+						payoutAmount,
 						betType,
-						betAmount,						
+						betAmount,
 						argsNew.eventData.getAuthorId(),
 					};
 
