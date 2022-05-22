@@ -9,7 +9,6 @@
 	#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 #endif
 
-#include <bsoncxx/builder/stream/document.hpp>
 #include <mongocxx/instance.hpp>
 #include <mongocxx/database.hpp>
 #include <mongocxx/client.hpp>
