@@ -48,7 +48,7 @@ namespace DiscordCoreAPI {
 
 				std::regex idRegExp("\\d{18}");
 				std::cmatch matchResults;
-				uint64_t roleID;
+				uint64_t roleID{};
 				std::string objectName;
 				if (regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, idRegExp)) {
 					roleID = stoull(matchResults.str());
@@ -56,7 +56,7 @@ namespace DiscordCoreAPI {
 					objectName = argsNew.commandData.optionsArgs.at(0);
 				}
 
-				uint64_t userID;
+				uint64_t userID{};
 				std::regex userMentionRegExp("<@!\\d{18}>");
 				if (argsNew.commandData.optionsArgs.size() == 1) {
 					userID = argsNew.eventData.getAuthorId();
