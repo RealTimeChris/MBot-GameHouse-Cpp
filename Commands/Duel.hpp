@@ -20,7 +20,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		std::string msgString;
 		msgString = *msgEmbedString + "\n\n__**Sorry, but you have insufficient funds in your wallet for placing that wager!**__";
 
-		DiscordCoreAPI::EmbedData messageEmbed3;
+		DiscordCoreAPI::EmbedData messageEmbed3{};
 		messageEmbed3.setAuthor(currentUser.userName, currentUser.avatar);
 		messageEmbed3.setDescription(msgString);
 		messageEmbed3.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
@@ -39,7 +39,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 	if (*betAmount > toUserCurrency) {
 		std::string msgString;
 		msgString += *msgEmbedString + "\n\n__**Sorry, but they have insufficient funds in their wallet for accepting that wager!**__";
-		DiscordCoreAPI::EmbedData messageEmbed4;
+		DiscordCoreAPI::EmbedData messageEmbed4{};
 		messageEmbed4.setAuthor(currentUser.userName, currentUser.avatar);
 		messageEmbed4.setDescription(msgString);
 		messageEmbed4.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
@@ -60,7 +60,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 
 	int32_t fromUserRoll = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 100.0f);
 	int32_t toUserRoll = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 100.0f);
-	std::vector<DiscordCoreAPI::EmbedData> messageEmbeds;
+	std::vector<DiscordCoreAPI::EmbedData> messageEmbeds{};
 	std::vector<std::string> finalStrings;
 	std::vector<std::string> fromUserGainStrings;
 	std::vector<std::string> fromUserLossStrings;
@@ -291,7 +291,7 @@ void executeExit(std::string fromUserID, std::string toUserID, DiscordCoreAPI::D
 	std::string rejectedString;
 	rejectedString = "Sorry, <@!" + fromUserID + ">, but <@!" + toUserID + "> has rejected your duel offer! (Timed Out!)";
 	DiscordCoreAPI::User currentUser = DiscordCoreAPI::Users::getUserAsync({ originalEvent.getAuthorId() }).get();
-	DiscordCoreAPI::EmbedData messageEmbed2;
+	DiscordCoreAPI::EmbedData messageEmbed2{};
 	messageEmbed2.setAuthor(currentUser.userName, currentUser.avatar);
 	messageEmbed2.setColor(discordGuild.data.borderColor);
 	messageEmbed2.setTimeStamp(DiscordCoreAPI::getTimeAndDate());
@@ -442,7 +442,7 @@ namespace DiscordCoreAPI {
 						&theNewUserId);
 				} else if (buttonInteractionData.at(0).buttonId == "cross") {
 					std::string rejectedString = "Sorry, <@!" + std::to_string(fromUserID) + ">, but <@!" + std::to_string(toUserID) + "> has rejected your duel offer!";
-					EmbedData messageEmbed5;
+					EmbedData messageEmbed5{};
 					messageEmbed5 = EmbedData();
 					messageEmbed5.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					messageEmbed5.setColor("FE0000");
