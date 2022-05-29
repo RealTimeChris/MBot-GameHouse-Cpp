@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		Withdraw() {
 			this->commandName = "withdraw";
 			this->helpDescription = "Withdraws currency from your bank account to your wallet.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /withdraw AMOUNT.\n------");
 			msgEmbed.setTitle("__**Withdraw Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -51,7 +51,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() == 0 || !regex_search(argsNew.commandData.optionsArgs[0], amountRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -70,7 +70,7 @@ namespace DiscordCoreAPI {
 
 				if (withdrawAmount > discordGuildMember.data.currency.bank) {
 					std::string msgString = "-------\n**Sorry, but you do not have sufficient funds to withdraw that much!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -93,7 +93,7 @@ namespace DiscordCoreAPI {
 					" " + discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName +
 					"\n------";
 
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);

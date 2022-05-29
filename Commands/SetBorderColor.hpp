@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		SetBorderColor() {
 			this->commandName = "setbordercolor";
 			this->helpDescription = "Set the bot's default border color for message embeds.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nSimply enter /setbordercolor <HEXCOLORVALUE>!\n------");
 			msgEmbed.setTitle("__**Set Border Color Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 
 				if (std::stoll(argsNew.commandData.optionsArgs[0], 0, 16) < 0 || std::stoll(argsNew.commandData.optionsArgs[0], 0, 16) > std::stoll("fefefe", 0, 16)) {
 					std::string msgString = "------\n**Please, enter a hex-color value between 0 and FeFeFe! (!setbordercolor = BOTNAME, HEXCOLORVALUE)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -60,7 +60,7 @@ namespace DiscordCoreAPI {
 					discordGuild.data.borderColor = borderColor;
 					discordGuild.writeDataToDB();
 
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(

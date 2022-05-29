@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		Rob() {
 			this->commandName = "rob";
 			this->helpDescription = "Attempt to rob a fellow server-mate, for currency.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /rob @USERMENTION.\n------");
 			msgEmbed.setTitle("__**Rob Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());

@@ -309,7 +309,7 @@ namespace DiscordCoreAPI {
 		Duel() {
 			this->commandName = "duel";
 			this->helpDescription = "Challenge a fellow server member to a duel, for currency.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /duel BETAMOUNT, @USERMENTIONTARGETUSERMENTION.\n------");
 			msgEmbed.setTitle("__**Duel Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -339,7 +339,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() < 2 || !std::regex_search(argsNew.commandData.optionsArgs.at(1), numberRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid bet amount! (!duel = BETAMOUNT, @USERMENTION)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -368,7 +368,7 @@ namespace DiscordCoreAPI {
 
 				if (toGuildMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -386,7 +386,7 @@ namespace DiscordCoreAPI {
 
 				if (betAmount > fromUserCurrency) {
 					std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet for placing that wager!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -400,7 +400,7 @@ namespace DiscordCoreAPI {
 				}
 				if (betAmount > toUserCurrency) {
 					std::string msgString = "------\n**Sorry, but they have insufficient funds in their wallet for accepting that wager!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -416,16 +416,16 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				std::string msgEmbedString = "You've been challenged to a duel! :crossed_swords: \nBy user: <@!" + std::to_string(fromUserID) +
 					">\nFor a wager of: " + std::to_string(betAmount) + " " + discordUser.data.currencyName + "\nReact with :white_check_mark: to accept or :x: to reject!";
-				EmbedData messageEmbed;
-				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				messageEmbed.setDescription(msgEmbedString);
-				messageEmbed.setTimeStamp(getTimeAndDate());
-				messageEmbed.setTitle("__**IT'S TIME TO DUEL!**__");
-				messageEmbed.setColor(discordGuild.data.borderColor);
+				EmbedData msgEmbed{};
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+				msgEmbed.setDescription(msgEmbedString);
+				msgEmbed.setTimeStamp(getTimeAndDate());
+				msgEmbed.setTitle("__**IT'S TIME TO DUEL!**__");
+				msgEmbed.setColor(discordGuild.data.borderColor);
 				InputEventData newEvent02 = argsNew.eventData;
 				RespondToInputEventData dataPackage2(argsNew.eventData);
 				dataPackage2.setResponseType(InputEventResponseType::Interaction_Response);
-				dataPackage2.addMessageEmbed(messageEmbed);
+				dataPackage2.addMessageEmbed(msgEmbed);
 				dataPackage2.addContent("<@!" + std::to_string(toUserID) + ">");
 				dataPackage2.addButton(false, "check", "Accept", ButtonStyle::Success, "✅");
 				dataPackage2.addButton(false, "cross", "Reject", ButtonStyle::Success, "❌");

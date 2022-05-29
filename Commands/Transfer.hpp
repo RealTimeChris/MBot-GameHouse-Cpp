@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		Transfer() {
 			this->commandName = "transfer";
 			this->helpDescription = "Transfers currency from yourself to another server member.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /transfer AMOUNT, @USERMENTION.\n------");
 			msgEmbed.setTitle("__**Transfer Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -42,7 +42,7 @@ namespace DiscordCoreAPI {
 				std::regex amountRegExp("\\d{1,18}");
 				if (!regex_search(argsNew.commandData.optionsArgs[0], amountRegExp) || std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid number for amount! (!transfer = AMOUNT, @USERMENTION)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -68,7 +68,7 @@ namespace DiscordCoreAPI {
 
 				if (toUserID == fromUserID) {
 					std::string msgString = "------\n**Sorry, but you cannot transfer to yourself!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -83,7 +83,7 @@ namespace DiscordCoreAPI {
 				DiscordGuildMember discordToGuildMember(toUserMember);
 				if (toUserMember.userName == "" || discordToGuildMember.data.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -105,7 +105,7 @@ namespace DiscordCoreAPI {
 
 				if (amount > discordFromGuildMember.data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you don't have sufficient funds in your wallet for that transfer!**\n-------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -129,7 +129,7 @@ namespace DiscordCoreAPI {
 				msgString += "\n__Your new wallet balances are:__ \n<@!" + std::to_string(fromUserID) + ">: " + std::to_string(discordFromGuildMember.data.currency.wallet) + " " +
 					discordUser.data.currencyName;
 				msgString += "\n<@!" + std::to_string(toUserID) + ">: " + std::to_string(discordToGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);

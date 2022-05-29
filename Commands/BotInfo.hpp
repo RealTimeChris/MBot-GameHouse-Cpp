@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		BotInfo() {
 			this->commandName = "botinfo";
 			this->helpDescription = "Displays some info about this bot.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /botinfo.\n------");
 			msgEmbed.setTitle("__**Bot Info Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -33,22 +33,22 @@ namespace DiscordCoreAPI {
 					userCount += value.memberCount;
 				}
 
-				EmbedData messageEmbed;
-				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				messageEmbed.setImage(argsNew.discordCoreClient->getBotUser().avatar);
-				messageEmbed.setColor("FEFEFE");
-				messageEmbed.setTitle("__**Bot Info:**__");
-				messageEmbed.setTimeStamp(getTimeAndDate());
-				messageEmbed.addField("__Bot Name:__", argsNew.discordCoreClient->getBotUser().userName + "#" + argsNew.discordCoreClient->getBotUser().discriminator, true);
-				messageEmbed.addField("__Bot ID:__", std::to_string(argsNew.discordCoreClient->getBotUser().id), true);
-				messageEmbed.addField("__Guild Count:__", std::to_string(guilds.size()), true);
-				messageEmbed.addField("__Created At:__", argsNew.discordCoreClient->getBotUser().getCreatedAtTimestamp(TimeFormat::LongDateTime), true);
-				messageEmbed.addField("__Serving Users:__", std::to_string(userCount), true);
-				messageEmbed.addField("__Running On:__", "[DiscordCoreAPI Bot Library](https://discordcoreapi.com)", true);
-				messageEmbed.addField("__Created By:__", "RealTime Chris#3627", true);
+				EmbedData msgEmbed{};
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+				msgEmbed.setImage(argsNew.discordCoreClient->getBotUser().avatar);
+				msgEmbed.setColor("FEFEFE");
+				msgEmbed.setTitle("__**Bot Info:**__");
+				msgEmbed.setTimeStamp(getTimeAndDate());
+				msgEmbed.addField("__Bot Name:__", argsNew.discordCoreClient->getBotUser().userName + "#" + argsNew.discordCoreClient->getBotUser().discriminator, true);
+				msgEmbed.addField("__Bot ID:__", std::to_string(argsNew.discordCoreClient->getBotUser().id), true);
+				msgEmbed.addField("__Guild Count:__", std::to_string(guilds.size()), true);
+				msgEmbed.addField("__Created At:__", argsNew.discordCoreClient->getBotUser().getCreatedAtTimestamp(TimeFormat::LongDateTime), true);
+				msgEmbed.addField("__Serving Users:__", std::to_string(userCount), true);
+				msgEmbed.addField("__Running On:__", "[DiscordCoreAPI Bot Library](https://discordcoreapi.com)", true);
+				msgEmbed.addField("__Created By:__", "RealTime Chris#3627", true);
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-				dataPackage.addMessageEmbed(messageEmbed);
+				dataPackage.addMessageEmbed(msgEmbed);
 				auto eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 				return;
 			} catch (...) {

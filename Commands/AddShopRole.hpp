@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		AddShopRole() {
 			this->commandName = "addshoprole";
 			this->helpDescription = "Add a role to the server's shop";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /addshoprole NAME, HEXCOLORVALUE, COST.\n------");
 			msgEmbed.setTitle("__**Add Shop Role Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -51,7 +51,7 @@ namespace DiscordCoreAPI {
 				std::regex costRegExp("\\d{1,8}");
 				if (argsNew.commandData.optionsArgs.size() < 2 || !regex_search(argsNew.commandData.optionsArgs.at(1), hexColorRegExp)) {
 					std::string msgString = "------\n**Please enter a valid hex color value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -66,7 +66,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() < 3 || !regex_search(argsNew.commandData.optionsArgs.at(2), costRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -89,7 +89,7 @@ namespace DiscordCoreAPI {
 				for (auto& value: discordGuild.data.guildShop.roles) {
 					if (roleName == value.roleName) {
 						std::string msgString = "------\n**Sorry, but a role by that name already exists!**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
@@ -149,7 +149,7 @@ namespace DiscordCoreAPI {
 				msgString = "Nicely done! You've added a new role to the store's inventory, giving the server access to it!\nIt is as "
 							"follows:\n------\n__**Role:**__ <@&" +
 					std::to_string(currentRole.roleId) + "> __**Cost**__ : " + std::to_string(roleCost) + " " + discordUser.data.currencyName + "\n------";
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);

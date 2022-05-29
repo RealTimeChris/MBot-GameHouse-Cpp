@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		RegisterApplicationCommands() {
 			this->commandName = "registerapplicationcommands";
 			this->helpDescription = "Registers some application commands.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /RegisterApplicationCommands.\n------");
 			msgEmbed.setTitle("__**Register Slash Commands Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());

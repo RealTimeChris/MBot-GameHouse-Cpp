@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		Leaderboard() {
 			this->commandName = "leaderboard";
 			this->helpDescription = "Displays the leaderboard for currency on the current server.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /leaderboard.\n------");
 			msgEmbed.setTitle("__**Leaderboard Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());

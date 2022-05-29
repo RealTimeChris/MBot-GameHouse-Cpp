@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		SellDrugs() {
 			this->commandName = "selldrugs";
 			this->helpDescription = "Gains you some currency!";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /selldrugs to gain currency.\n------");
 			msgEmbed.setTitle("__**Sell Drugs Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -66,15 +66,15 @@ namespace DiscordCoreAPI {
 					msgString += "You've been busy dealing drugs... and you've earned " + std::to_string(amountEarned) + " " + discordUser.data.currencyName +
 						"\nNice job and watch out for cops!\nYour new wallet balance is: ";
 					msgString += std::to_string(discordGuildMember.data.currency.wallet) + " " + discordUser.data.currencyName;
-					EmbedData messageEmbed;
-					messageEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-					messageEmbed.setDescription(msgString);
-					messageEmbed.setTitle("__**Drug Dealing:**__");
-					messageEmbed.setColor(discordGuild.data.borderColor);
-					messageEmbed.setTimeStamp(getTimeAndDate());
+					EmbedData msgEmbed{};
+					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTitle("__**Drug Dealing:**__");
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setTimeStamp(getTimeAndDate());
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-					dataPackage.addMessageEmbed(messageEmbed);
+					dataPackage.addMessageEmbed(msgEmbed);
 					InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage).get();
 
 					discordGuildMember.data.lastTimeWorked =
@@ -96,15 +96,15 @@ namespace DiscordCoreAPI {
 					} else {
 						msgString += "Sorry, but you need to wait " + std::to_string(secondsLeft) + " seconds before you can get paid again!";
 					}
-					EmbedData messageEmbed;
-					messageEmbed.setAuthor(currentUser.userName, currentUser.avatar);
-					messageEmbed.setDescription(msgString);
-					messageEmbed.setTitle("__**Drug Dealing:**__");
-					messageEmbed.setColor(discordGuild.data.borderColor);
-					messageEmbed.setTimeStamp(getTimeAndDate());
+					EmbedData msgEmbed{};
+					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTitle("__**Drug Dealing:**__");
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setTimeStamp(getTimeAndDate());
 					RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(messageEmbed);
+					dataPackage.addMessageEmbed(msgEmbed);
 					InputEventData event01 = InputEvents::respondToInputEventAsync(dataPackage).get();
 				}
 			} catch (...) {

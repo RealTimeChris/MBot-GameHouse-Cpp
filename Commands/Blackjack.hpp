@@ -658,7 +658,7 @@ namespace DiscordCoreAPI {
 		Blackjack() {
 			this->commandName = "blackjack";
 			this->helpDescription = "Bet some currency on a game of blackjack.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /blackjack BETAMOUNT.\n------");
 			msgEmbed.setTitle("__**Blackjack Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());

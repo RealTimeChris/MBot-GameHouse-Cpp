@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		SetBalance() {
 			this->commandName = "setbalance";
 			this->helpDescription = "Sets your own or another server member's currency balances.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /setbalance NEWBALANCE, BALANCETYPE, @USERMENTION or to set your own balance it's simply /setbalance = "
 									"NEWBALANCE, BALANCETYPE.\n------");
 			msgEmbed.setTitle("__**Set Balance Usage:**__");
@@ -58,7 +58,7 @@ namespace DiscordCoreAPI {
 					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 0) {
 					std::string msgString = "------\n**Please enter a valid desired balance! (!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -73,7 +73,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() < 2 || (argsNew.commandData.optionsArgs.at(1) != "bank" && argsNew.commandData.optionsArgs.at(1) != "wallet")) {
 					std::string msgString = "------\n**Please enter a valid balance type! Bank or Wallet! (!setbalance = NEWBALANCE, BALANCETYPE, "
 											"@USERMENTION, or just !setbalance = NEWBALANCE, BALANCETYPE)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -92,7 +92,7 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\n**Please enter a valid target user mention, or leave it blank to select yourself as the target! "
 											"(!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -117,7 +117,7 @@ namespace DiscordCoreAPI {
 
 				if (targetMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -153,17 +153,17 @@ namespace DiscordCoreAPI {
 						"__You've set the user <@!" + std::to_string(targetUserID) + ">'s wallet balance to:__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName;
 				}
 
-				EmbedData messageEmbed;
-				messageEmbed.setTimeStamp(getTimeAndDate());
-				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				messageEmbed.setColor(discordGuild.data.borderColor);
-				messageEmbed.setDescription(msgString);
-				messageEmbed.setTimeStamp(getTimeAndDate());
-				messageEmbed.setTitle("__**Set New Balance:**__");
+				EmbedData msgEmbed{};
+				msgEmbed.setTimeStamp(getTimeAndDate());
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+				msgEmbed.setColor(discordGuild.data.borderColor);
+				msgEmbed.setDescription(msgString);
+				msgEmbed.setTimeStamp(getTimeAndDate());
+				msgEmbed.setTitle("__**Set New Balance:**__");
 				RespondToInputEventData dataPackage{ argsNew.eventData };
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
 				dataPackage.addContent("<@!" + std::to_string(targetUserID) + ">");
-				dataPackage.addMessageEmbed(messageEmbed);
+				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				return;
 			} catch (...) {

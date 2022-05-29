@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		Coinflip() {
 			this->commandName = "coinflip";
 			this->helpDescription = "Gamble some currency on a coinflip!";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nSimply enter /coinflip BETAMOUNT.\n------");
 			msgEmbed.setTitle("__**Coinflip Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());

@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		RemoveShopItem() {
 			this->commandName = "removeshopitem";
 			this->helpDescription = "Remove's an item from the server's shop.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /removeshopitem ITEMNAME.\n------");
 			msgEmbed.setTitle("__**Remove Shop Item Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -59,7 +59,7 @@ namespace DiscordCoreAPI {
 
 				if (itemFound == false) {
 					std::string msgString = "------\n**Sorry, but that item was not found in the shop's inventory!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -80,7 +80,7 @@ namespace DiscordCoreAPI {
 				discordGuild.data.guildShop.items.erase(discordGuild.data.guildShop.items.begin() + itemIndex);
 				discordGuild.writeDataToDB();
 
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);

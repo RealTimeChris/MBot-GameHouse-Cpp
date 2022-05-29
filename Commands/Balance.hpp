@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		Balance() {
 			this->commandName = "balance";
 			this->helpDescription = "Display yours or another server member's currency balance.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /balance to view your own balance, or /balance @USERMENTION to view someone else's balances.\n------");
 			msgEmbed.setTitle("__**Balance Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -51,7 +51,7 @@ namespace DiscordCoreAPI {
 					if (!regex_search(argsNew.commandData.optionsArgs.at(0), mentionRegExp, std::regex_constants::match_flag_type::format_first_only) &&
 						!regex_search(argsNew.commandData.optionsArgs.at(0), idRegExp, std::regex_constants::match_flag_type::format_first_only)) {
 						std::string msgString = "------\n* *Please, enter a valid user mention, or enter none at all!(!balance = @USERMENTION)**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
@@ -72,7 +72,7 @@ namespace DiscordCoreAPI {
 
 				if (guildMember.id == 0) {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -95,7 +95,7 @@ namespace DiscordCoreAPI {
 				msgString = "<@!" + std::to_string(guildMember.id) + "> 's balances are:\n------\n__**Bank Balance:**__ " + std::to_string(bankAmount) + " " +
 					discordUser.data.currencyName + "\n__**Wallet Balance:**__ " + std::to_string(walletAmount) + " " + discordUser.data.currencyName + "\n------";
 
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setDescription(msgString);
 				msgEmbed.setColor(discordGuild.data.borderColor);

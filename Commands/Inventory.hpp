@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		Inventory() {
 			this->commandName = "inventory";
 			this->helpDescription = "Inspect your own or someone else's inventoryt";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /inventory. Alternatively, enter /inventory @USERMENTION to view someone else's inventory.\n------");
 			msgEmbed.setTitle("__**Inventory Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -59,7 +59,7 @@ namespace DiscordCoreAPI {
 
 				if (currentGuildMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user data could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -90,7 +90,7 @@ namespace DiscordCoreAPI {
 						discordGuildMember.data.roles.erase(discordGuildMember.data.roles.begin() + x);
 						discordGuildMember.writeDataToDB();
 						std::string msgString = "------\n**Removing role " + userRole.roleName + " from user cache!**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
@@ -176,15 +176,15 @@ namespace DiscordCoreAPI {
 				if (rolesMsgEmbeds.size() == 0 && itemsMessageEmbeds.size() == 0) {
 					std::string msgString = "";
 					msgString = "Sorry, but the specified user, (<@!" + std::to_string(userID) + ">) has no inventory!";
-					EmbedData messageEmbed;
-					messageEmbed.setDescription(msgString);
-					messageEmbed.setTimeStamp(getTimeAndDate());
-					messageEmbed.setTitle("__**Empty Inventory:**__");
-					messageEmbed.setColor(discordGuild.data.borderColor);
-					messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					EmbedData msgEmbed{};
+					msgEmbed.setDescription(msgString);
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setTitle("__**Empty Inventory:**__");
+					msgEmbed.setColor(discordGuild.data.borderColor);
+					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					RespondToInputEventData dataPackage(event02);
 					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
-					dataPackage.addMessageEmbed(messageEmbed);
+					dataPackage.addMessageEmbed(msgEmbed);
 					event02 = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}

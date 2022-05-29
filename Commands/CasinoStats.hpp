@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		CasinoStatsFunction() {
 			this->commandName = "casinostats";
 			this->helpDescription = "View stats about this server's casino.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /casinostats.\n------");
 			msgEmbed.setTitle("__**Casino Stats Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -93,7 +93,7 @@ namespace DiscordCoreAPI {
 				field8.Inline = true;
 				fields.push_back(field8);
 
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(

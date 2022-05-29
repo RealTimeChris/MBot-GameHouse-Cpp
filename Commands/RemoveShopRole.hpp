@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		RemoveShopRole() {
 			this->commandName = "removeshoprole";
 			this->helpDescription = "Remove a role from the server's shop.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /removeshoprole ROLENAME.\n------");
 			msgEmbed.setTitle("__**Remove Shop Role Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -71,7 +71,7 @@ namespace DiscordCoreAPI {
 
 				if (isRoleFound == false) {
 					msgString = "------\n**Sorry, but that role was not found in the shop's inventory!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -88,15 +88,15 @@ namespace DiscordCoreAPI {
 
 				msgString += "You've just deleted a role from the shop / server!\n------\n__**Role Name:**__ " + realRoleName + "\n------";
 
-				EmbedData messageEmbed;
-				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-				messageEmbed.setDescription(msgString);
-				messageEmbed.setTimeStamp(getTimeAndDate());
-				messageEmbed.setTitle("__**Shop/Server Role Deleted:**__");
-				messageEmbed.setColor(discordGuild.data.borderColor);
+				EmbedData msgEmbed{};
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+				msgEmbed.setDescription(msgString);
+				msgEmbed.setTimeStamp(getTimeAndDate());
+				msgEmbed.setTitle("__**Shop/Server Role Deleted:**__");
+				msgEmbed.setColor(discordGuild.data.borderColor);
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-				dataPackage.addMessageEmbed(messageEmbed);
+				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 
 				return;

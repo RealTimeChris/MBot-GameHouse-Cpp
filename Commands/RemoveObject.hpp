@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		RemoveObject() {
 			this->commandName = "removeobject";
 			this->helpDescription = "Remove an object from your own or someone else's inventory.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter or /removeobject OBJECTNAME. Alternatively, /removeobject = OBJECTNAME, @USERMENTION.\n------");
 			msgEmbed.setTitle("__**Remove Object Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -76,7 +76,7 @@ namespace DiscordCoreAPI {
 
 				if (targetMember.userName == "") {
 					std::string msgString = "------\n**Sorry, but that user could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -93,7 +93,7 @@ namespace DiscordCoreAPI {
 
 				if (guildMemberData.data.userName == "") {
 					std::string msgString = "------\n**Sorry, but the specified user data could not be found!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -129,11 +129,11 @@ namespace DiscordCoreAPI {
 					}
 				}
 
-				EmbedData messageEmbed;
+				EmbedData msgEmbed{};
 
 				if (isObjectFound == false) {
 					std::string msgString = "-------\n**Sorry, but the item was not found in the inventory!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -156,19 +156,19 @@ namespace DiscordCoreAPI {
 													  })
 						.get();
 					msgString = "------\n**You've removed the following role from <@!" + std::to_string(userID) + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
-					messageEmbed.setTitle("__**Role Removed:**__");
+					msgEmbed.setTitle("__**Role Removed:**__");
 				} else if (objectType == "item") {
 					msgString = "------\n**You've removed the following item from <@!" + std::to_string(userID) + ">'s inventory:**\n------\n __**" + objectName + "**__\n------";
-					messageEmbed.setTitle("__**Item Removed:**__");
+					msgEmbed.setTitle("__**Item Removed:**__");
 				}
 
-				messageEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl())
+				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl())
 					.setColor(discordGuild.data.borderColor)
 					.setDescription(msgString)
 					.setTimeStamp(getTimeAndDate());
 				RespondToInputEventData dataPackage(argsNew.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Interaction_Response);
-				dataPackage.addMessageEmbed(messageEmbed);
+				dataPackage.addMessageEmbed(msgEmbed);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 
 				return;

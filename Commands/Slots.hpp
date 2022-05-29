@@ -13,7 +13,7 @@ namespace DiscordCoreAPI {
 		Slots() {
 			this->commandName = "slots";
 			this->helpDescription = "Gamble some currency on a game of slots!";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /slots BETAMOUNT.\n------");
 			msgEmbed.setTitle("__**Slots Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -43,7 +43,7 @@ namespace DiscordCoreAPI {
 				std::regex digitRegExp("\\d{1,18}");
 				if (std::stoll(argsNew.commandData.optionsArgs[0]) <= 0 || !regex_search(argsNew.commandData.optionsArgs.at(0), digitRegExp)) {
 					std::string msgString = "------\n**Please, enter a valid bet amount as the first argument of the command! (!slots = BETAMOUNT)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -66,7 +66,7 @@ namespace DiscordCoreAPI {
 
 				if (( uint32_t )betAmountOld > discordGuildMember.data.currency.wallet) {
 					std::string msgString = "------\n**Sorry, but you don't have sufficient funds in your wallet for placing that bet!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -127,7 +127,7 @@ namespace DiscordCoreAPI {
 					std::string msgString1 = "__**Slot Results:**__\n[" + slotReel[reelIndices1[7]] + "][:question:][:question:]\n[" + slotReel[reelIndices1[8]] +
 						"][:question:][:question:]\n[" + slotReel[reelIndices1[9]] + "][:question:][:question:]\n\n__**Your Wager:**__ " + std::to_string(betAmountOld) + " " +
 						discordUser.data.currencyName + "\n__**Maximum Payout:**__ " + std::to_string(15 * betAmountOld) + " " + discordUser.data.currencyName;
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor("0000FE");
 					msgEmbed.setDescription(msgString1);

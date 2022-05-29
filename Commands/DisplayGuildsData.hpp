@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		DisplayGuildsData() {
 			this->commandName = "displayguildsdata";
 			this->helpDescription = "Displays some info about the servers that this bot is in.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /displayguildsdata.\n------");
 			msgEmbed.setTitle("__**Display Guild's Data Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -45,17 +45,17 @@ namespace DiscordCoreAPI {
 					msgString += "__Guild Owner:__ <@!" + value.ownerId + "> " + owner.userName + "#" + owner.discriminator + "\n";
 					msgString += "__Created At:__ " + value.getCreatedAtTimestamp(TimeFormat::LongDateTime);
 
-					EmbedData messageEmbed;
-					messageEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
-					messageEmbed.setColor("FEFEFE");
-					messageEmbed.setThumbnail(value.icon);
-					messageEmbed.setTitle("__**Guild Data " + std::to_string(currentCount + 1) + " of " + std::to_string(theCache.size()) + "**__");
-					messageEmbed.setTimeStamp(getTimeAndDate());
-					messageEmbed.setDescription(msgString);
+					EmbedData msgEmbed{};
+					msgEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
+					msgEmbed.setColor("FEFEFE");
+					msgEmbed.setThumbnail(value.icon);
+					msgEmbed.setTitle("__**Guild Data " + std::to_string(currentCount + 1) + " of " + std::to_string(theCache.size()) + "**__");
+					msgEmbed.setTimeStamp(getTimeAndDate());
+					msgEmbed.setDescription(msgString);
 
 					RespondToInputEventData dataPackage02(inputEvent);
 					dataPackage02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
-					dataPackage02.addMessageEmbed(messageEmbed);
+					dataPackage02.addMessageEmbed(msgEmbed);
 					inputEvent = InputEvents::respondToInputEventAsync(dataPackage02).get();
 					currentCount += 1;
 				};

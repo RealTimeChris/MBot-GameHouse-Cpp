@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		AddShopItem() {
 			this->commandName = "addshopitem";
 			this->helpDescription = "Add an item to the server's shop.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /addshopitem ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI.\n------");
 			msgEmbed.setTitle("__**Add Shop Item Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -56,7 +56,7 @@ namespace DiscordCoreAPI {
 					std::stoll(argsNew.commandData.optionsArgs.at(1)) > 100 || std::stoll(argsNew.commandData.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid self-mod value, between 0 and 100! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -71,7 +71,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() < 3 || theInt < -100 || theInt > 0) {
 					std::string msgString = "------\n**Please enter a valid opp-mod value between -100 and 0! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -86,7 +86,7 @@ namespace DiscordCoreAPI {
 				if (argsNew.commandData.optionsArgs.size() < 4 || !regex_search(argsNew.commandData.optionsArgs.at(3), itemCostRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(3)) < 1) {
 					std::string msgString = "------\n**Please enter a valid item cost! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -100,7 +100,7 @@ namespace DiscordCoreAPI {
 				}
 				if (argsNew.commandData.optionsArgs.size() < 5 || !regex_search(argsNew.commandData.optionsArgs.at(4), emojiRegExp)) {
 					std::string msgString = "------\n**Please enter a valid emoji! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -126,7 +126,7 @@ namespace DiscordCoreAPI {
 				for (auto& value: discordGuild.data.guildShop.items) {
 					if (itemName == value.itemName) {
 						std::string msgString = "------\n**Sorry, but an item by that name already exists!**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
@@ -157,7 +157,7 @@ namespace DiscordCoreAPI {
 					itemName + "\n__Self-Mod Value__: " + std::to_string(selfMod) + "\n__Opp-Mod Value__: " + std::to_string(oppMod) + "\n\
 				__Item Cost__: " +
 					std::to_string(itemCost) + " " + discordUser.data.currencyName + "\n__Emoji__: " + emoji;
-				EmbedData msgEmbed;
+				EmbedData msgEmbed{};
 				msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 				msgEmbed.setColor(discordGuild.data.borderColor);
 				msgEmbed.setDescription(msgString);

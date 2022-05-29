@@ -14,7 +14,7 @@ namespace DiscordCoreAPI {
 		Buy() {
 			this->commandName = "buy";
 			this->helpDescription = "Buy an item or role from the server's shop.";
-			EmbedData msgEmbed;
+			EmbedData msgEmbed{};
 			msgEmbed.setDescription("------\nEnter /buy ITEMNAME/ROLENAME.\n------");
 			msgEmbed.setTitle("__**Buy Usage:**__");
 			msgEmbed.setTimeStamp(getTimeAndDate());
@@ -64,7 +64,7 @@ namespace DiscordCoreAPI {
 							}
 						}
 						std::string msgString = "------\n**Removing guild role " + shopRole.roleName + " from guild member cache!**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
@@ -98,7 +98,7 @@ namespace DiscordCoreAPI {
 				}
 				if (isFoundInShop == false) {
 					std::string msgString = "------\n**Sorry, but we could not find that object in the shop!**\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -129,7 +129,7 @@ namespace DiscordCoreAPI {
 
 				if (isFoundInInventory == true) {
 					std::string msgString = "------\n**Sorry, but you already have one of those " + objectType + "s.** \n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 					msgEmbed.setColor(discordGuild.data.borderColor);
 					msgEmbed.setDescription(msgString);
@@ -148,7 +148,7 @@ namespace DiscordCoreAPI {
 
 					if (roleCost > userBalance) {
 						std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
 						msgEmbed.setColor(discordGuild.data.borderColor);
 						msgEmbed.setDescription(msgString);
@@ -176,7 +176,7 @@ namespace DiscordCoreAPI {
 					std::string msgString = "------\nCongratulations! You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ <@&" +
 						std::to_string(newRole.roleId) + "> (" + newRole.roleName + ")\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " +
 						discordUser.data.currencyName + "\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setTitle("__**New Role Purchased:**__");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setDescription(msgString);
@@ -209,7 +209,7 @@ namespace DiscordCoreAPI {
 
 					if (itemCost > userBalance) {
 						std::string msgString = "------\n**Sorry, but you have insufficient funds in your wallet to purchase that!**\n------";
-						EmbedData msgEmbed;
+						EmbedData msgEmbed{};
 						msgEmbed.setTimeStamp(getTimeAndDate());
 						msgEmbed.setDescription(msgString);
 						msgEmbed.setAuthor(currentUser.userName, currentUser.avatar);
@@ -234,7 +234,7 @@ namespace DiscordCoreAPI {
 					DiscordUser discordUser(botUser.userName, botUser.id);
 					std::string msgString = "------\nCongratulations!You've just purchased a new " + objectType + ".\n------\n__**It is as follows:**__ " + itemEmoji + itemName +
 						"\n------\n__**Your new wallet balance:**__ " + std::to_string(newBalance) + " " + discordUser.data.currencyName + "\n------";
-					EmbedData msgEmbed;
+					EmbedData msgEmbed{};
 					msgEmbed.setTitle("__**New Item Purchased:**__");
 
 					uint32_t maxIdx = 0;
