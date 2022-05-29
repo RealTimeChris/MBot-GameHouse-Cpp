@@ -73,7 +73,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 	int32_t finalFromUserRoll = 0;
 	int32_t finalToUserRoll = 0;
 
-	for (auto value: discordFromGuildMember->data.items) {
+	for (auto& value: discordFromGuildMember->data.items) {
 		if (value.selfMod > 0) {
 			std::string currentString = "+" + std::to_string(value.selfMod);
 			currentString += " of base roll from <@!" + *fromUserIDNew + ">'s " + value.emoji + value.itemName + "\n";
@@ -88,7 +88,7 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		}
 	}
 
-	for (auto value: discordToGuildMember->data.items) {
+	for (DiscordCoreAPI::InventoryItem value: discordToGuildMember->data.items) {
 		if (value.selfMod > 0) {
 			std::string currentString = "+" + std::to_string(value.selfMod);
 			currentString += " of base roll from <@!" + *toUserIDNew + ">'s " + value.emoji + value.itemName + "\n";
@@ -144,12 +144,12 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 			*toUserIDNew + ">: " + std::to_string(discordToGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 		std::vector<std::string> fromUserModStrings;
-		for (auto value: fromUserLossStrings) {
+		for (std::string value: fromUserLossStrings) {
 			fromUserGainStrings.push_back(value);
 		}
 		fromUserModStrings = fromUserGainStrings;
 
-		for (auto value: fromUserModStrings) {
+		for (std::string value: fromUserModStrings) {
 			if ((finalStrings[currentPage].length() + value.length() + midFooter1.length() + fromUserFooterString.length()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
@@ -164,12 +164,12 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		finalStrings[currentPage] += midFooter2;
 
 		std::vector<std::string> toUserModStrings;
-		for (auto value: toUserLossStrings) {
+		for (std::string value: toUserLossStrings) {
 			toUserGainStrings.push_back(value);
 		}
 		toUserModStrings = toUserGainStrings;
 
-		for (auto value: toUserModStrings) {
+		for (std::string value: toUserModStrings) {
 			if ((finalStrings[currentPage].size() + value.size() + midFooter1.size() + toUserFooterString.size()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
@@ -219,12 +219,12 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 			"\n------";
 
 		std::vector<std::string> toUserModStrings;
-		for (auto value: toUserLossStrings) {
+		for (auto& value: toUserLossStrings) {
 			toUserGainStrings.push_back(value);
 		}
 		toUserModStrings = toUserGainStrings;
 
-		for (auto value: toUserModStrings) {
+		for (auto& value: toUserModStrings) {
 			if ((finalStrings[currentPage].length() + value.length() + midFooter1.length() + toUserFooterString.length()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
@@ -239,12 +239,12 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		finalStrings[currentPage] += midFooter2;
 
 		std::vector<std::string> fromUserModStrings;
-		for (auto value: fromUserLossStrings) {
+		for (auto& value: fromUserLossStrings) {
 			fromUserGainStrings.push_back(value);
 		}
 		fromUserModStrings = fromUserGainStrings;
 
-		for (auto value: fromUserModStrings) {
+		for (auto& value: fromUserModStrings) {
 			if ((finalStrings[currentPage].size() + value.size() + fromUserFooterString.size()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
