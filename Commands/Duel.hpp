@@ -131,8 +131,8 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		finalStrings.resize(1);
 		finalStrings[currentPage] += fromUserVicHeaderString;
 
-		std::string midFooter1 = "__**<@!" + *fromUserIDNew + ">:**__ " + std::to_string(fromUserRoll) + "\n";
-		std::string midFooter2 = "__**<@!" + *toUserIDNew + ">:**__ " + std::to_string(toUserRoll) + "\n";
+		auto midFooter1 = "__**<@!" + *fromUserIDNew + ">:**__ " + std::to_string(fromUserRoll) + "\n";
+		auto midFooter2 = "__**<@!" + *toUserIDNew + ">:**__ " + std::to_string(toUserRoll) + "\n";
 
 		finalStrings[currentPage] += midFooter1;
 
@@ -143,13 +143,13 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		finalFooterString += "<@!" + *fromUserIDNew + ">: " + std::to_string(discordFromGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n" + "<@!" +
 			*toUserIDNew + ">: " + std::to_string(discordToGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
-		std::vector<std::string> fromUserModStrings;
-		for (std::string value: fromUserLossStrings) {
+		std::vector<std::string> fromUserModStrings{};
+		for (std::string& value: fromUserLossStrings) {
 			fromUserGainStrings.push_back(value);
 		}
 		fromUserModStrings = fromUserGainStrings;
 
-		for (std::string value: fromUserModStrings) {
+		for (std::string& value: fromUserModStrings) {
 			if ((finalStrings[currentPage].length() + value.length() + midFooter1.length() + fromUserFooterString.length()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;
@@ -164,12 +164,12 @@ void executeCheck(DiscordCoreAPI::BaseFunctionArguments argsNew, DiscordCoreAPI:
 		finalStrings[currentPage] += midFooter2;
 
 		std::vector<std::string> toUserModStrings;
-		for (std::string value: toUserLossStrings) {
+		for (std::string& value: toUserLossStrings) {
 			toUserGainStrings.push_back(value);
 		}
 		toUserModStrings = toUserGainStrings;
 
-		for (std::string value: toUserModStrings) {
+		for (std::string& value: toUserModStrings) {
 			if ((finalStrings[currentPage].size() + value.size() + midFooter1.size() + toUserFooterString.size()) >= 2048) {
 				finalStrings.resize(finalStrings.size() + 1);
 				currentPage += 1;

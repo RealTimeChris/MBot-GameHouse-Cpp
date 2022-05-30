@@ -33,7 +33,7 @@ std::string getNumberString(std::string inputString, std::vector<std::string> re
 
 void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newEvent, DiscordCoreAPI::DiscordUser discordUser, std::vector<std::string> redNumbers,
 	std::vector<std::string> blackNumbers) {
-	std::string msgStringFinal;
+	std::string msgStringFinal{};
 	std::string finalRollString = getNumberString(finalRoll, redNumbers, blackNumbers);
 	msgStringFinal += "------\n__**Final Roll:**__ " + finalRollString + "\n------\n";
 	DiscordCoreAPI::Guild guild = DiscordCoreAPI::Guilds::getGuildAsync({ .guildId = newEvent.getGuildId() }).get();
@@ -664,11 +664,9 @@ namespace DiscordCoreAPI {
 						currentIndex -= 1;
 						if (currentIndex == -1) {
 							DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(newEvent);
-							std::stringstream stream;
 							std::mt19937_64 randomEngine{ static_cast<uint64_t>(
 								std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
-							stream << static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 38.0f);
-							std::string finalRoll = stream.str();
+							std::string finalRoll = std::to_string(static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 39.0f));
 
 							calculateResults(finalRoll, argsNew.eventData, discordUser, redNumbers, blackNumbers);
 						}
