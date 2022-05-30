@@ -8,6 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
+
 	class RemoveShopItem : public BaseFunction {
 	  public:
 		RemoveShopItem() {

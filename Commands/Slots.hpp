@@ -8,6 +8,7 @@
 #include "HelperFunctions.hpp"
 
 namespace DiscordCoreAPI {
+
 	class Slots : public BaseFunction {
 	  public:
 		Slots() {
