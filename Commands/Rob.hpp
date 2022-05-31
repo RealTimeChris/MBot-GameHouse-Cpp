@@ -38,8 +38,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex userMentionRegExp(".{2,3}\\d{18}>");
-				std::regex userIDRegExp("\\d{18}");
+				std::regex userMentionRegExp{ ".{2,3}\\d{18}>" };
+				std::regex userIDRegExp{ "\\d{18}" };
 
 
 				uint64_t userID = argsNew.eventData.getAuthorId();

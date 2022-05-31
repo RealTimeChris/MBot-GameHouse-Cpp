@@ -46,7 +46,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex idRegExp("\\d{18}");
+				std::regex idRegExp{ "\\d{18}" };
 				std::cmatch matchResults;
 				uint64_t roleID{};
 				std::string objectName;
@@ -57,7 +57,7 @@ namespace DiscordCoreAPI {
 				}
 
 				uint64_t userID{};
-				std::regex userMentionRegExp("<@!\\d{18}>");
+				std::regex userMentionRegExp{ "<@!\\d{18}>" };
 				if (argsNew.commandData.optionsArgs.size() == 1) {
 					userID = argsNew.eventData.getAuthorId();
 				} else {

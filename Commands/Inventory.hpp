@@ -41,8 +41,8 @@ namespace DiscordCoreAPI {
 
 				uint64_t userID;
 
-				std::regex userIDRegExp(".{2,3}\\d{18}>");
-				std::regex idRegExp("\\d{18}");
+				std::regex userIDRegExp{ ".{2,3}\\d{18}>" };
+				std::regex idRegExp{ "\\d{18}" };
 				if (argsNew.commandData.optionsArgs.size() == 0) {
 					userID = argsNew.eventData.getAuthorId();
 				} else {

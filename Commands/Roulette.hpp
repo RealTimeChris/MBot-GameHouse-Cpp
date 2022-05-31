@@ -172,7 +172,7 @@ namespace DiscordCoreAPI {
 				uint32_t betAmount = 0;
 				std::string betType;
 				std::string betOptions;
-				std::regex betRegex("bet");
+				std::regex betRegex{ "bet" };
 				if (argsNew.commandData.subCommandName == "start") {
 					if (discordGuild->data.rouletteGame.currentlySpinning == true) {
 						std::string msgString = "------\n**Please, wait until the current game is over, before starting another one!**\n------";
@@ -224,7 +224,7 @@ namespace DiscordCoreAPI {
 						betAmount = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs[0]);
 					}
 				}
-				std::regex digitRegExp("\\d{1,18}");
+				std::regex digitRegExp{ "\\d{1,18}" };
 				std::vector<std::string> betTypes{ "0", "00", "straight", "row", "split", "street", "basket", "sixline", "1stcolumn", "2ndcolumn", "3rdcolumn", "1stdozen",
 					"2nddozen", "3rddozen", "odd", "even", "red", "black", "1to18", "19to36" };
 				std::vector<std::string> redNumbers{ ":red_square:32", ":red_square:19", ":red_square:21", ":red_square:25", ":red_square:34", ":red_square:27", ":red_square:36",

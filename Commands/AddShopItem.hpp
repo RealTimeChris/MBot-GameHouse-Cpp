@@ -48,10 +48,10 @@ namespace DiscordCoreAPI {
 					return;
 				}
 				int32_t theInt = std::bit_cast<int32_t, int32_t>(static_cast<int32_t>(std::stoll(argsNew.commandData.optionsArgs[2])));
-				std::regex selfModRegExp("\\d{1,5}");
-				std::regex oppModRegExp("-{0,1}\\d{1,5}");
-				std::regex itemCostRegExp("\\d{1,6}");
-				std::regex emojiRegExp(".{1,32}");
+				std::regex selfModRegExp{ "\\d{1,5}" };
+				std::regex oppModRegExp{ "-{0,1}\\d{1,5}" };
+				std::regex itemCostRegExp{ "\\d{1,6}" };
+				std::regex emojiRegExp{ ".{1,32}" };
 				if (argsNew.commandData.optionsArgs.size() < 2 || !regex_search(argsNew.commandData.optionsArgs.at(1), selfModRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(1)) > 100 || std::stoll(argsNew.commandData.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid self-mod value, between 0 and 100! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "

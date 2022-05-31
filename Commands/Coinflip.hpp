@@ -59,7 +59,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex betAmountRegExp("\\d{1,18}");
+				std::regex betAmountRegExp{ "\\d{1,18}" };
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
 				if (argsNew.commandData.optionsArgs.size() == 0 || !std::regex_search(argsNew.commandData.optionsArgs.at(0), betAmountRegExp) ||

@@ -38,8 +38,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex userMentionRegExp("\\d{18}");
-				std::regex amountRegExp("\\d{1,18}");
+				std::regex userMentionRegExp{ "\\d{18}" };
+				std::regex amountRegExp{ "\\d{1,18}" };
 				if (!regex_search(argsNew.commandData.optionsArgs[0], amountRegExp) || std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid number for amount! (!transfer = AMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed{};

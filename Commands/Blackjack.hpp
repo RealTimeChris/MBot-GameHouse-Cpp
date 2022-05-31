@@ -704,7 +704,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex betRegExp("\\d{1,18}");
+				std::regex betRegExp{ "\\d{1,18}" };
 				if (argsNew.commandData.optionsArgs.size() == 0 || !std::regex_search(argsNew.commandData.optionsArgs.at(0), betRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid bet amount!(!blackjack = BETAMOUNT)**\n------";

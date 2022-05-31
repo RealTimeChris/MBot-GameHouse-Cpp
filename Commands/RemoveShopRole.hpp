@@ -45,8 +45,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex roleNameRegExp(".{1,36}");
-				std::regex roleIdRegExp("\\d{1,18}");
+				std::regex roleNameRegExp{ ".{1,36}" };
+				std::regex roleIdRegExp{ "\\d{1,18}" };
 
 				std::string roleName = argsNew.commandData.optionsArgs.at(0);
 

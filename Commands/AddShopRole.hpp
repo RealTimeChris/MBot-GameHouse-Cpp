@@ -47,8 +47,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex hexColorRegExp(".{1,24}");
-				std::regex costRegExp("\\d{1,8}");
+				std::regex hexColorRegExp{ ".{1,24}" };
+				std::regex costRegExp{ "\\d{1,8}" };
 				if (argsNew.commandData.optionsArgs.size() < 2 || !regex_search(argsNew.commandData.optionsArgs.at(1), hexColorRegExp)) {
 					std::string msgString = "------\n**Please enter a valid hex color value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed{};

@@ -49,9 +49,9 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex balanceRegExp("\\d{1,18}");
-				std::regex userMentionRegExp("<@!\\d{18}>");
-				std::regex userIDRegExp("\\d{18}");
+				std::regex balanceRegExp{ "\\d{1,18}" };
+				std::regex userMentionRegExp{ "<@!\\d{18}>" };
+				std::regex userIDRegExp{ "\\d{18}" };
 				uint64_t targetUserID{};
 
 				if (argsNew.commandData.optionsArgs.size() == 0 || !regex_search(argsNew.commandData.optionsArgs.at(0), balanceRegExp) ||

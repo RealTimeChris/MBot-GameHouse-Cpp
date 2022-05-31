@@ -43,8 +43,8 @@ namespace DiscordCoreAPI {
 				uint32_t bankAmount = 0;
 				uint32_t walletAmount = 0;
 
-				std::regex mentionRegExp("<@!\\d{18,}>");
-				std::regex idRegExp("\\d{18,}");
+				std::regex mentionRegExp{ "<@!\\d{18,}>" };
+				std::regex idRegExp{ "\\d{18,}" };
 				if (argsNew.commandData.optionsArgs.size() == 0) {
 					userID = argsNew.eventData.getAuthorId();
 				} else if (argsNew.commandData.optionsArgs.at(0) != "") {

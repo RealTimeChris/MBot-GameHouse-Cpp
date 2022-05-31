@@ -334,8 +334,8 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::regex numberRegExp("\\d{1,18}");
-				std::regex idRegExp("\\d{18}");
+				std::regex numberRegExp{ "\\d{1,18}" };
+				std::regex idRegExp{ "\\d{18}" };
 
 				if (argsNew.commandData.optionsArgs.size() < 2 || !std::regex_search(argsNew.commandData.optionsArgs.at(1), numberRegExp) ||
 					std::stoll(argsNew.commandData.optionsArgs.at(1)) < 0) {
