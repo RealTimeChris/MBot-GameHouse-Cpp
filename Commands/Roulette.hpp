@@ -633,7 +633,6 @@ namespace DiscordCoreAPI {
 					discordGuild->writeDataToDB();
 
 					int32_t currentIndex = 3;
-					currentIndex = 3;
 					InputEventData newEvent = argsNew.eventData;
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -650,10 +649,11 @@ namespace DiscordCoreAPI {
 					auto botUser = argsNew.discordCoreClient->getBotUser();
 					DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 					currentIndex -= 1;
-					std::function<void()> function01 = [&]() {
+					std::string borderColor = discordGuild->data.borderColor;
+					std::function<void()> function01 = [&]()mutable {
 						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
-						msgEmbed->setColor(discordGuild->data.borderColor);
+						msgEmbed->setColor(borderColor);
 						msgEmbed->setDescription("------\n__**" + std::to_string(currentIndex * 10) + " seconds remaining to place your roulette bets!**__\n------");
 						msgEmbed->setTimeStamp(getTimeAndDate());
 						msgEmbed->setTitle("__**Roulette Ball Rolling:**__");
@@ -666,15 +666,15 @@ namespace DiscordCoreAPI {
 							DiscordCoreAPI::InputEvents::deleteInputEventResponseAsync(newEvent);
 							std::mt19937_64 randomEngine{ static_cast<uint64_t>(
 								std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
-							std::string finalRoll = std::to_string(static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 39.0f));
+							std::string finalRoll = std::to_string(static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 38.0f));
 
 							calculateResults(finalRoll, argsNew.eventData, discordUser, redNumbers, blackNumbers);
 						}
 					};
 
-					ThreadPool::storeThread(function01, 10000, true);
-					ThreadPool::storeThread(function01, 10000, true);
-					ThreadPool::storeThread(function01, 10000, true);
+					ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
+					ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
+					ThreadPool::executeFunctionAfterTimePeriod(function01, 10000, true);
 				}
 				return;
 			} catch (...) {
