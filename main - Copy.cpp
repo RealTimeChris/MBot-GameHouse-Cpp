@@ -27,7 +27,7 @@ void onBoot01(DiscordCoreAPI::DiscordCoreClient* args) {
 	args->getBotUser().updatePresence(dataPackage);
 }
 
-int main() {
+int32_t main() {
 	std::string botToken = "";
 	std::vector<DiscordCoreAPI::RepeatedFunctionData> functionVector{};
 	DiscordCoreAPI::RepeatedFunctionData function01{};
