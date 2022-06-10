@@ -39,7 +39,10 @@ namespace DiscordCoreAPI {
 				msgEmbed.setColor("FEFEFE");
 				msgEmbed.setTitle("__**Bot Info:**__");
 				msgEmbed.setTimeStamp(getTimeAndDate());
-				msgEmbed.addField("__Bot Name:__", argsNew.discordCoreClient->getBotUser().userName + "#" + argsNew.discordCoreClient->getBotUser().discriminator, true);
+				msgEmbed.addField("__Bot Name:__",
+					static_cast<std::string>(argsNew.discordCoreClient->getBotUser().userName) + "#" +
+						static_cast<std::string>(argsNew.discordCoreClient->getBotUser().discriminator),
+					true);
 				msgEmbed.addField("__Bot ID:__", std::to_string(argsNew.discordCoreClient->getBotUser().id), true);
 				msgEmbed.addField("__Guild Count:__", std::to_string(guilds.size()), true);
 				msgEmbed.addField("__Created At:__", argsNew.discordCoreClient->getBotUser().getCreatedAtTimestamp(TimeFormat::LongDateTime), true);
