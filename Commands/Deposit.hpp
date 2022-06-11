@@ -102,7 +102,7 @@ namespace DiscordCoreAPI {
 
 					msgString = "Congratulations! You've deposited " + std::to_string(depositAmount) + " " + discordUser.data.currencyName +
 						" from your wallet into your bank!\n------\n__**Your new balances are:**__\n__Bank:__ " + std::to_string(discordGuildMember.data.currency.bank) + " ";
-					msgString += discordUser.data.currencyName + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " +
+					msgString += std::string(discordUser.data.currencyName) + "\n" + "__Wallet:__ " + std::to_string(discordGuildMember.data.currency.wallet) + " " +
 						discordUser.data.currencyName + "\n------";
 				} else {
 					uint32_t timeRemaining = msPerDepositCycle - timeSinceLastDeposit;

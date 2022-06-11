@@ -138,8 +138,8 @@ namespace DiscordCoreAPI {
 							std::to_string(baseProbabilityOfSuccess) + "% \n";
 
 						if (userGainAmount > 0 || userLossAmount < 0) {
-							msgString += userGainString + userLossString + "\n__Resulting in a net probability of success gain of:__ " + std::to_string(userRollModTotal) +
-								"% \n__For a final probability of success of:__ " + std::to_string(totalProbabilityOfSuccess) + "% \n";
+							msgString += std::string(userGainString) + userLossString + "\n__Resulting in a net probability of success gain of:__ " +
+								std::to_string(userRollModTotal) + "% \n__For a final probability of success of:__ " + std::to_string(totalProbabilityOfSuccess) + "% \n";
 						}
 
 						uint32_t currencyRobPercentage = static_cast<int32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * 60.0f);
@@ -168,7 +168,7 @@ namespace DiscordCoreAPI {
 						uint32_t targetUserNewBalance = targetGuildMember.data.currency.wallet;
 						uint32_t userNewBalance = discordGuildMember.data.currency.wallet;
 
-						msgString = msgString + "------\n**You've robbed <@!" + std::to_string(targetUserID) + "> for " + std::to_string(currencyRobPercentage) +
+						msgString = std::string(msgString) + "------\n**You've robbed <@!" + std::to_string(targetUserID) + "> for " + std::to_string(currencyRobPercentage) +
 							"% of their wallet, which is " + std::to_string(currencyRobAmount) + " " + discordUser.data.currencyName + ".\n" +
 							"**\n__Your new wallet balances are:__\n<@!" + std::to_string(userID) + ">: " + std::to_string(userNewBalance) + " " + discordUser.data.currencyName +
 							"\n<@!" + std::to_string(targetUserID) + ">: " + std::to_string(targetUserNewBalance) + " " + discordUser.data.currencyName;
@@ -204,8 +204,8 @@ namespace DiscordCoreAPI {
 							std::to_string(baseProbabilityOfSuccess) + "% \n";
 
 						if (userGainAmount > 0 || userLossAmount < 0) {
-							msgString += userGainString + userLossString + "\n__Resulting in a net probability of success gain of:__ " + std::to_string(userRollModTotal) +
-								"%\n__For a final probability of success of:__ " + std::to_string(totalProbabilityOfSuccess) + "%\n";
+							msgString += std::string(userGainString) + userLossString + "\n__Resulting in a net probability of success gain of:__ " +
+								std::to_string(userRollModTotal) + "%\n__For a final probability of success of:__ " + std::to_string(totalProbabilityOfSuccess) + "%\n";
 						}
 
 						msgString += "------\n**You've been fined " + std::to_string(finedPercentage) + "% of your wallet balance, which is " + std::to_string(finedAmount) + " " +

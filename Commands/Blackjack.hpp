@@ -789,8 +789,9 @@ namespace DiscordCoreAPI {
 						msgEmbed->setTitle("__**Blackjack Tie:**__");
 						msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
 						msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore),
-							dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
-						msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
+							std::string(dealerHand[0].suit) + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
+						msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore),
+							std::string(userHand[0].suit) + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 						msgEmbed->addField("__**Game Status: Tie**__", footerMsgString2, false);
 
 						DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
@@ -826,8 +827,8 @@ namespace DiscordCoreAPI {
 					msgEmbed->setDescription(finalMsgString);
 					msgEmbed->setTitle("__**Blackjack Win:**__");
 					msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-					msgEmbed->addField("Dealer's Hand: ", dealerHand[0].suit + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
-					msgEmbed->addField("Player's Hand: ", userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
+					msgEmbed->addField("Dealer's Hand: ", std::string(dealerHand[0].suit) + dealerHand[0].type + dealerHand[1].suit + dealerHand[1].type, true);
+					msgEmbed->addField("Player's Hand: ", std::string(userHand[0].suit) + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 					msgEmbed->addField("__**Game Status: Player Wins**__", footerMsgString2, false);
 					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData };
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Interaction_Response);
@@ -849,8 +850,8 @@ namespace DiscordCoreAPI {
 				msgEmbed->setDescription(finalMsgString);
 				msgEmbed->setTitle("__**Blackjack:**__");
 				msgEmbed->setFooter("Cards Remaining: " + std::to_string(discordGuild->data.blackjackStack.size()));
-				msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), dealerHand[0].suit + dealerHand[0].type, true);
-				msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), userHand[0].suit + userHand[0].type + userHand[1].suit + userHand[1].type, true);
+				msgEmbed->addField("Dealer's Hand: " + std::to_string(newDealerHandScore), std::string(dealerHand[0].suit) + dealerHand[0].type, true);
+				msgEmbed->addField("Player's Hand: " + std::to_string(userHandScore), std::string(userHand[0].suit) + userHand[0].type + userHand[1].suit + userHand[1].type, true);
 				msgEmbed->addField("__**Game Status: In Play**__", footerMsgString, false);
 				RespondToInputEventData replyInteractionData(argsNew.eventData);
 				replyInteractionData.setResponseType(InputEventResponseType::Interaction_Response);
