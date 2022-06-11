@@ -25,7 +25,7 @@ std::string getNumberString(std::string inputString, std::vector<std::string> re
 	}
 	if (inputString == "0") {
 		returnString = ":green_square:0";
-	} else if (inputString == "00") {
+	} else if (inputString == "37") {
 		returnString = ":green_square:00";
 	}
 	return returnString;
@@ -49,10 +49,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 		int32_t payoutAmount = discordGuild->data.rouletteGame.rouletteBets.at(x).payoutAmount;
 		std::vector<std::string> winningNumbers = discordGuild->data.rouletteGame.rouletteBets.at(x).winningNumbers;
 		for (uint32_t y = 0; y < winningNumbers.size(); y += 1) {
-			if (finalRoll == "37") {
-				finalRoll = "00";
-			}
-			if (getNumberString(finalRoll, redNumbers, blackNumbers) == winningNumbers[y]) {
+			if (finalRollString == winningNumbers[y]) {
 				isItAWinner = true;
 				break;
 			}
