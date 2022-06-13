@@ -7,11 +7,11 @@
 
 void onBoot00(DiscordCoreAPI::DiscordCoreClient* args) {
 	auto botUser = args->getBotUser();
-	DiscordCoreAPI::DatabaseManagerAgent::initialize(botUser.id);
+	DiscordCoreAPI::DatabaseManagerAgent::initialize(std::to_string(botUser.id));
 	DiscordCoreAPI::DiscordUser theUser{ botUser.userName, botUser.id };
 }
 
-void onGuildCreateion(DiscordCoreAPI::OnGuildCreationData dataPackage) {
+void onGuildCreation(DiscordCoreAPI::OnGuildCreationData dataPackage) {
 	DiscordCoreAPI::DiscordGuild discordGuild(dataPackage.guild);
 	discordGuild.data.rouletteGame.currentlySpinning = false;
 	discordGuild.writeDataToDB();
@@ -19,32 +19,45 @@ void onGuildCreateion(DiscordCoreAPI::OnGuildCreationData dataPackage) {
 
 void onBoot01(DiscordCoreAPI::DiscordCoreClient* args) {
 	std::vector<DiscordCoreAPI::ActivityData> activities;
-	DiscordCoreAPI::Act ivityData activity;
+	DiscordCoreAPI::ActivityData activity;
 	activity.name = "/help for my commands!";
 	activity.type = DiscordCoreAPI::ActivityType::Game;
 	activities.push_back(activity);
 	DiscordCoreAPI::UpdatePresenceData dataPackage{ .activities = activities, .status = "online", .afk = false };
 	args->getBotUser().updatePresence(dataPackage);
-}
+} 
 
 int32_t main() {
-	std::string botToken = "";
+	std::string botToken = "YOUR_BOT_TOKEN_HERE";
 	std::vector<DiscordCoreAPI::RepeatedFunctionData> functionVector{};
 	DiscordCoreAPI::RepeatedFunctionData function01{};
 	function01.function = std::ref(onBoot00);
-	function01.intervalInMs = 0;
+	function01.intervalInMs = 50;
 	function01.repeated = false;
 	functionVector.push_back(function01);
 	DiscordCoreAPI::RepeatedFunctionData function02{};
-	function02.function = std::ref(onBoot01);
-	function02.intervalInMs = 500;
+	function02.function = std::ref(onBoot01); 
+	function02.intervalInMs = 150;
 	function02.repeated = false;
 	functionVector.push_back(function02);
-	auto thePtr = std::make_unique<DiscordCoreAPI::DiscordCoreClient>(botToken, functionVector);
-	thePtr->eventManager.onGuildCreation(onGuildCreateion);
-	auto newPtr = std::make_unique<DiscordCoreAPI::AddShopItem>();
-	std::vector<std::string> theVector{ "addshopitem" };
-	thePtr->registerFunction(theVector, std::move(newPtr));
+	DiscordCoreAPI::ShardingOptions shardOptions{};
+	shardOptions.numberOfShardsForThisProcess = 1;
+	shardOptions.startingShard = 0;
+	shardOptions.totalNumberOfShards = 1;
+	DiscordCoreAPI::LoggingOptions logOptions{};
+	logOptions.logFFMPEGErrorMessages = true;
+	logOptions.logGeneralErrorMessages = true;
+	logOptions.logHttpErrorMessages = true;
+	logOptions.logWebSocketErrorMessages = true;
+	DiscordCoreAPI::DiscordCoreClientConfig clientConfig{};
+	//clientConfig.alternateConnectionAddress = "127.0.0.1";
+	clientConfig.botToken = botToken;
+	clientConfig.logOptions = logOptions;
+	clientConfig.shardOptions = shardOptions;
+	clientConfig.functionsToExecute = functionVector;
+	auto thePtr = std::make_unique<DiscordCoreAPI::DiscordCoreClient>(clientConfig);
+	thePtr->eventManager.onGuildCreation(&onGuildCreation);
+	thePtr->registerFunction(std::vector<std::string>{ "addshopitem" }, std::make_unique<DiscordCoreAPI::AddShopItem>());
 	thePtr->registerFunction(std::vector<std::string>{ "addshoprole" }, std::make_unique<DiscordCoreAPI::AddShopRole>());
 	thePtr->registerFunction(std::vector<std::string>{ "balance" }, std::make_unique<DiscordCoreAPI::Balance>());
 	thePtr->registerFunction(std::vector<std::string>{ "blackjack" }, std::make_unique<DiscordCoreAPI::Blackjack>());
@@ -74,5 +87,7 @@ int32_t main() {
 	thePtr->registerFunction(std::vector<std::string>{ "transfer" }, std::make_unique<DiscordCoreAPI::Transfer>());
 	thePtr->registerFunction(std::vector<std::string>{ "withdraw" }, std::make_unique<DiscordCoreAPI::Withdraw>());
 	thePtr->runBot();
+	
+	//thePtr->eventManager.onGuildCreation(onGuildCreation);
 	return 0;
 }
