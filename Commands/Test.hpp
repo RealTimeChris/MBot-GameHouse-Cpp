@@ -51,7 +51,7 @@ namespace DiscordCoreAPI {
 					dataPackage02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage02).get();
 				}
-				
+
 
 
 				return;

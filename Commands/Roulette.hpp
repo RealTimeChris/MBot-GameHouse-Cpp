@@ -647,7 +647,7 @@ namespace DiscordCoreAPI {
 					DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 					currentIndex -= 1;
 					std::string borderColor = discordGuild->data.borderColor;
-					std::function<void()> function01 = [&]()mutable {
+					std::function<void()> function01 = [&]() mutable {
 						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
 						msgEmbed->setColor(borderColor);

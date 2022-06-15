@@ -25,7 +25,7 @@ void onBoot01(DiscordCoreAPI::DiscordCoreClient* args) {
 	activities.push_back(activity);
 	DiscordCoreAPI::UpdatePresenceData dataPackage{ .activities = activities, .status = "online", .afk = false };
 	args->getBotUser().updatePresence(dataPackage);
-} 
+}
 
 int32_t main() {
 	std::string botToken = "YOUR_BOT_TOKEN_HERE";
@@ -36,7 +36,7 @@ int32_t main() {
 	function01.repeated = false;
 	functionVector.push_back(function01);
 	DiscordCoreAPI::RepeatedFunctionData function02{};
-	function02.function = std::ref(onBoot01); 
+	function02.function = std::ref(onBoot01);
 	function02.intervalInMs = 150;
 	function02.repeated = false;
 	functionVector.push_back(function02);
@@ -87,7 +87,7 @@ int32_t main() {
 	thePtr->registerFunction(std::vector<std::string>{ "transfer" }, std::make_unique<DiscordCoreAPI::Transfer>());
 	thePtr->registerFunction(std::vector<std::string>{ "withdraw" }, std::make_unique<DiscordCoreAPI::Withdraw>());
 	thePtr->runBot();
-	
+
 	//thePtr->eventManager.onGuildCreation(onGuildCreation);
 	return 0;
 }
