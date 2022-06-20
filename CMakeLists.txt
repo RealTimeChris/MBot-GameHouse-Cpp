@@ -14,7 +14,7 @@ set(OPUS_INCLUDE_DIR "")
 set(OPUS_RELEASE_ROOT "")
 set(OPUS_DEBUG_ROOT "")
 set(SODIUM_INCLUDE_DIR "")
-set(SODIUM_RELEASE_ROOT "")
+set(SODIUM_RELEASE_ROOT "") 
 set(SODIUM_DEBUG_ROOT "")
 
 cmake_minimum_required(VERSION 3.20)
