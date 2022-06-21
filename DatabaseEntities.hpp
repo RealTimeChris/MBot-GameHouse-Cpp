@@ -230,11 +230,11 @@ namespace DiscordCoreAPI {
 
 	class DatabaseManagerAgent {
 	  public:
-		static void initialize(std::string botUserIdNew) {
+		static void initialize(uint64_t botUserIdNew) {
 			DatabaseManagerAgent::botUserId = botUserIdNew;
 			auto newClient = DatabaseManagerAgent::getClient();
-			mongocxx::database newDataBase = (*newClient)[DatabaseManagerAgent::botUserId];
-			mongocxx::collection newCollection = newDataBase[DatabaseManagerAgent::botUserId];
+			mongocxx::database newDataBase = (*newClient)[std::to_string(DatabaseManagerAgent::botUserId)];
+			mongocxx::collection newCollection = newDataBase[std::to_string(DatabaseManagerAgent::botUserId)];
 		}
 
 		static mongocxx::pool::entry getClient() {
@@ -246,8 +246,8 @@ namespace DiscordCoreAPI {
 			DatabaseReturnValue newData{};
 			try {
 				mongocxx::pool::entry thePtr = DatabaseManagerAgent::getClient();
-				auto newDataBase = (*thePtr)[DatabaseManagerAgent::botUserId];
-				auto newCollection = newDataBase[DatabaseManagerAgent::botUserId];
+				auto newDataBase = (*thePtr)[std::to_string(DatabaseManagerAgent::botUserId)];
+				auto newCollection = newDataBase[std::to_string(DatabaseManagerAgent::botUserId)];
 				switch (workload.workloadType) {
 					case (DatabaseWorkloadType::DISCORD_USER_WRITE): {
 						auto doc = DatabaseManagerAgent::convertUserDataToDBDoc(workload.userData);
@@ -331,16 +331,16 @@ namespace DiscordCoreAPI {
 				}
 				return newData;
 			} catch (...) {
-				reportException("DatabaseManagerAgent::run()");
+				reportException("DatabaseManagerAgent::run() Error: ");
 				return newData;
 			}
 		}
-		
+
 	  protected:
 		static mongocxx::instance instance;
 		static std::mutex workloadMutex;
 		static mongocxx::pool thePool;
-		static std::string botUserId;
+		static uint64_t botUserId;
 
 		static bsoncxx::builder::basic::document convertUserDataToDBDoc(DiscordUserData discordUserData) {
 			bsoncxx::builder::basic::document buildDoc;
@@ -756,8 +756,8 @@ namespace DiscordCoreAPI {
 
 	mongocxx::instance DatabaseManagerAgent::instance{};
 	mongocxx::pool DatabaseManagerAgent::thePool{ mongocxx::uri{} };
-	std::string DatabaseManagerAgent::botUserId{ "" };
 	std::mutex DatabaseManagerAgent::workloadMutex{};
+	uint64_t DatabaseManagerAgent::botUserId{ 0 };
 	int32_t DiscordUser::guildCount{ 0 };
 
 }
