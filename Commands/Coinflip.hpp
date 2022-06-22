@@ -119,7 +119,7 @@ namespace DiscordCoreAPI {
 				InputEventData inputData = InputEvents::respondToInputEventAsync(dataPackage).get();
 				std::unique_ptr<ButtonCollector> button2{ std::make_unique<ButtonCollector>(inputData) };
 				std::vector<ButtonResponseData> buttonInteractionData = button2->collectButtonData(false, 120000, 1, argsNew.eventData.getAuthorId()).get();
-				if (buttonInteractionData.at(0).buttonId == "") {
+				if (buttonInteractionData.at(0).buttonId == "empty") {
 					std::string timeOutString = "------\nSorry, but you ran out of time to select an option.\n------";
 					EmbedData msgEmbed2;
 					msgEmbed2.setColor("FF0000");
