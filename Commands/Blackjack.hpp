@@ -226,7 +226,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		inPlayFooterString = "------\n__***Sorry, but you have insufficient funds for placing that wager now!***__\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setColor("FF0000");
 		msgEmbed->setTitle("__**Blackjack Fail:**__");
@@ -286,7 +286,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 			"------\n__**Your New Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack Loss:**__");
 		msgEmbed->setColor("FF0000");
@@ -336,7 +336,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 				"------\n__**Your Wallet Balance:**__ " + std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser.data.currencyName + "\n------";
 
 			std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+			msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 			msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 			msgEmbed->setTitle("__**Blackjack Tie:**__");
 			msgEmbed->setColor("0000FF");
@@ -383,7 +383,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 				std::to_string(discordGuildMember->data.currency.wallet) + " " + discordUser->data.currencyName + "\n------";
 
 			std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
-			msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+			msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 			msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 			msgEmbed->setTitle("__**Blackjack Win:**__");
 			msgEmbed->setColor("00FF00");
@@ -412,7 +412,7 @@ void executeCheckResponse(DiscordCoreAPI::BaseFunctionArguments& argsNew, Discor
 		std::string inPlayFooterString = "------\n------";
 		std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 		DiscordCoreAPI::InputEventData newData{};
-		msgEmbed->setAuthor(currentUser.userName, currentUser.avatar);
+		msgEmbed->setAuthor(guildMember->userName, guildMember->userAvatar);
 		msgEmbed->setTimeStamp(DiscordCoreAPI::getTimeAndDate());
 		msgEmbed->setTitle("__**Blackjack:**__");
 		msgEmbed->setColor("00FF00");
