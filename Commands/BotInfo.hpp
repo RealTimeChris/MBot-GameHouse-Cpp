@@ -29,7 +29,7 @@ namespace DiscordCoreAPI {
 			try {
 				auto guilds = Guilds::getAllGuildsAsync().get();
 				int32_t userCount{ 0 };
-				for (auto& value: guilds.theGuildDatas) {
+				for (auto& value: guilds) {
 					userCount += value.memberCount;
 				}
 
