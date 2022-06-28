@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);

@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -74,13 +74,13 @@ namespace DiscordCoreAPI {
 
 				std::string userName = currentGuildMember.userName;
 
-				RoleVector rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				InputEventData event02 = argsNew.eventData;
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
 					InventoryRole userRole = discordGuildMember.data.roles[x];
-					for (auto& value2: rolesArray.theRoles) {
+					for (auto& value2: rolesArray) {
 						if (value2.id == userRole.roleId) {
 							isRoleFound = true;
 							break;

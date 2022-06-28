@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -46,13 +46,13 @@ namespace DiscordCoreAPI {
 				std::string objectType;
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember discordGuildMember(guildMember);
-				RoleVector rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData.getGuildId() }).get();
+				std::vector<Role> rolesArray = Roles::getGuildMemberRolesAsync({ .guildMember = guildMember, .guildId = argsNew.eventData.getGuildId() }).get();
 
 				for (uint32_t x = 0; x < discordGuildMember.data.roles.size(); x += 1) {
 					bool isRoleFound = false;
 					InventoryRole shopRole = discordGuildMember.data.roles.at(x);
-					for (uint32_t y = 0; y < rolesArray.theRoles.size(); y += 1) {
-						if (rolesArray.theRoles.at(y).id == shopRole.roleId) {
+					for (uint32_t y = 0; y < rolesArray.size(); y += 1) {
+						if (rolesArray.at(y).id == shopRole.roleId) {
 							isRoleFound = true;
 							break;
 						}

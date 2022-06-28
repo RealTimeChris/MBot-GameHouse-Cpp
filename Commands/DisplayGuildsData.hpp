@@ -31,11 +31,11 @@ namespace DiscordCoreAPI {
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = newArgs.eventData.getChannelId() }).get();
 
 				uint32_t currentCount = 0;
-				GuildDataVector theCache = Guilds::getAllGuildsAsync().get();
+				std::vector<GuildData> theCache = Guilds::getAllGuildsAsync().get();
 				RespondToInputEventData dataPackage(newArgs.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto inputEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
-				for (auto& value: theCache.theGuildDatas) {
+				for (auto& value: theCache) {
 					std::string msgString = "__Guild Name:__ " + static_cast<std::string>(value.name) + "\n";
 					msgString += "__Guild ID:__ " + std::to_string(value.id) + "\n";
 					msgString += "__Member Count:__ " + std::to_string(value.memberCount) + "\n";
@@ -50,7 +50,7 @@ namespace DiscordCoreAPI {
 					msgEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 					msgEmbed.setColor("FEFEFE");
 					msgEmbed.setThumbnail(value.icon);
-					msgEmbed.setTitle("__**Guild Data " + std::to_string(currentCount + 1) + " of " + std::to_string(theCache.theGuildDatas.size()) + "**__");
+					msgEmbed.setTitle("__**Guild Data " + std::to_string(currentCount + 1) + " of " + std::to_string(theCache.size()) + "**__");
 					msgEmbed.setTimeStamp(getTimeAndDate());
 					msgEmbed.setDescription(msgString);
 

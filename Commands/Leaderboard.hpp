@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, discordGuild);
@@ -99,9 +99,7 @@ namespace DiscordCoreAPI {
 
 				uint32_t currentPageIndex = 0;
 				uint64_t userID = argsNew.eventData.getAuthorId();
-				if (pageEmbeds.size() > 0) {
-					moveThroughMessagePages(std::to_string(userID), newEvent, currentPageIndex, pageEmbeds, true, 120000);
-				}
+				moveThroughMessagePages(std::to_string(userID), newEvent, currentPageIndex, pageEmbeds, true, 120000);
 				discordGuild.writeDataToDB();
 				return;
 			} catch (...) {

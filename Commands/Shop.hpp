@@ -99,7 +99,7 @@ namespace DiscordCoreAPI {
 			try {
 				Channel channel = Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				GuildMember guildMember =
@@ -127,13 +127,13 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				RoleVector rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				std::vector<Role> rolesArray = Roles::getGuildRolesAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				InputEventData event02 = argsNew.eventData;
 
 				for (uint32_t x = 0; x < discordGuild.data.guildShop.roles.size(); x += 1) {
 					bool isRoleFound = false;
 					InventoryRole shopRole = discordGuild.data.guildShop.roles[x];
-					for (auto& value2: rolesArray.theRoles) {
+					for (auto& value2: rolesArray) {
 						if (value2.id == shopRole.roleId) {
 							isRoleFound = true;
 							break;

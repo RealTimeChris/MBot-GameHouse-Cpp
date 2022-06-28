@@ -36,7 +36,7 @@ void calculateResults(std::string finalRoll, DiscordCoreAPI::InputEventData newE
 	std::string msgStringFinal{};
 	std::string finalRollString = getNumberString(finalRoll, redNumbers, blackNumbers);
 	msgStringFinal += "------\n__**Final Roll:**__ " + finalRollString + "\n------\n";
-	DiscordCoreAPI::Guild guild = DiscordCoreAPI::Guilds::getCachedGuildAsync({ .guildId = newEvent.getGuildId() }).get();
+	DiscordCoreAPI::Guild guild = DiscordCoreAPI::Guilds::getGuildAsync({ .guildId = newEvent.getGuildId() }).get();
 	std::unique_ptr<DiscordCoreAPI::DiscordGuild> discordGuild(std::make_unique<DiscordCoreAPI::DiscordGuild>(guild));
 	for (uint32_t x = 0; x < discordGuild->data.rouletteGame.rouletteBets.size(); x += 1) {
 		bool isItAWinner = false;
@@ -157,7 +157,7 @@ namespace DiscordCoreAPI {
 			try {
 				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
 
-				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
+				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);

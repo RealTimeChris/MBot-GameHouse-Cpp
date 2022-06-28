@@ -33,7 +33,7 @@ namespace DiscordCoreAPI {
 				GuildMember guildMember =
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 
-				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
+				Guild guild = Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild(guild);
 
 				bool doWeHaveAdmin = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
