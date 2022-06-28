@@ -31,7 +31,7 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData dataPackage(newArgs.eventData);
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
-				std::unique_ptr<Guild> guild = std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get());
+				std::unique_ptr<Guild> guild = std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = newArgs.eventData.getGuildId() }).get());
 				DiscordGuild discordGuild{ *guild };
 
 				std::unique_ptr<CreateGlobalApplicationCommandData> registerApplicationCommandsCommandData{ std::make_unique<CreateGlobalApplicationCommandData>() };

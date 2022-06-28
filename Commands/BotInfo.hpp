@@ -29,7 +29,7 @@ namespace DiscordCoreAPI {
 			try {
 				auto guilds = Guilds::getAllGuildsAsync().get();
 				int32_t userCount{ 0 };
-				for (auto& value: guilds) {
+				for (auto& value: guilds.theGuildDatas) {
 					userCount += value.memberCount;
 				}
 
@@ -44,7 +44,7 @@ namespace DiscordCoreAPI {
 						static_cast<std::string>(argsNew.discordCoreClient->getBotUser().discriminator),
 					true);
 				msgEmbed.addField("__Bot ID:__", std::to_string(argsNew.discordCoreClient->getBotUser().id), true);
-				msgEmbed.addField("__Guild Count:__", std::to_string(guilds.size()), true);
+				msgEmbed.addField("__Guild Count:__", std::to_string(guilds.theGuildDatas.size()), true);
 				msgEmbed.addField("__Created At:__", argsNew.discordCoreClient->getBotUser().getCreatedAtTimestamp(TimeFormat::LongDateTime), true);
 				msgEmbed.addField("__Serving Users:__", std::to_string(userCount), true);
 				msgEmbed.addField("__Running On:__", "[DiscordCoreAPI Bot Library](https://discordcoreapi.com)", true);

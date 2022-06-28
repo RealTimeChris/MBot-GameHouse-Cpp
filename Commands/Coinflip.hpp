@@ -30,7 +30,7 @@ namespace DiscordCoreAPI {
 			try {
 				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
 
-				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
+				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
 				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);
