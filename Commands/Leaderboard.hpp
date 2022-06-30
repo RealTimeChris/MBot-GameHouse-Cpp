@@ -101,7 +101,7 @@ namespace DiscordCoreAPI {
 				uint64_t userID = argsNew.eventData.getAuthorId();
 				if (pageEmbeds.size() > 0) {
 					moveThroughMessagePages(std::to_string(userID), newEvent, currentPageIndex, pageEmbeds, true, 120000);
-				}				
+				}
 				discordGuild.writeDataToDB();
 				return;
 			} catch (...) {

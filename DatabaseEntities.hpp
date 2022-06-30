@@ -114,8 +114,7 @@ namespace DiscordCoreAPI {
 			}
 			std::mt19937_64 randomEngine{ static_cast<uint64_t>(
 				std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()) };
-			uint32_t cardIndex =
-				static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * static_cast<float>(this->cards.size()));
+			uint32_t cardIndex = static_cast<uint32_t>(static_cast<float>(randomEngine()) / static_cast<float>(randomEngine.max()) * static_cast<float>(this->cards.size()));
 			Card currentCard = this->cards.at(cardIndex);
 			this->cards.erase(this->cards.begin() + cardIndex);
 			return currentCard;
@@ -541,7 +540,7 @@ namespace DiscordCoreAPI {
 				auto largestSlotsPayout = docValue.view()["casinoStats"].get_document().value["largestSlotsPayout"].get_document();
 				guildData.casinoStats.largestSlotsPayout.amount = largestSlotsPayout.value["amount"].get_int32().value;
 				guildData.casinoStats.largestSlotsPayout.timeStamp = largestSlotsPayout.value["timeStamp"].get_utf8().value.to_string();
-				guildData.casinoStats.largestSlotsPayout.userId = largestSlotsPayout.value["userId"].get_int64().value;				
+				guildData.casinoStats.largestSlotsPayout.userId = largestSlotsPayout.value["userId"].get_int64().value;
 				guildData.casinoStats.largestSlotsPayout.userName = largestSlotsPayout.value["userName"].get_utf8().value.to_string();
 				guildData.casinoStats.totalSlotsPayout = docValue.view()["casinoStats"].get_document().value["totalSlotsPayout"].get_int32().value;
 				guildData.casinoStats.totalPayout = docValue.view()["casinoStats"].get_document().value["totalPayout"].get_int32().value;
@@ -616,10 +615,10 @@ namespace DiscordCoreAPI {
 			DiscordGuildMemberData guildMemberData{};
 			try {
 				guildMemberData.guildMemberMention = docValue.view()["guildMemberMention"].get_utf8().value.to_string();
-				guildMemberData.guildId = docValue.view()["guildId"].get_int64().value;				
+				guildMemberData.guildId = docValue.view()["guildId"].get_int64().value;
 				guildMemberData.displayName = docValue.view()["displayName"].get_utf8().value.to_string();
 				guildMemberData.globalId = docValue.view()["globalId"].get_utf8().value.to_string();
-				guildMemberData.guildMemberId = docValue.view()["guildMemberId"].get_int64().value;				
+				guildMemberData.guildMemberId = docValue.view()["guildMemberId"].get_int64().value;
 				guildMemberData.userName = docValue.view()["userName"].get_utf8().value.to_string();
 				guildMemberData.lastTimeWorked = docValue.view()["lastTimeWorked"].get_int32().value;
 				guildMemberData.lastTimeRobbed = docValue.view()["lastTimeRobbed"].get_int32().value;
