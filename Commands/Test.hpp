@@ -46,8 +46,25 @@ namespace DiscordCoreAPI {
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild{ guild };
 				VoiceStateData voiceStateData{};
+				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
+				bool areTheyACommander = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
+
+				if (!areTheyACommander) {
+					return;
+				}
+
 				if (guild.voiceStates.contains(guildMember.id)) {
 					voiceStateData = guild.voiceStates.at(guildMember.id);
+					std::unique_ptr<DiscordCoreAPI::EmbedData> newEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
+					newEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
+					newEmbed->setDescription("------\n__**Enjoy!**__\n------");
+					newEmbed->setTimeStamp(getTimeAndDate());
+					newEmbed->setTitle("__**Joining Now:**__");
+					newEmbed->setColor(discordGuild.data.borderColor);
+					RespondToInputEventData dataPackage(argsNew.eventData);
+					dataPackage.setResponseType(InputEventResponseType::Ephemeral_Interaction_Response);
+					dataPackage.addMessageEmbed(*newEmbed);
+					auto newerEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				} else {
 					std::unique_ptr<DiscordCoreAPI::EmbedData> newEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					newEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -68,7 +85,7 @@ namespace DiscordCoreAPI {
 
 				for (uint32_t x = 0; x < 100; x += 1) {
 					VoiceConnection* voiceConnection = guild.connectToVoice(guildMember.id, 0, true, false);
-					std::this_thread::sleep_for(50ms);
+					std::this_thread::sleep_for(100ms);
 					guild.disconnect();
 				}
 
