@@ -85,7 +85,7 @@ namespace DiscordCoreAPI {
 
 				for (uint32_t x = 0; x < 100; x += 1) {
 					VoiceConnection* voiceConnection = guild.connectToVoice(guildMember.id, 0, true, false);
-					std::this_thread::sleep_for(100ms);
+					std::this_thread::sleep_for(250ms);
 					guild.disconnect();
 				}
 
