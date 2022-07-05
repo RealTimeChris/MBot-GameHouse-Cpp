@@ -29,10 +29,6 @@ endif()
 target_link_libraries(
 	"${PROJECT_NAME}" PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
-	mongo::bsoncxx_shared
-	mongo::mongocxx_shared
-	mongo::mongoc_shared
-	ZLIB::ZLIB
 )
 
 set_target_properties(
