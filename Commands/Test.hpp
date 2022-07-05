@@ -82,16 +82,11 @@ namespace DiscordCoreAPI {
 					InputEvents::deleteInputEventResponseAsync(newerEvent, 20000);
 					return;
 				}
-				UpdateVoiceStateData theData{};
-				theData.channelId = guild.voiceStates[guildMember.id].channelId;
-				theData.guildId = guild.id;
+
 				for (uint32_t x = 0; x < 100; x += 1) {
-					theData.channelId = guild.voiceStates[guildMember.id].channelId;
-					argsNew.discordCoreClient->getBotUser().updateVoiceStatus(theData);
+					VoiceConnection* voiceConnection = guild.connectToVoice(guildMember.id, 0, true, false);
 					std::this_thread::sleep_for(250ms);
-					theData.channelId = 0;
-					argsNew.discordCoreClient->getBotUser().updateVoiceStatus(theData);
-					std::this_thread::sleep_for(250ms);
+					guild.disconnect();
 				}
 
 
