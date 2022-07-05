@@ -29,23 +29,39 @@ endif()
 target_link_libraries(
 	"${PROJECT_NAME}" PUBLIC
 	DiscordCoreAPI::DiscordCoreAPI
+	mongo::bsoncxx_shared
+	mongo::mongocxx_shared
+	mongo::mongoc_shared
+	ZLIB::ZLIB
 )
 
 set_target_properties(
 	"${PROJECT_NAME}" PROPERTIES 
 	OUTPUT_NAME "${PROJECT_NAME}-Cpp"
 	VS_GLOBAL_VcpkgEnabled true
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/Output Files/$<CONFIG>"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_INSTALL_PREFIX}/$<CONFIG>"
 )
 
 if (WIN32 AND NOT EXISTS "${VCPKG_ROOT}")
-	add_custom_command(
-		TARGET "${PROJECT_NAME}" PRE_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "$<IF:$<CONFIG:Debug>,${DEBUG_PDB_FILE_PATH},${RELEASE_PDB_FILE_PATH}>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+	install(
+		FILES 
+		"$<TARGET_PDB_FILE:${PROJECT_NAME}>"
+		DESTINATION "$<CONFIG>"
+		OPTIONAL
 	)
-	add_custom_command(
-		TARGET "${PROJECT_NAME}" PRE_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>" "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
-		COMMAND_EXPAND_LISTS
+	install (FILES 
+		"$<IF:$<CONFIG:Debug>,${DEBUG_PDB_FILE_PATH},${RELEASE_PDB_FILE_PATH}>" 
+		DESTINATION "$<CONFIG>"
+	)	
+	install(
+		FILES 
+		"$<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>"
+		DESTINATION "$<CONFIG>"
 	)
 endif()
+
+install(
+	FILES 
+	"$<TARGET_FILE:${PROJECT_NAME}>"
+	DESTINATION "$<CONFIG>"
+)
