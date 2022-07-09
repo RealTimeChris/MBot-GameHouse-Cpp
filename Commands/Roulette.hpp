@@ -170,7 +170,7 @@ namespace DiscordCoreAPI {
 				std::string betType;
 				std::string betOptions;
 				std::regex betRegex{ "bet" };
-				if (argsNew.commandData.subCommandName == "start") {
+				if (argsNew.subCommandName == "start") {
 					if (discordGuild->data.rouletteGame.currentlySpinning == true) {
 						std::string msgString = "------\n**Please, wait until the current game is over, before starting another one!**\n------";
 						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
@@ -186,7 +186,7 @@ namespace DiscordCoreAPI {
 						return;
 					}
 					whatAreWeDoing = "start";
-				} else if (regex_search(argsNew.commandData.subCommandName, betRegex)) {
+				} else if (regex_search(argsNew.subCommandName, betRegex)) {
 					if (discordGuild->data.rouletteGame.currentlySpinning == false) {
 						std::string msgString = "------\n**Please, start a roulette game before placing any bets!**\n------";
 						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
@@ -203,8 +203,8 @@ namespace DiscordCoreAPI {
 					}
 					whatAreWeDoing = "bet";
 				}
-				if (argsNew.commandData.optionsArgs.size() > 0) {
-					if (std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
+				if (argsNew.optionsArgs.size() > 0) {
+					if (std::stoll(argsNew.optionsArgs[0]) <= 0) {
 						std::string msgString = "------\n**Please, enter a valid betting amount! (!roulette = bet, BETAMOUNT, BETTYPE, BETOPTIONS)** \n------";
 						std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 						msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -218,7 +218,7 @@ namespace DiscordCoreAPI {
 						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					} else {
-						betAmount = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs[0]);
+						betAmount = ( uint32_t )std::stoll(argsNew.optionsArgs[0]);
 					}
 				}
 				std::regex digitRegExp{ "\\d{1,18}" };
@@ -262,7 +262,7 @@ namespace DiscordCoreAPI {
 
 					bool isValidType = false;
 					for (uint32_t x = 0; x < betTypes.size(); x += 1) {
-						if (argsNew.commandData.optionsArgs[1] != "" && argsNew.commandData.optionsArgs[1] == betTypes[x]) {
+						if (argsNew.optionsArgs[1] != "" && argsNew.optionsArgs[1] == betTypes[x]) {
 							isValidType = true;
 							break;
 						}
@@ -283,10 +283,10 @@ namespace DiscordCoreAPI {
 						auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 						return;
 					} else {
-						betType = argsNew.commandData.optionsArgs[1];
+						betType = argsNew.optionsArgs[1];
 					}
-					if (argsNew.commandData.optionsArgs.size() > 2) {
-						betOptions = argsNew.commandData.optionsArgs[2];
+					if (argsNew.optionsArgs.size() > 2) {
+						betOptions = argsNew.optionsArgs[2];
 					}
 					uint32_t payoutAmount = 0;
 					std::vector<std::string> winningNumbers;
@@ -313,8 +313,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("straight"): {
 							payoutAmount = betAmount * 35;
-							if (argsNew.commandData.optionsArgs.size() < 3 || argsNew.commandData.optionsArgs[2] == "" ||
-								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
+								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid value from the roulette wheel!(1 - 36)**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -329,7 +329,7 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 36) {
+							if (std::stoll(argsNew.optionsArgs[2]) < 1 || std::stoll(argsNew.optionsArgs[2]) > 36) {
 								std::string msgString = "------\n**Please enter a value between 1 and 36!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -344,7 +344,7 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							winningNumbers.push_back(getNumberString(argsNew.commandData.optionsArgs[2], redNumbers, blackNumbers));
+							winningNumbers.push_back(getNumberString(argsNew.optionsArgs[2], redNumbers, blackNumbers));
 
 							break;
 						}
@@ -356,8 +356,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("split"): {
 							payoutAmount = betAmount * 17;
-							if (argsNew.commandData.optionsArgs.size() < 3 || argsNew.commandData.optionsArgs[2] == "" ||
-								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
+								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your split!(1 - 35)** \n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -372,7 +372,7 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 35) {
+							if (std::stoll(argsNew.optionsArgs[2]) < 1 || std::stoll(argsNew.optionsArgs[2]) > 35) {
 								std::string msgString = "-------\n**Please enter a value between 1 and 35!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -387,17 +387,17 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							winningNumbers.push_back(getNumberString(argsNew.commandData.optionsArgs[2], redNumbers, blackNumbers));
+							winningNumbers.push_back(getNumberString(argsNew.optionsArgs[2], redNumbers, blackNumbers));
 							std::stringstream sstream{};
-							sstream << std::stoll(argsNew.commandData.optionsArgs[2]) + 1;
+							sstream << std::stoll(argsNew.optionsArgs[2]) + 1;
 							winningNumbers.push_back(getNumberString(sstream.str(), redNumbers, blackNumbers));
 
 							break;
 						}
 						case stringToInt("street"): {
 							payoutAmount = betAmount * 11;
-							if (argsNew.commandData.optionsArgs.size() < 3 || argsNew.commandData.optionsArgs[2] == "" ||
-								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
+								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your street!(1 - 34)** \n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -412,7 +412,7 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 34) {
+							if (std::stoll(argsNew.optionsArgs[2]) < 1 || std::stoll(argsNew.optionsArgs[2]) > 34) {
 								std::string msgString = "-------\n**Please enter a value between 1 and 34!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -427,12 +427,12 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							winningNumbers.push_back(getNumberString(argsNew.commandData.optionsArgs[2], redNumbers, blackNumbers));
+							winningNumbers.push_back(getNumberString(argsNew.optionsArgs[2], redNumbers, blackNumbers));
 							std::stringstream stream01{};
-							stream01 << std::stoll(argsNew.commandData.optionsArgs[2]) + 1;
+							stream01 << std::stoll(argsNew.optionsArgs[2]) + 1;
 							winningNumbers.push_back(getNumberString(stream01.str(), redNumbers, blackNumbers));
 							std::stringstream stream02{};
-							stream02 << std::stoll(argsNew.commandData.optionsArgs[2]) + 2;
+							stream02 << std::stoll(argsNew.optionsArgs[2]) + 2;
 							winningNumbers.push_back(getNumberString(stream02.str(), redNumbers, blackNumbers));
 
 							break;
@@ -448,8 +448,8 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("sixline"): {
 							payoutAmount = betAmount * 5;
-							if (argsNew.commandData.optionsArgs.size() < 3 || argsNew.commandData.optionsArgs[2] == "" ||
-								!regex_search(argsNew.commandData.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
+								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your sixline!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -464,7 +464,7 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							if (std::stoll(argsNew.commandData.optionsArgs[2]) < 1 || std::stoll(argsNew.commandData.optionsArgs[2]) > 31) {
+							if (std::stoll(argsNew.optionsArgs[2]) < 1 || std::stoll(argsNew.optionsArgs[2]) > 31) {
 								std::string msgString = "------\n * *Please enter a value between 1 and 31!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -479,21 +479,21 @@ namespace DiscordCoreAPI {
 								return;
 							}
 
-							winningNumbers.push_back(getNumberString(argsNew.commandData.optionsArgs[2], redNumbers, blackNumbers));
+							winningNumbers.push_back(getNumberString(argsNew.optionsArgs[2], redNumbers, blackNumbers));
 							std::stringstream stream01{};
-							stream01 << std::stoll(argsNew.commandData.optionsArgs[2]) + 1;
+							stream01 << std::stoll(argsNew.optionsArgs[2]) + 1;
 							winningNumbers.push_back(getNumberString(stream01.str(), redNumbers, blackNumbers));
 							std::stringstream stream02{};
-							stream02 << std::stoll(argsNew.commandData.optionsArgs[2]) + 2;
+							stream02 << std::stoll(argsNew.optionsArgs[2]) + 2;
 							winningNumbers.push_back(getNumberString(stream02.str(), redNumbers, blackNumbers));
 							std::stringstream stream03{};
-							stream03 << std::stoll(argsNew.commandData.optionsArgs[2]) + 3;
+							stream03 << std::stoll(argsNew.optionsArgs[2]) + 3;
 							winningNumbers.push_back(getNumberString(stream03.str(), redNumbers, blackNumbers));
 							std::stringstream stream04{};
-							stream04 << std::stoll(argsNew.commandData.optionsArgs[2]) + 4;
+							stream04 << std::stoll(argsNew.optionsArgs[2]) + 4;
 							winningNumbers.push_back(getNumberString(stream04.str(), redNumbers, blackNumbers));
 							std::stringstream stream05{};
-							stream05 << std::stoll(argsNew.commandData.optionsArgs[2]) + 5;
+							stream05 << std::stoll(argsNew.optionsArgs[2]) + 5;
 							winningNumbers.push_back(getNumberString(stream05.str(), redNumbers, blackNumbers));
 
 							break;

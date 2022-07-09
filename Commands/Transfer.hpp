@@ -40,7 +40,7 @@ namespace DiscordCoreAPI {
 
 				std::regex userMentionRegExp{ "\\d{18}" };
 				std::regex amountRegExp{ "\\d{1,18}" };
-				if (!regex_search(argsNew.commandData.optionsArgs[0], amountRegExp) || std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
+				if (!regex_search(argsNew.optionsArgs[0], amountRegExp) || std::stoll(argsNew.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid number for amount! (!transfer = AMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -56,10 +56,10 @@ namespace DiscordCoreAPI {
 				}
 
 				std::cmatch matchResults{};
-				regex_search(argsNew.commandData.optionsArgs[1].c_str(), matchResults, userMentionRegExp);
+				regex_search(argsNew.optionsArgs[1].c_str(), matchResults, userMentionRegExp);
 				uint64_t toUserID = stoull(matchResults.str());
 				uint64_t fromUserID = argsNew.eventData.getAuthorId();
-				uint32_t amount = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs[0]);
+				uint32_t amount = ( uint32_t )std::stoll(argsNew.optionsArgs[0]);
 				GuildMember toUserMember = GuildMembers::getCachedGuildMemberAsync({
 																					   .guildMemberId = toUserID,
 																					   .guildId = argsNew.eventData.getGuildId(),

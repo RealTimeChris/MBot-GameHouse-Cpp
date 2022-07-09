@@ -48,11 +48,11 @@ namespace DiscordCoreAPI {
 				std::regex roleNameRegExp{ ".{1,36}" };
 				std::regex roleIdRegExp{ "\\d{1,18}" };
 
-				std::string roleName = argsNew.commandData.optionsArgs.at(0);
+				std::string roleName = argsNew.optionsArgs.at(0);
 
 				uint64_t roleID;
 				std::cmatch matchResults;
-				regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, roleIdRegExp);
+				regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults, roleIdRegExp);
 				roleID = stoull(matchResults.str());
 				std::string realRoleName;
 

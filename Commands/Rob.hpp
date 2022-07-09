@@ -49,7 +49,7 @@ namespace DiscordCoreAPI {
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::cmatch matchResults;
-				regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, userIDRegExp);
+				regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults, userIDRegExp);
 				uint64_t targetUserID = stoull(matchResults.str());
 				GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuildMember targetGuildMember(targetMember);

@@ -45,11 +45,11 @@ namespace DiscordCoreAPI {
 
 				std::regex mentionRegExp{ "<@!\\d{18,}>" };
 				std::regex idRegExp{ "\\d{18,}" };
-				if (argsNew.commandData.optionsArgs.size() == 0) {
+				if (argsNew.optionsArgs.size() == 0) {
 					userID = argsNew.eventData.getAuthorId();
-				} else if (argsNew.commandData.optionsArgs.at(0) != "") {
-					if (!regex_search(argsNew.commandData.optionsArgs.at(0), mentionRegExp, std::regex_constants::match_flag_type::format_first_only) &&
-						!regex_search(argsNew.commandData.optionsArgs.at(0), idRegExp, std::regex_constants::match_flag_type::format_first_only)) {
+				} else if (argsNew.optionsArgs.at(0) != "") {
+					if (!regex_search(argsNew.optionsArgs.at(0), mentionRegExp, std::regex_constants::match_flag_type::format_first_only) &&
+						!regex_search(argsNew.optionsArgs.at(0), idRegExp, std::regex_constants::match_flag_type::format_first_only)) {
 						std::string msgString = "------\n* *Please, enter a valid user mention, or enter none at all!(!balance = @USERMENTION)**\n------";
 						EmbedData msgEmbed{};
 						msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -64,7 +64,7 @@ namespace DiscordCoreAPI {
 						return;
 					}
 					std::cmatch matchResults;
-					regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, idRegExp);
+					regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults, idRegExp);
 					userID = stoull(matchResults.str());
 				}
 

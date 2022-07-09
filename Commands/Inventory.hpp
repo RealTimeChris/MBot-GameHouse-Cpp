@@ -43,10 +43,10 @@ namespace DiscordCoreAPI {
 
 				std::regex userIDRegExp{ ".{2,3}\\d{18}>" };
 				std::regex idRegExp{ "\\d{18}" };
-				if (argsNew.commandData.optionsArgs.size() == 0) {
+				if (argsNew.optionsArgs.size() == 0) {
 					userID = argsNew.eventData.getAuthorId();
 				} else {
-					std::string argZero = argsNew.commandData.optionsArgs.at(0);
+					std::string argZero = argsNew.optionsArgs.at(0);
 					std::cmatch userIDMatch;
 					regex_search(argZero.c_str(), userIDMatch, idRegExp);
 					std::string userIDOne = userIDMatch.str();

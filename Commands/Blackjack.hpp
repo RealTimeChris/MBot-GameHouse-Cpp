@@ -705,8 +705,8 @@ namespace DiscordCoreAPI {
 				}
 
 				std::regex betRegExp{ "\\d{1,18}" };
-				if (argsNew.commandData.optionsArgs.size() == 0 || !std::regex_search(argsNew.commandData.optionsArgs.at(0), betRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 1) {
+				if (argsNew.optionsArgs.size() == 0 || !std::regex_search(argsNew.optionsArgs.at(0), betRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid bet amount!(!blackjack = BETAMOUNT)**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -722,7 +722,7 @@ namespace DiscordCoreAPI {
 				}
 
 				std::cmatch matchResults;
-				std::regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, betRegExp);
+				std::regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults, betRegExp);
 				uint32_t betAmount = ( uint32_t )std::stoll(matchResults.str());
 
 				std::srand(( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());

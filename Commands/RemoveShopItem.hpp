@@ -46,7 +46,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::string itemName = argsNew.commandData.optionsArgs.at(0);
+				std::string itemName = argsNew.optionsArgs.at(0);
 
 				uint32_t itemIndex = 0;
 				bool itemFound = false;

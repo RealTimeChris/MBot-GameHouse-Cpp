@@ -337,8 +337,8 @@ namespace DiscordCoreAPI {
 				std::regex numberRegExp{ "\\d{1,18}" };
 				std::regex idRegExp{ "\\d{18}" };
 
-				if (argsNew.commandData.optionsArgs.size() < 2 || !std::regex_search(argsNew.commandData.optionsArgs.at(1), numberRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(1)) < 0) {
+				if (argsNew.optionsArgs.size() < 2 || !std::regex_search(argsNew.optionsArgs.at(1), numberRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid bet amount! (!duel = BETAMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -354,10 +354,10 @@ namespace DiscordCoreAPI {
 				}
 
 				std::cmatch matchResults;
-				std::regex_search(argsNew.commandData.optionsArgs.at(1).c_str(), matchResults, numberRegExp);
+				std::regex_search(argsNew.optionsArgs.at(1).c_str(), matchResults, numberRegExp);
 				int32_t betAmount = ( int32_t )std::stoll(matchResults.str());
 				std::cmatch matchResults02;
-				std::regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults02, idRegExp);
+				std::regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults02, idRegExp);
 				uint64_t toUserID = stoull(matchResults02.str());
 				uint64_t fromUserID = argsNew.eventData.getAuthorId();
 

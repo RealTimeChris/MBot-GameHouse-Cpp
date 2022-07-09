@@ -62,8 +62,8 @@ namespace DiscordCoreAPI {
 				std::regex betAmountRegExp{ "\\d{1,18}" };
 				auto botUser = argsNew.discordCoreClient->getBotUser();
 				DiscordUser discordUser(botUser.userName, botUser.id);
-				if (argsNew.commandData.optionsArgs.size() == 0 || !std::regex_search(argsNew.commandData.optionsArgs.at(0), betAmountRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 1) {
+				if (argsNew.optionsArgs.size() == 0 || !std::regex_search(argsNew.optionsArgs.at(0), betAmountRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid amount to bet! 1 " + discordUser.data.currencyName + " or more! (!coinflip = BETAMOUNT)**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -81,7 +81,7 @@ namespace DiscordCoreAPI {
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::cmatch matchResults;
-				std::regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, betAmountRegExp);
+				std::regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults, betAmountRegExp);
 				int32_t betAmount = ( int32_t )std::stoll(matchResults.str());
 				int32_t currencyAmount = discordGuildMember.data.currency.wallet;
 

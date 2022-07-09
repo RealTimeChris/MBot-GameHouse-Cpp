@@ -54,8 +54,8 @@ namespace DiscordCoreAPI {
 				std::regex userIDRegExp{ "\\d{18}" };
 				uint64_t targetUserID{};
 
-				if (argsNew.commandData.optionsArgs.size() == 0 || !regex_search(argsNew.commandData.optionsArgs.at(0), balanceRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(0)) < 0) {
+				if (argsNew.optionsArgs.size() == 0 || !regex_search(argsNew.optionsArgs.at(0), balanceRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(0)) < 0) {
 					std::string msgString = "------\n**Please enter a valid desired balance! (!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed{};
@@ -70,7 +70,7 @@ namespace DiscordCoreAPI {
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 2 || (argsNew.commandData.optionsArgs.at(1) != "bank" && argsNew.commandData.optionsArgs.at(1) != "wallet")) {
+				if (argsNew.optionsArgs.size() < 2 || (argsNew.optionsArgs.at(1) != "bank" && argsNew.optionsArgs.at(1) != "wallet")) {
 					std::string msgString = "------\n**Please enter a valid balance type! Bank or Wallet! (!setbalance = NEWBALANCE, BALANCETYPE, "
 											"@USERMENTION, or just !setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed{};
@@ -85,10 +85,10 @@ namespace DiscordCoreAPI {
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 3) {
+				if (argsNew.optionsArgs.size() < 3) {
 					targetUserID = argsNew.eventData.getAuthorId();
-				} else if (argsNew.commandData.optionsArgs.size() == 3 && !regex_search(argsNew.commandData.optionsArgs.at(2), userMentionRegExp) &&
-					!regex_search(argsNew.commandData.optionsArgs.at(2), userIDRegExp)) {
+				} else if (argsNew.optionsArgs.size() == 3 && !regex_search(argsNew.optionsArgs.at(2), userMentionRegExp) &&
+					!regex_search(argsNew.optionsArgs.at(2), userIDRegExp)) {
 					std::string msgString = "------\n**Please enter a valid target user mention, or leave it blank to select yourself as the target! "
 											"(!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
@@ -103,15 +103,15 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
-				} else if (argsNew.commandData.optionsArgs.at(2) != "") {
+				} else if (argsNew.optionsArgs.at(2) != "") {
 					std::cmatch matchResults;
-					regex_search(argsNew.commandData.optionsArgs.at(2).c_str(), matchResults, userIDRegExp);
+					regex_search(argsNew.optionsArgs.at(2).c_str(), matchResults, userIDRegExp);
 					std::string targetUserIDOne = matchResults.str();
 					targetUserID = stoull(targetUserIDOne);
 				}
 
-				uint32_t targetUserBalance = ( uint32_t )std::stoll(argsNew.commandData.optionsArgs.at(0));
-				std::string balanceType = argsNew.commandData.optionsArgs.at(1);
+				uint32_t targetUserBalance = ( uint32_t )std::stoll(argsNew.optionsArgs.at(0));
+				std::string balanceType = argsNew.optionsArgs.at(1);
 
 				GuildMember targetMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = targetUserID, .guildId = argsNew.eventData.getGuildId() }).get();
 

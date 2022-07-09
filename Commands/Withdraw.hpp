@@ -48,8 +48,8 @@ namespace DiscordCoreAPI {
 				DiscordGuildMember discordGuildMember(guildMember);
 
 				std::regex amountRegExp{ "\\d{1,18}" };
-				if (argsNew.commandData.optionsArgs.size() == 0 || !regex_search(argsNew.commandData.optionsArgs[0], amountRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs[0]) <= 0) {
+				if (argsNew.optionsArgs.size() == 0 || !regex_search(argsNew.optionsArgs[0], amountRegExp) ||
+					std::stoll(argsNew.optionsArgs[0]) <= 0) {
 					std::string msgString = "------\n**Please enter a valid withdrawl amount! (!withdraw = AMOUNT)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -64,7 +64,7 @@ namespace DiscordCoreAPI {
 					return;
 				} else {
 					std::cmatch matchResults;
-					regex_search(argsNew.commandData.optionsArgs[0].c_str(), matchResults, amountRegExp);
+					regex_search(argsNew.optionsArgs[0].c_str(), matchResults, amountRegExp);
 					withdrawAmount = ( uint32_t )std::stoll(matchResults.str());
 				}
 

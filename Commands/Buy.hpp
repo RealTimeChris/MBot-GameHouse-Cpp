@@ -41,7 +41,7 @@ namespace DiscordCoreAPI {
 
 				User currentUser = Users::getUserAsync({ argsNew.eventData.getAuthorId() }).get();
 
-				std::string objectName = argsNew.commandData.optionsArgs.at(0);
+				std::string objectName = argsNew.optionsArgs.at(0);
 				uint32_t objectShopIndex = 0;
 				std::string objectType;
 				GuildMember guildMember = GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = currentUser.id, .guildId = argsNew.eventData.getGuildId() }).get();

@@ -6,6 +6,7 @@
 #pragma once
 
 #include "HelperFunctions.hpp"
+#include <regex>
 
 namespace DiscordCoreAPI {
 
@@ -47,13 +48,13 @@ namespace DiscordCoreAPI {
 				if (areWeAllowed == false) {
 					return;
 				}
-				int32_t theInt = std::bit_cast<int32_t, int32_t>(static_cast<int32_t>(std::stoll(argsNew.commandData.optionsArgs[2])));
+				int32_t theInt = std::bit_cast<int32_t, int32_t>(static_cast<int32_t>(std::stoll(argsNew.optionsArgs[2])));
 				std::regex selfModRegExp{ "\\d{1,5}" };
 				std::regex oppModRegExp{ "-{0,1}\\d{1,5}" };
 				std::regex itemCostRegExp{ "\\d{1,6}" };
 				std::regex emojiRegExp{ ".{1,32}" };
-				if (argsNew.commandData.optionsArgs.size() < 2 || !regex_search(argsNew.commandData.optionsArgs.at(1), selfModRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(1)) > 100 || std::stoll(argsNew.commandData.optionsArgs.at(1)) < 0) {
+				if (argsNew.optionsArgs.size() < 2 || !regex_search(argsNew.optionsArgs.at(1), selfModRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(1)) > 100 || std::stoll(argsNew.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid self-mod value, between 0 and 100! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed{};
@@ -68,7 +69,7 @@ namespace DiscordCoreAPI {
 					InputEventData event = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 3 || theInt < -100 || theInt > 0) {
+				if (argsNew.optionsArgs.size() < 3 || theInt < -100 || theInt > 0) {
 					std::string msgString = "------\n**Please enter a valid opp-mod value between -100 and 0! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed{};
@@ -83,8 +84,8 @@ namespace DiscordCoreAPI {
 					InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 4 || !regex_search(argsNew.commandData.optionsArgs.at(3), itemCostRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(3)) < 1) {
+				if (argsNew.optionsArgs.size() < 4 || !regex_search(argsNew.optionsArgs.at(3), itemCostRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(3)) < 1) {
 					std::string msgString = "------\n**Please enter a valid item cost! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -98,7 +99,7 @@ namespace DiscordCoreAPI {
 					InputEventData eventNew = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 5 || !regex_search(argsNew.commandData.optionsArgs.at(4), emojiRegExp)) {
+				if (argsNew.optionsArgs.size() < 5 || !regex_search(argsNew.optionsArgs.at(4), emojiRegExp)) {
 					std::string msgString = "------\n**Please enter a valid emoji! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, ITEMCOST, EMOJI)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -113,15 +114,15 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				std::string itemName = argsNew.commandData.optionsArgs.at(0);
+				std::string itemName = argsNew.optionsArgs.at(0);
 				std::cmatch matchResults;
-				regex_search(argsNew.commandData.optionsArgs.at(1).c_str(), matchResults, selfModRegExp);
+				regex_search(argsNew.optionsArgs.at(1).c_str(), matchResults, selfModRegExp);
 				uint32_t selfMod = ( uint32_t )std::stoll(matchResults.str());
-				regex_search(argsNew.commandData.optionsArgs.at(2).c_str(), matchResults, oppModRegExp);
+				regex_search(argsNew.optionsArgs.at(2).c_str(), matchResults, oppModRegExp);
 				int32_t oppMod = static_cast<int32_t>(theInt);
-				regex_search(argsNew.commandData.optionsArgs.at(3).c_str(), matchResults, itemCostRegExp);
+				regex_search(argsNew.optionsArgs.at(3).c_str(), matchResults, itemCostRegExp);
 				uint32_t itemCost = ( uint32_t )std::stoll(matchResults.str());
-				std::string emoji = argsNew.commandData.optionsArgs.at(4);
+				std::string emoji = argsNew.optionsArgs.at(4);
 
 				for (auto& value: discordGuild.data.guildShop.items) {
 					if (itemName == value.itemName) {

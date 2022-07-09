@@ -46,10 +46,10 @@ namespace DiscordCoreAPI {
 				std::regex depositAmountRegExp{ "\\d{1,18}" };
 				std::cmatch matchResults;
 				uint32_t depositAmount = 0;
-				if (argsNew.commandData.optionsArgs.size() == 0 || argsNew.commandData.optionsArgs[0] == "all") {
+				if (argsNew.optionsArgs.size() == 0 || argsNew.optionsArgs[0] == "all") {
 					depositAmount = discordGuildMember.data.currency.wallet;
-				} else if (argsNew.commandData.optionsArgs.size() == 0 || argsNew.commandData.optionsArgs[0] == "" ||
-					!regex_search(argsNew.commandData.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) || std::stoll(matchResults.str()) <= 0) {
+				} else if (argsNew.optionsArgs.size() == 0 || argsNew.optionsArgs[0] == "" ||
+					!regex_search(argsNew.optionsArgs[0].c_str(), matchResults, depositAmountRegExp) || std::stoll(matchResults.str()) <= 0) {
 					std::string msgString = "------\n**Please enter a valid deposit amount!(!deposit = AMOUNT)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -62,7 +62,7 @@ namespace DiscordCoreAPI {
 					dataPackage.addMessageEmbed(msgEmbed);
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
-				} else if (regex_search(argsNew.commandData.optionsArgs[0], depositAmountRegExp)) {
+				} else if (regex_search(argsNew.optionsArgs[0], depositAmountRegExp)) {
 					depositAmount = ( uint32_t )std::stoll(matchResults.str());
 				}
 

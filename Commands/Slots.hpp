@@ -42,7 +42,7 @@ namespace DiscordCoreAPI {
 
 				int32_t betAmountOld;
 				std::regex digitRegExp{ "\\d{1,18}" };
-				if (std::stoll(argsNew.commandData.optionsArgs[0]) <= 0 || !regex_search(argsNew.commandData.optionsArgs.at(0), digitRegExp)) {
+				if (std::stoll(argsNew.optionsArgs[0]) <= 0 || !regex_search(argsNew.optionsArgs.at(0), digitRegExp)) {
 					std::string msgString = "------\n**Please, enter a valid bet amount as the first argument of the command! (!slots = BETAMOUNT)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -57,7 +57,7 @@ namespace DiscordCoreAPI {
 					return;
 				} else {
 					std::cmatch matchResults;
-					regex_search(argsNew.commandData.optionsArgs.at(0).c_str(), matchResults, digitRegExp);
+					regex_search(argsNew.optionsArgs.at(0).c_str(), matchResults, digitRegExp);
 					betAmountOld = ( int32_t )std::stoll(matchResults.str());
 				}
 

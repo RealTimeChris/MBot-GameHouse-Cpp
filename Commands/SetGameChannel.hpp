@@ -42,7 +42,7 @@ namespace DiscordCoreAPI {
 					return;
 				}
 
-				if (argsNew.commandData.subCommandName == "add") {
+				if (argsNew.subCommandName == "add") {
 					uint64_t channelID = channel.id;
 					for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {
 						if (channelID == discordGuild.data.gameChannelIds[x]) {
@@ -75,7 +75,7 @@ namespace DiscordCoreAPI {
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.subCommandName == "remove") {
+				if (argsNew.subCommandName == "remove") {
 					uint64_t channelID;
 					channelID = channel.id;
 
@@ -118,7 +118,7 @@ namespace DiscordCoreAPI {
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.subCommandName == "purge") {
+				if (argsNew.subCommandName == "purge") {
 					std::string msgString;
 
 					if (discordGuild.data.gameChannelIds.size() > 0) {
@@ -150,7 +150,7 @@ namespace DiscordCoreAPI {
 					auto newEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.at(0).find("view") != std::string::npos) {
+				if (argsNew.optionsArgs.at(0).find("view") != std::string::npos) {
 					std::string msgString = "__You have the following channels enabled for gaming, on this server:__\n------\n";
 
 					for (uint32_t x = 0; x < discordGuild.data.gameChannelIds.size(); x += 1) {

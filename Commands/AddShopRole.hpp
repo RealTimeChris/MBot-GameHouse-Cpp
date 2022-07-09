@@ -49,7 +49,7 @@ namespace DiscordCoreAPI {
 
 				std::regex hexColorRegExp{ ".{1,24}" };
 				std::regex costRegExp{ "\\d{1,8}" };
-				if (argsNew.commandData.optionsArgs.size() < 2 || !regex_search(argsNew.commandData.optionsArgs.at(1), hexColorRegExp)) {
+				if (argsNew.optionsArgs.size() < 2 || !regex_search(argsNew.optionsArgs.at(1), hexColorRegExp)) {
 					std::string msgString = "------\n**Please enter a valid hex color value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -63,8 +63,8 @@ namespace DiscordCoreAPI {
 					auto event = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.commandData.optionsArgs.size() < 3 || !regex_search(argsNew.commandData.optionsArgs.at(2), costRegExp) ||
-					std::stoll(argsNew.commandData.optionsArgs.at(2)) <= 0) {
+				if (argsNew.optionsArgs.size() < 3 || !regex_search(argsNew.optionsArgs.at(2), costRegExp) ||
+					std::stoll(argsNew.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -80,10 +80,10 @@ namespace DiscordCoreAPI {
 				}
 
 				std::cmatch matchResults;
-				std::string roleName = argsNew.commandData.optionsArgs.at(0).c_str();
-				regex_search(argsNew.commandData.optionsArgs.at(1).c_str(), matchResults, hexColorRegExp);
+				std::string roleName = argsNew.optionsArgs.at(0).c_str();
+				regex_search(argsNew.optionsArgs.at(1).c_str(), matchResults, hexColorRegExp);
 				std::string roleColor = matchResults.str();
-				regex_search(argsNew.commandData.optionsArgs.at(2).c_str(), matchResults, costRegExp);
+				regex_search(argsNew.optionsArgs.at(2).c_str(), matchResults, costRegExp);
 				uint32_t roleCost = ( uint32_t )std::stoll(matchResults.str());
 
 				for (auto& value: discordGuild.data.guildShop.roles) {
