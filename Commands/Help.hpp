@@ -30,9 +30,10 @@ namespace DiscordCoreAPI {
 			try {
 				bool isItFirst{ true };
 				InputEventData newEvent01(newArgs.eventData);
-				RespondToInputEventData responseData{ newEvent01 };
 
 				while (1) {
+
+					RespondToInputEventData responseData{ newEvent01 };
 					std::vector<std::vector<SelectOptionData>> selectOptions;
 					int32_t counter{ 0 };
 					int32_t currentHelpPage{ 0 };
@@ -110,7 +111,7 @@ namespace DiscordCoreAPI {
 						newEvent01 = InputEvents::respondToInputEventAsync(responseData).get();
 					} else {
 						responseData.setResponseType(InputEventResponseType::Edit_Interaction_Response);
-						InputEvents::respondToInputEventAsync(responseData).get();
+						newEvent01 = InputEvents::respondToInputEventAsync(responseData).get();
 					}
 					std::unique_ptr<ButtonCollector> button{ std::make_unique<ButtonCollector>(newEvent01) };
 					auto buttonData = button->collectButtonData(false, 120000, 1, newArgs.eventData.getAuthorId()).get();
@@ -118,7 +119,7 @@ namespace DiscordCoreAPI {
 					std::vector<RespondToInputEventData> editInteractionResponseData00;
 					for (auto& value: selectOptionsNew) {
 						EmbedData msgEmbed00;
-						msgEmbed00.setAuthor(newEvent01.getUserName(), newEvent01.getAvatarUrl());
+						msgEmbed00.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 						msgEmbed00.setColor("FeFeFe");
 						msgEmbed00.setTimeStamp(getTimeAndDate());
 						msgEmbed00.setDescription(msgString);
@@ -134,7 +135,7 @@ namespace DiscordCoreAPI {
 					if (buttonData.size() > 0) {
 						if (buttonData.at(0).buttonId == "exit" || buttonData.at(0).buttonId == "empty") {
 							EmbedData msgEmbed00;
-							msgEmbed00.setAuthor(newEvent01.getUserName(), newEvent01.getAvatarUrl());
+							msgEmbed00.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 							msgEmbed00.setColor("FeFeFe");
 							msgEmbed00.setTimeStamp(getTimeAndDate());
 							msgEmbed00.setDescription(messageNew);
@@ -190,9 +191,9 @@ namespace DiscordCoreAPI {
 					auto buttonReturnData02 = ButtonCollector{ newEvent01 }.collectButtonData(false, 120000, 1, newArgs.eventData.getAuthorId()).get();
 					if (buttonReturnData02.at(0).buttonId == "back") {
 						responseData = RespondToInputEventData{ *buttonReturnData02.at(0).interactionData };
-						responseData.setResponseType(InputEventResponseType::Edit_Interaction_Response);
-						responseData.addMessageEmbed(newEmbed);
-						newEvent = InputEvents::respondToInputEventAsync(responseData).get();
+						responseData.setResponseType(InputEventResponseType::Deferred_Response);
+						auto interactionData = InputEvents::respondToInputEventAsync(responseData).get().getInteractionData();
+						responseData = RespondToInputEventData{ interactionData };
 						continue;
 					} else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
 						RespondToInputEventData responseData03(*buttonReturnData02.at(0).interactionData);
