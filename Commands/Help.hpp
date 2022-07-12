@@ -190,6 +190,9 @@ namespace DiscordCoreAPI {
 					auto buttonReturnData02 = ButtonCollector{ newEvent01 }.collectButtonData(false, 120000, 1, newArgs.eventData.getAuthorId()).get();
 					if (buttonReturnData02.at(0).buttonId == "back") {
 						responseData = RespondToInputEventData{ *buttonReturnData02.at(0).interactionData };
+						responseData.setResponseType(InputEventResponseType::Edit_Interaction_Response);
+						responseData.addMessageEmbed(newEmbed);
+						newEvent = InputEvents::respondToInputEventAsync(responseData).get();
 						continue;
 					} else if (buttonReturnData02.at(0).buttonId == "exit" || buttonReturnData02.at(0).buttonId == "empty") {
 						RespondToInputEventData responseData03(*buttonReturnData02.at(0).interactionData);
