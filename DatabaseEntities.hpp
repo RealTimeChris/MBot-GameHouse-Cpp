@@ -237,14 +237,15 @@ namespace DiscordCoreAPI {
 		}
 
 		static mongocxx::pool::entry getClient() {
+			std::lock_guard<std::mutex> workloadLock{ DatabaseManagerAgent::workloadMutex02 };
 			return DatabaseManagerAgent::thePool.acquire();
 		}
 
 		static DatabaseReturnValue submitWorkloadAndGetResults(DatabaseWorkload workload) {
-			std::lock_guard<std::mutex> workloadLock{ DatabaseManagerAgent::workloadMutex };
+			std::lock_guard<std::mutex> workloadLock{ DatabaseManagerAgent::workloadMutex01 };
 			DatabaseReturnValue newData{};
+			mongocxx::pool::entry thePtr = DatabaseManagerAgent::getClient();
 			try {
-				mongocxx::pool::entry thePtr = DatabaseManagerAgent::getClient();
 				auto newDataBase = (*thePtr)[std::to_string(DatabaseManagerAgent::botUserId)];
 				auto newCollection = newDataBase[std::to_string(DatabaseManagerAgent::botUserId)];
 				switch (workload.workloadType) {
@@ -258,6 +259,7 @@ namespace DiscordCoreAPI {
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertUserDataToDBDoc(workload.userData);
 							newCollection.insert_one(std::move(doc02.extract()));
+							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -269,8 +271,10 @@ namespace DiscordCoreAPI {
 						if (resultNew.get_ptr() != NULL) {
 							DiscordUserData userData = DatabaseManagerAgent::parseUserData(*resultNew.get_ptr());
 							newData.discordUser = userData;
+							thePtr = nullptr;
 							return newData;
 						} else {
+							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -284,6 +288,7 @@ namespace DiscordCoreAPI {
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildDataToDBDoc(workload.guildData);
 							newCollection.insert_one(std::move(doc02.extract()));
+							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -295,8 +300,10 @@ namespace DiscordCoreAPI {
 						if (resultNew.get_ptr() != NULL) {
 							DiscordGuildData guildData = DatabaseManagerAgent::parseGuildData(*resultNew.get_ptr());
 							newData.discordGuild = guildData;
+							thePtr = nullptr;
 							return newData;
 						} else {
+							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -310,6 +317,7 @@ namespace DiscordCoreAPI {
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildMemberDataToDBDoc(workload.guildMemberData);
 							newCollection.insert_one(std::move(doc02.extract()));
+							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -321,23 +329,28 @@ namespace DiscordCoreAPI {
 						if (resultNew.get_ptr() != NULL) {
 							DiscordGuildMemberData guildMemberData = DatabaseManagerAgent::parseGuildMemberData(*resultNew.get_ptr());
 							newData.discordGuildMember = guildMemberData;
+							thePtr = nullptr;
 							return newData;
 						} else {
+							thePtr = nullptr;
 							return newData;
 						}
 						break;
 					}
 				}
+				thePtr = nullptr;
 				return newData;
 			} catch (...) {
 				reportException("DatabaseManagerAgent::run() Error: ");
+				thePtr = nullptr;
 				return newData;
 			}
 		}
 
 	  protected:
 		static mongocxx::instance instance;
-		static std::mutex workloadMutex;
+		static std::mutex workloadMutex01;
+		static std::mutex workloadMutex02;
 		static mongocxx::pool thePool;
 		static uint64_t botUserId;
 
@@ -755,7 +768,8 @@ namespace DiscordCoreAPI {
 
 	mongocxx::instance DatabaseManagerAgent::instance{};
 	mongocxx::pool DatabaseManagerAgent::thePool{ mongocxx::uri{} };
-	std::mutex DatabaseManagerAgent::workloadMutex{};
+	std::mutex DatabaseManagerAgent::workloadMutex01{};
+	std::mutex DatabaseManagerAgent::workloadMutex02{};
 	uint64_t DatabaseManagerAgent::botUserId{ 0 };
 	int32_t DiscordUser::guildCount{ 0 };
 
