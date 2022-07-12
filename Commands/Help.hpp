@@ -32,7 +32,6 @@ namespace DiscordCoreAPI {
 				InputEventData newEvent01(newArgs.eventData);
 
 				while (1) {
-
 					RespondToInputEventData responseData{ newEvent01 };
 					std::vector<std::vector<SelectOptionData>> selectOptions;
 					int32_t counter{ 0 };
@@ -49,6 +48,7 @@ namespace DiscordCoreAPI {
 						newData.label = newString;
 						newData.description = value->helpDescription;
 						newData.value = convertToLowerCase(newString);
+						value->helpEmbed.setAuthor(newArgs.eventData.getUserName(), newArgs.eventData.getAvatarUrl());
 						newData.emoji.name = "✅";
 						bool doWeContinue{ false };
 						for (auto& value02: selectOptions) {
