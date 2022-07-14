@@ -705,8 +705,7 @@ namespace DiscordCoreAPI {
 				}
 
 				std::regex betRegExp{ "\\d{1,18}" };
-				if (argsNew.optionsArgs.size() == 0 || !std::regex_search(argsNew.optionsArgs.at(0), betRegExp) ||
-					std::stoll(argsNew.optionsArgs.at(0)) < 1) {
+				if (argsNew.optionsArgs.size() == 0 || !std::regex_search(argsNew.optionsArgs.at(0), betRegExp) || std::stoll(argsNew.optionsArgs.at(0)) < 1) {
 					std::string msgString = "------\n**Please enter a valid bet amount!(!blackjack = BETAMOUNT)**\n------";
 					std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 					msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

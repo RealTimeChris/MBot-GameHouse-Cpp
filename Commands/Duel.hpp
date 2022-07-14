@@ -337,8 +337,7 @@ namespace DiscordCoreAPI {
 				std::regex numberRegExp{ "\\d{1,18}" };
 				std::regex idRegExp{ "\\d{18}" };
 
-				if (argsNew.optionsArgs.size() < 2 || !std::regex_search(argsNew.optionsArgs.at(1), numberRegExp) ||
-					std::stoll(argsNew.optionsArgs.at(1)) < 0) {
+				if (argsNew.optionsArgs.size() < 2 || !std::regex_search(argsNew.optionsArgs.at(1), numberRegExp) || std::stoll(argsNew.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid bet amount! (!duel = BETAMOUNT, @USERMENTION)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

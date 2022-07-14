@@ -36,7 +36,7 @@ namespace DiscordCoreAPI {
 				dataPackage.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto inputEvent = InputEvents::respondToInputEventAsync(dataPackage).get();
 				for (auto& valueNew: theCache) {
-					auto  value = Guilds::getGuildAsync({ valueNew.id }).get();
+					auto value = Guilds::getGuildAsync({ valueNew.id }).get();
 					std::string msgString = "__Guild Name:__ " + static_cast<std::string>(value.name) + "\n";
 					msgString += "__Guild ID:__ " + std::to_string(value.id) + "\n";
 					msgString += "__Member Count:__ " + std::to_string(value.memberCount) + "\n";

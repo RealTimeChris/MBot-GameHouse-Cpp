@@ -63,8 +63,7 @@ namespace DiscordCoreAPI {
 					auto event = InputEvents::respondToInputEventAsync(dataPackage).get();
 					return;
 				}
-				if (argsNew.optionsArgs.size() < 3 || !regex_search(argsNew.optionsArgs.at(2), costRegExp) ||
-					std::stoll(argsNew.optionsArgs.at(2)) <= 0) {
+				if (argsNew.optionsArgs.size() < 3 || !regex_search(argsNew.optionsArgs.at(2), costRegExp) || std::stoll(argsNew.optionsArgs.at(2)) <= 0) {
 					std::string msgString = "------\n**Please enter a valid cost value! (!addshoprole = NAME, HEXCOLORVALIE, COST)**\n------";
 					EmbedData msgEmbed{};
 					msgEmbed.setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());

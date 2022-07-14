@@ -54,8 +54,7 @@ namespace DiscordCoreAPI {
 				std::regex userIDRegExp{ "\\d{18}" };
 				uint64_t targetUserID{};
 
-				if (argsNew.optionsArgs.size() == 0 || !regex_search(argsNew.optionsArgs.at(0), balanceRegExp) ||
-					std::stoll(argsNew.optionsArgs.at(0)) < 0) {
+				if (argsNew.optionsArgs.size() == 0 || !regex_search(argsNew.optionsArgs.at(0), balanceRegExp) || std::stoll(argsNew.optionsArgs.at(0)) < 0) {
 					std::string msgString = "------\n**Please enter a valid desired balance! (!setbalance = NEWBALANCE, BALANCETYPE, @USERMENTION, or just "
 											"!setbalance = NEWBALANCE, BALANCETYPE)**\n------";
 					EmbedData msgEmbed{};

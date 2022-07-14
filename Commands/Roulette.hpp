@@ -313,8 +313,7 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("straight"): {
 							payoutAmount = betAmount * 35;
-							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
-								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" || !regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid value from the roulette wheel!(1 - 36)**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -356,8 +355,7 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("split"): {
 							payoutAmount = betAmount * 17;
-							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
-								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" || !regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your split!(1 - 35)** \n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -396,8 +394,7 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("street"): {
 							payoutAmount = betAmount * 11;
-							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
-								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" || !regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your street!(1 - 34)** \n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
@@ -448,8 +445,7 @@ namespace DiscordCoreAPI {
 						}
 						case stringToInt("sixline"): {
 							payoutAmount = betAmount * 5;
-							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" ||
-								!regex_search(argsNew.optionsArgs[2], digitRegExp)) {
+							if (argsNew.optionsArgs.size() < 3 || argsNew.optionsArgs[2] == "" || !regex_search(argsNew.optionsArgs[2], digitRegExp)) {
 								std::string msgString = "------\n**Please enter a valid starting value for your sixline!**\n------";
 								std::unique_ptr<DiscordCoreAPI::EmbedData> msgEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
 								msgEmbed->setAuthor(argsNew.eventData.getUserName(), argsNew.eventData.getAvatarUrl());
