@@ -259,7 +259,6 @@ namespace DiscordCoreAPI {
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertUserDataToDBDoc(workload.userData);
 							newCollection.insert_one(std::move(doc02.extract()));
-							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -271,10 +270,8 @@ namespace DiscordCoreAPI {
 						if (resultNew.get_ptr() != NULL) {
 							DiscordUserData userData = DatabaseManagerAgent::parseUserData(*resultNew.get_ptr());
 							newData.discordUser = userData;
-							thePtr = nullptr;
 							return newData;
 						} else {
-							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -288,7 +285,6 @@ namespace DiscordCoreAPI {
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildDataToDBDoc(workload.guildData);
 							newCollection.insert_one(std::move(doc02.extract()));
-							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -300,10 +296,8 @@ namespace DiscordCoreAPI {
 						if (resultNew.get_ptr() != NULL) {
 							DiscordGuildData guildData = DatabaseManagerAgent::parseGuildData(*resultNew.get_ptr());
 							newData.discordGuild = guildData;
-							thePtr = nullptr;
 							return newData;
 						} else {
-							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -317,7 +311,6 @@ namespace DiscordCoreAPI {
 						if (resultNewer.get_ptr() == NULL) {
 							auto doc02 = DatabaseManagerAgent::convertGuildMemberDataToDBDoc(workload.guildMemberData);
 							newCollection.insert_one(std::move(doc02.extract()));
-							thePtr = nullptr;
 							return newData;
 						}
 						break;
@@ -329,20 +322,16 @@ namespace DiscordCoreAPI {
 						if (resultNew.get_ptr() != NULL) {
 							DiscordGuildMemberData guildMemberData = DatabaseManagerAgent::parseGuildMemberData(*resultNew.get_ptr());
 							newData.discordGuildMember = guildMemberData;
-							thePtr = nullptr;
 							return newData;
 						} else {
-							thePtr = nullptr;
 							return newData;
 						}
 						break;
 					}
 				}
-				thePtr = nullptr;
 				return newData;
 			} catch (...) {
 				reportException("DatabaseManagerAgent::run() Error: ");
-				thePtr = nullptr;
 				return newData;
 			}
 		}
