@@ -673,9 +673,6 @@ namespace DiscordCoreAPI {
 		void execute(BaseFunctionArguments& argsNew) {
 			try {
 
-				DiscordCoreAPI::RespondToInputEventData dataPackage00{ argsNew.eventData };
-				dataPackage00.setResponseType(DiscordCoreAPI::InputEventResponseType ::Deferred_Response);
-				auto newEvent01 = InputEvents::respondToInputEventAsync(dataPackage00).get();
 				std::unique_ptr<Guild> guild{ std::make_unique<Guild>(Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get()) };
 				std::unique_ptr<DiscordGuild> discordGuild(std::make_unique<DiscordGuild>(*guild));
 
@@ -698,8 +695,8 @@ namespace DiscordCoreAPI {
 					msgEmbed->setDescription(msgString);
 					msgEmbed->setTimeStamp(getTimeAndDate());
 					msgEmbed->setTitle("__**Missing Funds:**__");
-					DiscordCoreAPI::RespondToInputEventData dataPackage{ newEvent01 };
-					InputEvents::deleteInputEventResponseAsync(newEvent01).get();
+					DiscordCoreAPI::RespondToInputEventData dataPackage{ argsNew.eventData};
+					InputEvents::deleteInputEventResponseAsync(argsNew.eventData).get();
 					dataPackage.setResponseType(DiscordCoreAPI::InputEventResponseType::Ephemeral_Follow_Up_Message);
 					dataPackage.addMessageEmbed(*msgEmbed);
 					InputEvents::respondToInputEventAsync(dataPackage).get();
@@ -708,10 +705,15 @@ namespace DiscordCoreAPI {
 
 				std::unique_ptr<Channel> channel{ std::make_unique<Channel>(Channels::getCachedChannelAsync({ argsNew.eventData.getChannelId() }).get()) };
 				
-				bool areWeAllowed = checkIfAllowedGamingInChannel(newEvent01, *discordGuild);
+				bool areWeAllowed = checkIfAllowedGamingInChannel(argsNew.eventData, *discordGuild);
 				if (areWeAllowed == false) {
 					return;
 				}
+
+				
+				DiscordCoreAPI::RespondToInputEventData dataPackage00{ argsNew.eventData };
+				dataPackage00.setResponseType(DiscordCoreAPI::InputEventResponseType ::Deferred_Response);
+				auto newEvent01 = InputEvents::respondToInputEventAsync(dataPackage00).get();
 				
 
 				auto botUser = argsNew.discordCoreClient->getBotUser();
