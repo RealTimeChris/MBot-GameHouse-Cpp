@@ -709,7 +709,6 @@ namespace DiscordCoreAPI {
 				if (areWeAllowed == false) {
 					return;
 				}
-
 				
 				DiscordCoreAPI::RespondToInputEventData dataPackage00{ argsNew.eventData };
 				dataPackage00.setResponseType(DiscordCoreAPI::InputEventResponseType ::Deferred_Response);
@@ -720,13 +719,8 @@ namespace DiscordCoreAPI {
 				DiscordCoreAPI::DiscordUser discordUser(botUser.userName, botUser.id);
 				discordUser.writeDataToDB();
 				GuildMember botMember{ GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = discordUser.data.userId, .guildId = argsNew.eventData.getGuildId() }).get() };
-				
-				
-
-				
 
 				std::srand(( uint32_t )std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
-
 				
 				std::string finalMsgString;
 				finalMsgString = "__**Your Bet Amount:**__ " + std::to_string(betAmount) + " " + discordUser.data.currencyName + "\n";
