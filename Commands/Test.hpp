@@ -49,7 +49,7 @@ namespace DiscordCoreAPI {
 				theData.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto theResult = InputEvents::respondToInputEventAsync(theData).get();
 				RespondToInputEventData theData02{ theResult };
-				theData02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
+				theData02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
 				File theFile{};
 				theFile.data = loadFileContents("C:/Users/Chris/Downloads/nft profile pic.png");
 				theFile.fileName = "nft profile pic.png";
@@ -57,7 +57,11 @@ namespace DiscordCoreAPI {
 				EmbedData theEmbed{};
 				theEmbed.setDescription("TESTING");
 				theData02.addMessageEmbed(theEmbed);
-				InputEvents::respondToInputEventAsync(theData02).get();
+				theData02.addContent("TESTING");
+				auto theResult02=InputEvents::respondToInputEventAsync(theData02).get();
+				RespondToInputEventData theData03{ theResult02 };
+				theData03.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
+				InputEvents::respondToInputEventAsync(theData03).get();
 
 				/*
 				VoiceStateData voiceStateData{};
