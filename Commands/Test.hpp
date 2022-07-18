@@ -45,6 +45,22 @@ namespace DiscordCoreAPI {
 					GuildMembers::getCachedGuildMemberAsync({ .guildMemberId = argsNew.eventData.getAuthorId(), .guildId = argsNew.eventData.getGuildId() }).get();
 				Guild guild = Guilds::getCachedGuildAsync({ .guildId = argsNew.eventData.getGuildId() }).get();
 				DiscordGuild discordGuild{ guild };
+				RespondToInputEventData theData{ argsNew.eventData };
+				theData.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
+				auto theResult = InputEvents::respondToInputEventAsync(theData).get();
+				RespondToInputEventData theData02{ theResult };
+				theData02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
+				File theFile{};
+				theFile.data = loadFileContents("C:/Users/Chris/Downloads/nft profile pic.png");
+				theFile.fileName = "nft profile pic.png";
+				theData02.addFile(theFile);
+				EmbedData theEmbed{};
+				theEmbed.setDescription("TESTING");
+				theData02.addContent("TEST");
+				theData02.addMessageEmbed(theEmbed);
+				InputEvents::respondToInputEventAsync(theData02).get();
+
+				/*
 				VoiceStateData voiceStateData{};
 				Channel channel = Channels::getCachedChannelAsync({ .channelId = argsNew.eventData.getChannelId() }).get();
 				bool areTheyACommander = doWeHaveAdminPermissions(argsNew, argsNew.eventData, discordGuild, channel, guildMember);
@@ -52,7 +68,7 @@ namespace DiscordCoreAPI {
 				if (!areTheyACommander) {
 					return;
 				}
-
+				
 				if (guild.voiceStates.contains(guildMember.id)) {
 					voiceStateData = guild.voiceStates.at(guildMember.id);
 					std::unique_ptr<DiscordCoreAPI::EmbedData> newEmbed{ std::make_unique<DiscordCoreAPI::EmbedData>() };
@@ -93,7 +109,7 @@ namespace DiscordCoreAPI {
 					argsNew.discordCoreClient->getBotUser().updateVoiceStatus(theData);
 					std::this_thread::sleep_for(250ms);
 				}
-
+				*/
 
 				return;
 			} catch (...) {
