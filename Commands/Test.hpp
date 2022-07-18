@@ -49,14 +49,13 @@ namespace DiscordCoreAPI {
 				theData.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto theResult = InputEvents::respondToInputEventAsync(theData).get();
 				RespondToInputEventData theData02{ theResult };
-				theData02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
+				theData02.setResponseType(InputEventResponseType::Edit_Interaction_Response);
 				File theFile{};
 				theFile.data = loadFileContents("C:/Users/Chris/Downloads/nft profile pic.png");
 				theFile.fileName = "nft profile pic.png";
 				theData02.addFile(theFile);
 				EmbedData theEmbed{};
 				theEmbed.setDescription("TESTING");
-				theData02.addContent("TEST");
 				theData02.addMessageEmbed(theEmbed);
 				InputEvents::respondToInputEventAsync(theData02).get();
 
