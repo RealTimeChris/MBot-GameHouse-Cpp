@@ -48,20 +48,24 @@ namespace DiscordCoreAPI {
 				RespondToInputEventData theData{ argsNew.eventData };
 				theData.setResponseType(InputEventResponseType::Ephemeral_Deferred_Response);
 				auto theResult = InputEvents::respondToInputEventAsync(theData).get();
-				RespondToInputEventData theData02{ theResult };
-				theData02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
-				File theFile{};
-				theFile.data = loadFileContents("C:/Users/Chris/Downloads/nft profile pic.png");
-				theFile.fileName = "nft profile pic.png";
-				theData02.addFile(theFile);
-				EmbedData theEmbed{};
-				theEmbed.setDescription("TESTING");
-				theData02.addMessageEmbed(theEmbed);
-				theData02.addContent("TESTING");
-				auto theResult02=InputEvents::respondToInputEventAsync(theData02).get();
-				RespondToInputEventData theData03{ theResult02 };
-				theData03.setResponseType(InputEventResponseType::Edit_Follow_Up_Message);
-				InputEvents::respondToInputEventAsync(theData03).get();
+				RespondToInputEventData theData01{ theResult };
+				theData01.setResponseType(InputEventResponseType::Edit_Interaction_Response);
+				theData01.addContent("TESTING CONTENT");
+				theResult = InputEvents::respondToInputEventAsync(theData01).get();
+				for (int32_t x = 0; x < 20; x++) {
+					RespondToInputEventData theData02{ theResult };
+					theData02.setResponseType(InputEventResponseType::Ephemeral_Follow_Up_Message);
+					File theFile{};
+					theFile.data = loadFileContents("C:/Users/Chris/Downloads/nft profile pic.png");
+					theFile.fileName = "nft profile pic.png";
+					theData02.addFile(theFile);
+					EmbedData theEmbed{};
+					std::string theTime{ "<t:" + std::to_string(std::time(nullptr)) + std::string{ ":F>" } };
+					theEmbed.setDescription("TESTING " + theTime);
+					theData02.addMessageEmbed(theEmbed);
+					theData02.addContent("TESTING");
+					InputEvents::respondToInputEventAsync(theData02);
+				}
 
 				/*
 				VoiceStateData voiceStateData{};
