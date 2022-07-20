@@ -92,7 +92,7 @@ namespace DiscordCoreAPI {
 				addShopItemCommandOptionThree.required = true;
 				addShopItemCommandOptionThree.minValue = -1000;
 				addShopItemCommandOptionThree.maxValue = 0;
-				addShopItemCommandOptionThree.type = ApplicationCommandOptionType::Integer;
+				addShopItemCommandOptionThree.type = ApplicationCommandOptionType::Number;
 				addShopItemCommandOptionThree.description = "The opp-mod value of the item.";
 				createAddShopItemCommandData->options.push_back(addShopItemCommandOptionThree);
 				ApplicationCommandOptionData addShopItemCommandOptionFour;

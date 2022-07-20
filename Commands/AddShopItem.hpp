@@ -48,12 +48,13 @@ namespace DiscordCoreAPI {
 				if (areWeAllowed == false) {
 					return;
 				}
-				int32_t theInt = std::bit_cast<int32_t, int32_t>(static_cast<int32_t>(std::stoll(argsNew.optionsArgs[2])));
+				std::cout << argsNew.optionsArgs[2] << std::endl;
+				int32_t theInt = static_cast<int32_t>(std::bit_cast<int64_t>(stoull(argsNew.optionsArgs[2])));
 				std::regex selfModRegExp{ "\\d{1,5}" };
 				std::regex oppModRegExp{ "-{0,1}\\d{1,5}" };
 				std::regex itemCostRegExp{ "\\d{1,6}" };
 				std::regex emojiRegExp{ ".{1,32}" };
-				if (argsNew.optionsArgs.size() < 2 || !regex_search(argsNew.optionsArgs.at(1), selfModRegExp) || std::stoll(argsNew.optionsArgs.at(1)) > 100 ||
+				if (argsNew.optionsArgs.size() < 2 || !regex_search(argsNew.optionsArgs[1], selfModRegExp) || std::stoll(argsNew.optionsArgs.at(1)) > 100 ||
 					std::stoll(argsNew.optionsArgs.at(1)) < 0) {
 					std::string msgString = "------\n**Please enter a valid self-mod value, between 0 and 100! (!addshopitem = ITEMNAME, SELFMOD, OPPMOD, "
 											"ITEMCOST, EMOJI)**\n------";
@@ -116,11 +117,11 @@ namespace DiscordCoreAPI {
 				std::string itemName = argsNew.optionsArgs.at(0);
 				std::cmatch matchResults;
 				regex_search(argsNew.optionsArgs.at(1).c_str(), matchResults, selfModRegExp);
-				uint32_t selfMod = ( uint32_t )std::stoll(matchResults.str());
+				uint32_t selfMod = static_cast<uint32_t>(std::stoll(matchResults.str()));
 				regex_search(argsNew.optionsArgs.at(2).c_str(), matchResults, oppModRegExp);
 				int32_t oppMod = static_cast<int32_t>(theInt);
 				regex_search(argsNew.optionsArgs.at(3).c_str(), matchResults, itemCostRegExp);
-				uint32_t itemCost = ( uint32_t )std::stoll(matchResults.str());
+				uint32_t itemCost = static_cast<uint32_t>(std::stoll(matchResults.str()));
 				std::string emoji = argsNew.optionsArgs.at(4);
 
 				for (auto& value: discordGuild.data.guildShop.items) {
