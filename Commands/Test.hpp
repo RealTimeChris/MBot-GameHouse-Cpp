@@ -62,8 +62,8 @@ namespace DiscordCoreAPI {
 					EmbedData theEmbed{};
 					std::string theTime{ "<t:" + std::to_string(std::time(nullptr)) + std::string{ ":F>" } };
 					theEmbed.setDescription("TESTING " + theTime);
+					theEmbed.setImage("attachment://nft profile pic.png");
 					theData02.addMessageEmbed(theEmbed);
-					theData02.addContent("TESTING");
 					InputEvents::respondToInputEventAsync(theData02);
 				}
 
